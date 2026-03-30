@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:expertsportesdegarage.ca)",
+      "Bash(\"c:/Users/lambe/OneDrive/Bureau/experts-portes-de-garage/components/GallerySection.tsx\")",
+      "Bash(npx tsc:*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}

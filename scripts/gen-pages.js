@@ -1,4 +1,24 @@
-import { getAllPageSlugs, getPageBySlug } from "@/lib/content";
+const fs = require("fs");
+const path = require("path");
+
+const pages = [
+  { slug: "reparation-urgente-de-porte-de-garage", name: "ReparationUrgenteDePorteDeGarage" },
+  { slug: "remplacement-de-ressort-de-porte-de-garage", name: "RemplacementDeRessortDePorteDeGarage" },
+  { slug: "remplacement-de-cables-de-porte-de-garage", name: "RemplacementDeCablesDePorteDeGarage" },
+  { slug: "remplacement-de-roulettes-de-porte-de-garage", name: "RemplacementDeRoulettesDePorteDeGarage" },
+  { slug: "remplacement-de-panneau-de-porte-de-garage", name: "RemplacementDePanneauDePorteDeGarage" },
+  { slug: "reparation-de-rails-de-porte-de-garage", name: "ReparationDeRailsDePorteDeGarage" },
+  { slug: "remplacement-de-tambour-de-porte-de-garage", name: "RemplacementDeTambourDePorteDeGarage" },
+  { slug: "reparation-ouvre-porte-de-garage", name: "ReparationOuvrePorteDeGarage" },
+  { slug: "installation-de-nouvelle-porte-de-garage", name: "InstallationDeNouvellePorteDeGarage" },
+  { slug: "coupe-froid-de-porte-de-garage", name: "CoupeFroidDePorteDeGarage" },
+  { slug: "entretien-de-porte-de-garage", name: "EntretienDePorteDeGarage" },
+  { slug: "porte-de-garage-endommagee", name: "PorteDeGarageEndommagee" },
+  { slug: "a-propos", name: "APropos" },
+  { slug: "carriere", name: "Carriere" },
+];
+
+const template = (slug, name) => `import { getPageBySlug } from "@/lib/content";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
@@ -10,30 +30,24 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import GallerySection from "@/components/GallerySection";
 
+const SLUG = "${slug}";
+
 const HERO_BG =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
 const LOGO_SRC =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
 
-export async function generateStaticParams() {
-  return getAllPageSlugs().map((slug) => ({ slug }));
-}
-
-export async function generateMetadata(
-  props: PageProps<"/[slug]">
-): Promise<Metadata> {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = getPageBySlug(SLUG);
   if (!page) return {};
   return {
-    title: `${page.title} — Experts Portes de Garage`,
+    title: \`\${page.title} — Experts Portes de Garage\`,
     description: page.excerpt,
   };
 }
 
-export default async function SlugPage(props: PageProps<"/[slug]">) {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export default function ${name}Page() {
+  const page = getPageBySlug(SLUG);
   if (!page) notFound();
 
   return (
@@ -41,7 +55,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
       {/* ── 1. HERO + URGENCY BAR ── */}
       <section
         className="relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
+        style={{ backgroundImage: \`url(\${HERO_BG})\` }}
       >
         <div className="absolute inset-0 bg-black/65" />
 
@@ -239,3 +253,15 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
     </>
   );
 }
+`;
+
+const root = path.join(__dirname, "..");
+
+for (const { slug, name } of pages) {
+  const dir = path.join(root, "app", slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "page.tsx"), template(slug, name), "utf-8");
+  console.log(`Created app/${slug}/page.tsx`);
+}
+
+console.log("Done!");

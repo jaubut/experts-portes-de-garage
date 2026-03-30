@@ -1,4 +1,4 @@
-import { getAllPageSlugs, getPageBySlug } from "@/lib/content";
+import { getPageBySlug } from "@/lib/content";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
@@ -10,20 +10,15 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import GallerySection from "@/components/GallerySection";
 
+const SLUG = "porte-de-garage-endommagee";
+
 const HERO_BG =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
 const LOGO_SRC =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
 
-export async function generateStaticParams() {
-  return getAllPageSlugs().map((slug) => ({ slug }));
-}
-
-export async function generateMetadata(
-  props: PageProps<"/[slug]">
-): Promise<Metadata> {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = getPageBySlug(SLUG);
   if (!page) return {};
   return {
     title: `${page.title} — Experts Portes de Garage`,
@@ -31,9 +26,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function SlugPage(props: PageProps<"/[slug]">) {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export default function PorteDeGarageEndommageePage() {
+  const page = getPageBySlug(SLUG);
   if (!page) notFound();
 
   return (

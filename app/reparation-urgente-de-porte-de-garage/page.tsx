@@ -1,29 +1,27 @@
-import { getAllPageSlugs, getPageBySlug } from "@/lib/content";
+import { getPageBySlug } from "@/lib/content";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Anton } from "next/font/google";
 import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import GallerySection from "@/components/GallerySection";
+
+const anton = Anton({ weight: "400", subsets: ["latin"] });
+
+const SLUG = "reparation-urgente-de-porte-de-garage";
 
 const HERO_BG =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
 const LOGO_SRC =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
 
-export async function generateStaticParams() {
-  return getAllPageSlugs().map((slug) => ({ slug }));
-}
-
-export async function generateMetadata(
-  props: PageProps<"/[slug]">
-): Promise<Metadata> {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export async function generateMetadata(): Promise<Metadata> {
+  const page = getPageBySlug(SLUG);
   if (!page) return {};
   return {
     title: `${page.title} — Experts Portes de Garage`,
@@ -31,9 +29,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function SlugPage(props: PageProps<"/[slug]">) {
-  const { slug } = await props.params;
-  const page = getPageBySlug(slug);
+export default function ReparationUrgenteDePorteDeGaragePage() {
+  const page = getPageBySlug(SLUG);
   if (!page) notFound();
 
   return (
@@ -58,7 +55,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
                 <span>/</span>
                 <span className="text-white/80">{page.title}</span>
               </nav>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white uppercase leading-tight mb-5">
+              <h1 className={`${anton.className} text-3xl md:text-4xl lg:text-5xl text-white uppercase leading-tight mb-5`}>
                 {page.title}
               </h1>
               {page.excerpt && (
@@ -107,7 +104,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pb-8">
           <div className="bg-white border-l-4 border-brand rounded-xl shadow-xl px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-5">
             <div>
-              <p className="font-extrabold text-brand text-base leading-snug">
+              <p className={`${anton.className} text-brand text-base leading-snug`}>
                 Urgence ? Obtenez une réparation rapide 24h/24 par nos experts certifiés dès maintenant!
               </p>
               <p className="text-gray-500 text-sm mt-1">
@@ -156,12 +153,12 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
                 </a>
               ),
               h1: ({ children }) => (
-                <h1 className="text-3xl font-extrabold text-brand text-center mt-2 mb-8">
+                <h1 className={`${anton.className} text-3xl text-brand text-center mt-2 mb-8`}>
                   {children}
                 </h1>
               ),
               h2: ({ children }) => (
-                <h2 className="text-2xl font-bold text-brand mt-12 mb-4 pb-2 border-b-2 border-brand/20">
+                <h2 className={`${anton.className} text-2xl text-brand mt-12 mb-4 pb-2 border-b-2 border-brand/20`}>
                   {children}
                 </h2>
               ),
@@ -226,7 +223,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
       {page.faq.length > 0 && (
         <section className="bg-white py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand text-center mb-10">
+            <h2 className={`${anton.className} text-2xl md:text-3xl text-brand text-center mb-10`}>
               Foire aux questions
             </h2>
             <FaqAccordion items={page.faq} />

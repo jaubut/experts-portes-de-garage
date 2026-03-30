@@ -30,20 +30,171 @@ const EMPTY_FORM: FormData = {
   timeSlot: "",
 };
 
-const TIME_SLOTS = ["9h00 - 10h00", "11h00 - 12h00", "13h00 - 14h00"];
+const TIME_SLOTS = ["10h00 - 11h00", "12h00 - 13h00", "15h00 - 16h00"];
 
 const STEP_LABELS = ["Votre adresse", "Vos coordonnées", "Choisir un rendez-vous"];
+
+const FR_MONTHS = [
+  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre",
+];
+const FR_MONTHS_LONG = [
+  "janvier", "février", "mars", "avril", "mai", "juin",
+  "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+];
+const FR_DAYS_SHORT = ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"];
+const FR_DAYS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
+function toDateString(y: number, m: number, d: number) {
+  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+function formatDateFr(dateStr: string) {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dow = new Date(y, m - 1, d).getDay();
+  return `${FR_DAYS_LONG[dow]} ${d} ${FR_MONTHS_LONG[m - 1]} ${y}`;
+}
+
+interface CalendarProps {
+  value: string;
+  onChange: (date: string) => void;
+  hasError: boolean;
+}
+
+function Calendar({ value, onChange, hasError }: CalendarProps) {
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+  const todayStr = toDateString(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+
+  const [viewYear, setViewYear] = useState(() => todayDate.getFullYear());
+  const [viewMonth, setViewMonth] = useState(() => todayDate.getMonth());
+
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  const prevMonth = () => {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
+    else setViewMonth(m => m - 1);
+  };
+  const nextMonth = () => {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
+    else setViewMonth(m => m + 1);
+  };
+
+  // Disable going back before current month
+  const canGoPrev = viewYear > todayDate.getFullYear() ||
+    (viewYear === todayDate.getFullYear() && viewMonth > todayDate.getMonth());
+
+  // Build grid cells: nulls for leading blanks, then day numbers
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+  // Pad to complete last row
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  return (
+    <div className={`border rounded-xl overflow-hidden bg-white ${hasError ? "border-red-400" : "border-gray-200"}`}>
+      {/* Month navigation */}
+      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-100">
+        <button
+          type="button"
+          onClick={prevMonth}
+          disabled={!canGoPrev}
+          className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${
+            canGoPrev ? "hover:bg-gray-200 text-gray-600" : "text-gray-300 cursor-not-allowed"
+          }`}
+        >
+          ‹
+        </button>
+        <span className="text-sm font-bold text-gray-800">
+          {FR_MONTHS[viewMonth]} {viewYear}
+        </span>
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-600 transition-colors"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Day headers */}
+      <div className="grid grid-cols-7 border-b border-gray-100">
+        {FR_DAYS_SHORT.map((d, i) => (
+          <div
+            key={d}
+            className={`text-center text-xs font-semibold py-2 ${
+              i === 0 || i === 6 ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            {d}
+          </div>
+        ))}
+      </div>
+
+      {/* Date grid */}
+      <div className="grid grid-cols-7">
+        {cells.map((day, idx) => {
+          if (day === null) {
+            return <div key={`blank-${idx}`} className="py-1.5" />;
+          }
+
+          const dateStr = toDateString(viewYear, viewMonth, day);
+          const isPast = dateStr < todayStr;
+          const isToday = dateStr === todayStr;
+          const isSelected = dateStr === value;
+          const col = idx % 7;
+          const isWeekend = col === 0 || col === 6;
+
+          let cls = "relative mx-auto flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium cursor-pointer transition-all select-none ";
+
+          if (isSelected) {
+            cls += "bg-red-600 text-white font-bold shadow-sm";
+          } else if (isPast) {
+            cls += "text-gray-300 cursor-not-allowed";
+          } else if (isToday) {
+            cls += "border-2 border-red-500 text-red-600 font-bold hover:bg-red-50";
+          } else if (isWeekend) {
+            cls += "text-gray-500 hover:bg-red-50 hover:text-red-600";
+          } else {
+            cls += "text-gray-700 hover:bg-red-50 hover:text-red-600";
+          }
+
+          return (
+            <div
+              key={dateStr}
+              className={`flex items-center justify-center py-1 ${isWeekend && !isSelected ? "bg-gray-50/60" : ""}`}
+            >
+              <span
+                className={cls}
+                onClick={() => { if (!isPast) onChange(dateStr); }}
+              >
+                {day}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Selected date display */}
+      {value && (
+        <div className="px-4 py-2.5 bg-red-50 border-t border-red-100 text-center">
+          <span className="text-sm font-semibold text-red-700 capitalize">
+            {formatDateFr(value)}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
-  const [today, setToday] = useState("");
-
-  useEffect(() => {
-    setToday(new Date().toISOString().split("T")[0]);
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -143,7 +294,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
         </div>
 
         {/* Body */}
-        <div className="px-6 py-6">
+        <div className="px-6 py-6 max-h-[80vh] overflow-y-auto">
           {submitted ? (
             /* Success state */
             <div className="text-center py-8">
@@ -249,30 +400,32 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               {/* Step 3 — Rendez-vous */}
               {step === 3 && (
                 <div className="flex flex-col gap-5">
-                  <Field label="Date souhaitée" error={errors.date}>
-                    <input
-                      type="date"
+                  <div>
+                    <p className="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</p>
+                    {errors.date && (
+                      <p className="text-xs text-red-500 mb-2">{errors.date}</p>
+                    )}
+                    <Calendar
                       value={form.date}
-                      min={today}
-                      onChange={(e) => update("date", e.target.value)}
-                      className={inputCls(!!errors.date)}
+                      onChange={(d) => update("date", d)}
+                      hasError={!!errors.date}
                     />
-                  </Field>
+                  </div>
                   <div>
                     <p className="block text-sm font-semibold text-gray-700 mb-2">Plage horaire</p>
                     {errors.timeSlot && (
                       <p className="text-xs text-red-500 mb-2">{errors.timeSlot}</p>
                     )}
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="flex flex-col gap-3">
                       {TIME_SLOTS.map((slot) => (
                         <button
                           key={slot}
                           type="button"
                           onClick={() => update("timeSlot", slot)}
-                          className={`border-2 rounded-xl py-4 px-2 text-sm font-bold text-center transition-all ${
+                          className={`border-2 rounded-xl py-5 px-4 text-base font-bold text-center transition-all w-full ${
                             form.timeSlot === slot
-                              ? "border-brand bg-brand text-white shadow-md scale-[1.02]"
-                              : "border-gray-200 text-gray-600 hover:border-brand hover:text-brand"
+                              ? "border-red-600 bg-red-600 text-white shadow-md scale-[1.01]"
+                              : "border-gray-200 text-gray-700 hover:border-red-600 hover:text-red-600"
                           }`}
                         >
                           {slot}
