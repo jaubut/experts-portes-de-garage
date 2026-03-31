@@ -15,14 +15,14 @@ const sealTypes = [
     label: "Joints latéraux et de tête",
     desc: "Bandes d'étanchéité le long des montants verticaux et du haut du cadre. Empêchent l'air et l'eau de s'infiltrer sur les côtés et par le dessus.",
     detail: "Les joints latéraux et de tête forment un seul et même produit qui court sur les trois côtés du cadre. Souvent négligés, leur dégradation crée des courants d'air sur toute la hauteur et la largeur de la porte — particulièrement visible en hiver.",
-    image: "/images/gallery-2.webp",
+    image: "/images/coupe_froid_de_cote.jpg",
   },
   {
     id: "reteneur",
     label: "Reteneur du bas",
     desc: "Rail en aluminium ou PVC qui retient le caoutchouc d'étanchéité en forme de U au bas de la porte. Le reteneur du bas guide et maintient le caoutchouc en place pour une étanchéité optimale et durable.",
     detail: "Rail en aluminium ou PVC qui retient le caoutchouc d'étanchéité en forme de U au bas de la porte. Le reteneur du bas guide et maintient le caoutchouc en place pour une étanchéité optimale et durable.",
-    image: "/images/joint-lateral.webp",
+    image: "/images/reteneur_du_bas_porte_de_garage.jpg",
   },
 ];
 

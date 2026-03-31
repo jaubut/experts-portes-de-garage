@@ -205,7 +205,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
             ],
           },
           {
-            img: "/images/joint-lateral.webp",
+            img: "/images/coupe_froid_de_cote.jpg",
             title: "Votre télécommande de porte de garage ne fonctionne plus ?",
             content: `Si votre porte et votre ouvre-porte semblent en bon état, mais que la télécommande ne répond plus, le problème peut provenir de plusieurs causes :\n\nEssayez de remplacer les piles, de reprogrammer la télécommande ou de vous rapprocher de l'ouvre-porte lorsque vous l'utilisez. Si le problème persiste, il est conseillé de faire appel à un technicien pour un diagnostic et une réparation professionnelle.`,
             list: [
