@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 interface WeatherSealBookingModalProps {
@@ -187,6 +187,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
+  const adresseRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -196,6 +197,57 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   useEffect(() => {
     if (!isOpen) { setStep(1); setSubmitted(false); setErrors({}); setForm(EMPTY_FORM); }
   }, [isOpen]);
+
+  // Load Google Maps script once when modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey || document.getElementById("google-maps-script")) return;
+    const script = document.createElement("script");
+    script.id = "google-maps-script";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&language=fr`;
+    script.async = true;
+    document.head.appendChild(script);
+  }, [isOpen]);
+
+  // Wire up Places Autocomplete when step 3 is active
+  useEffect(() => {
+    if (step !== 3 || !adresseRef.current) return;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return;
+
+    const init = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const g = (window as any).google;
+      if (!g?.maps?.places) return;
+      const ac = new g.maps.places.Autocomplete(adresseRef.current, {
+        componentRestrictions: { country: "ca" },
+        fields: ["address_components"],
+      });
+      ac.addListener("place_changed", () => {
+        const place = ac.getPlace();
+        if (!place.address_components) return;
+        let streetNumber = "", route = "", city = "", postalCode = "";
+        for (const c of place.address_components) {
+          if (c.types.includes("street_number")) streetNumber = c.long_name;
+          if (c.types.includes("route")) route = c.long_name;
+          if (c.types.includes("locality")) city = c.long_name;
+          if (c.types.includes("postal_code")) postalCode = c.long_name;
+        }
+        if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
+        if (city) setForm(f => ({ ...f, ville: city }));
+        if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
+      });
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((window as any).google?.maps?.places) {
+      init();
+    } else {
+      const script = document.getElementById("google-maps-script");
+      if (script) { script.addEventListener("load", init); return () => script.removeEventListener("load", init); }
+    }
+  }, [step]);
 
   if (!isOpen) return null;
 
@@ -476,14 +528,14 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {/* ── Step 3 — Address ── */}
               {step === 3 && (
                 <div className="flex flex-col gap-4">
-                  <Field label="Code postal" error={errors.codePostal}>
-                    <input type="text" value={form.codePostal} onChange={(e) => update("codePostal", e.target.value)} placeholder="ex: J2G 3A1" className={inputCls(!!errors.codePostal)} />
-                  </Field>
                   <Field label="Adresse complète" error={errors.adresse}>
-                    <input type="text" value={form.adresse} onChange={(e) => update("adresse", e.target.value)} placeholder="123 rue Principale" className={inputCls(!!errors.adresse)} />
+                    <input ref={adresseRef} type="text" value={form.adresse} onChange={(e) => update("adresse", e.target.value)} placeholder="123 rue Principale" autoComplete="street-address" className={inputCls(!!errors.adresse)} />
                   </Field>
                   <Field label="Ville" error={errors.ville}>
-                    <input type="text" value={form.ville} onChange={(e) => update("ville", e.target.value)} placeholder="Granby" className={inputCls(!!errors.ville)} />
+                    <input type="text" value={form.ville} onChange={(e) => update("ville", e.target.value)} placeholder="Granby" autoComplete="address-level2" className={inputCls(!!errors.ville)} />
+                  </Field>
+                  <Field label="Code postal" error={errors.codePostal}>
+                    <input type="text" value={form.codePostal} onChange={(e) => update("codePostal", e.target.value)} placeholder="ex: J2G 3A1" autoComplete="postal-code" className={inputCls(!!errors.codePostal)} />
                   </Field>
                 </div>
               )}
@@ -492,13 +544,13 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {step === 4 && (
                 <div className="flex flex-col gap-4">
                   <Field label="Prénom et Nom" error={errors.nom}>
-                    <input type="text" value={form.nom} onChange={(e) => update("nom", e.target.value)} placeholder="Jean Tremblay" className={inputCls(!!errors.nom)} />
+                    <input type="text" value={form.nom} onChange={(e) => update("nom", e.target.value)} placeholder="Jean Tremblay" autoComplete="name" className={inputCls(!!errors.nom)} />
                   </Field>
                   <Field label="Numéro de téléphone" error={errors.telephone}>
-                    <input type="tel" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} placeholder="450-558-5788" className={inputCls(!!errors.telephone)} />
+                    <input type="tel" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} placeholder="450-558-5788" autoComplete="tel" className={inputCls(!!errors.telephone)} />
                   </Field>
                   <Field label="Adresse courriel" error={errors.courriel}>
-                    <input type="email" value={form.courriel} onChange={(e) => update("courriel", e.target.value)} placeholder="jean@exemple.com" className={inputCls(!!errors.courriel)} />
+                    <input type="email" value={form.courriel} onChange={(e) => update("courriel", e.target.value)} placeholder="jean@exemple.com" autoComplete="email" className={inputCls(!!errors.courriel)} />
                   </Field>
                 </div>
               )}
