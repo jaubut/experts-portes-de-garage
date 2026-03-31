@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 interface WeatherSealBookingModalProps {
@@ -187,7 +187,9 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
-  const adresseRef = useRef<HTMLInputElement>(null);
+  const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -195,59 +197,58 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) { setStep(1); setSubmitted(false); setErrors({}); setForm(EMPTY_FORM); }
+    if (!isOpen) { setStep(1); setSubmitted(false); setErrors({}); setForm(EMPTY_FORM); setSuggestions([]); }
   }, [isOpen]);
 
-  // Load Google Maps script once when modal opens
-  useEffect(() => {
-    if (!isOpen) return;
+  const fetchSuggestions = useCallback(async (input: string) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    if (!apiKey || document.getElementById("google-maps-script")) return;
-    const script = document.createElement("script");
-    script.id = "google-maps-script";
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&language=fr`;
-    script.async = true;
-    document.head.appendChild(script);
-  }, [isOpen]);
+    if (!apiKey || input.length < 3) { setSuggestions([]); return; }
+    try {
+      const res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Goog-Api-Key": apiKey },
+        body: JSON.stringify({ input, regionCode: "CA", languageCode: "fr" }),
+      });
+      const data = await res.json();
+      const items = (data.suggestions || []).map((s: { placePrediction: { placeId: string; text: { text: string }; structuredFormat: { mainText: { text: string }; secondaryText: { text: string } } } }) => ({
+        placeId: s.placePrediction.placeId,
+        text: s.placePrediction.structuredFormat.mainText.text,
+        secondary: s.placePrediction.structuredFormat.secondaryText.text,
+      }));
+      setSuggestions(items);
+      setShowSuggestions(items.length > 0);
+    } catch { setSuggestions([]); }
+  }, []);
 
-  // Wire up Places Autocomplete when step 3 is active
-  useEffect(() => {
-    if (step !== 3 || !adresseRef.current) return;
+  const handleAdresseChange = (value: string) => {
+    update("adresse", value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
+  };
+
+  const selectSuggestion = async (placeId: string, text: string) => {
+    setShowSuggestions(false);
+    setSuggestions([]);
+    update("adresse", text);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!apiKey) return;
-
-    const init = () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const g = (window as any).google;
-      if (!g?.maps?.places) return;
-      const ac = new g.maps.places.Autocomplete(adresseRef.current, {
-        componentRestrictions: { country: "ca" },
-        fields: ["address_components"],
+    try {
+      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents&languageCode=fr`, {
+        headers: { "X-Goog-Api-Key": apiKey },
       });
-      ac.addListener("place_changed", () => {
-        const place = ac.getPlace();
-        if (!place.address_components) return;
-        let streetNumber = "", route = "", city = "", postalCode = "";
-        for (const c of place.address_components) {
-          if (c.types.includes("street_number")) streetNumber = c.long_name;
-          if (c.types.includes("route")) route = c.long_name;
-          if (c.types.includes("locality")) city = c.long_name;
-          if (c.types.includes("postal_code")) postalCode = c.long_name;
-        }
-        if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
-        if (city) setForm(f => ({ ...f, ville: city }));
-        if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
-      });
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((window as any).google?.maps?.places) {
-      init();
-    } else {
-      const script = document.getElementById("google-maps-script");
-      if (script) { script.addEventListener("load", init); return () => script.removeEventListener("load", init); }
-    }
-  }, [step]);
+      const place = await res.json();
+      let streetNumber = "", route = "", city = "", postalCode = "";
+      for (const c of (place.addressComponents || [])) {
+        if (c.types.includes("street_number")) streetNumber = c.longText;
+        if (c.types.includes("route")) route = c.longText;
+        if (c.types.includes("locality")) city = c.longText;
+        if (c.types.includes("postal_code")) postalCode = c.longText;
+      }
+      if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
+      if (city) setForm(f => ({ ...f, ville: city }));
+      if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
+    } catch { /* keep typed value */ }
+  };
 
   if (!isOpen) return null;
 
@@ -529,7 +530,34 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {step === 3 && (
                 <div className="flex flex-col gap-4">
                   <Field label="Adresse complète" error={errors.adresse}>
-                    <input ref={adresseRef} type="text" value={form.adresse} onChange={(e) => update("adresse", e.target.value)} placeholder="123 rue Principale" autoComplete="street-address" className={inputCls(!!errors.adresse)} />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={form.adresse}
+                        onChange={(e) => handleAdresseChange(e.target.value)}
+                        onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                        onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                        placeholder="123 rue Principale"
+                        autoComplete="off"
+                        className={inputCls(!!errors.adresse)}
+                      />
+                      {showSuggestions && suggestions.length > 0 && (
+                        <ul className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                          {suggestions.map((s) => (
+                            <li key={s.placeId}>
+                              <button
+                                type="button"
+                                onMouseDown={() => selectSuggestion(s.placeId, s.text)}
+                                className="w-full text-left px-4 py-3 hover:bg-brand/5 flex flex-col gap-0.5 border-b border-gray-100 last:border-0"
+                              >
+                                <span className="text-sm font-semibold text-gray-800">{s.text}</span>
+                                <span className="text-xs text-gray-400">{s.secondary}</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </Field>
                   <Field label="Ville" error={errors.ville}>
                     <input type="text" value={form.ville} onChange={(e) => update("ville", e.target.value)} placeholder="Granby" autoComplete="address-level2" className={inputCls(!!errors.ville)} />
