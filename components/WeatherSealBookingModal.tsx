@@ -280,7 +280,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         </div>
         <div className="bg-brand-dark px-6 py-2.5">
           <p className="text-white/90 text-sm text-center font-medium">
-            Inspection + lubrification offertes — Valeur de 75$
+            Inspection + lubrification offertes — Valeur de 125$
           </p>
         </div>
 

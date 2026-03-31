@@ -105,7 +105,7 @@ export default function RemplacementCoupeFroidPage() {
                     <svg className="w-4 h-4 text-green-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" />
                     </svg>
-                    <p className="text-green-800 text-xs font-semibold">Inspection + lubrification OFFERTES (valeur 75$)</p>
+                    <p className="text-green-800 text-xs font-semibold">Inspection + lubrification OFFERTES (valeur 125$)</p>
                   </div>
                   <p className="text-gray-600 text-sm leading-snug">
                     Choisissez le moment qui vous convient et nos techniciens se déplacent chez vous.
@@ -140,7 +140,7 @@ export default function RemplacementCoupeFroidPage() {
             Inspection complète + lubrification GRATUITES
           </h2>
           <p className="text-white/80 text-lg mb-2">
-            Valeur de <span className="font-bold text-white line-through">75$</span>{" "}
+            Valeur de <span className="font-bold text-white line-through">125$</span>{" "}
             <span className="font-bold text-white bg-white/20 rounded px-2 py-0.5">INCLUSES</span> avec tout remplacement de coupe-froid
           </p>
           <p className="text-white/70 text-sm mb-10 max-w-lg mx-auto">
