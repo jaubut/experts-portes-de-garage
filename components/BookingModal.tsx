@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -190,6 +190,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
+  const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -206,15 +209,66 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       setSubmitted(false);
       setErrors({});
       setForm(EMPTY_FORM);
+      setSuggestions([]);
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  const fetchSuggestions = useCallback(async (input: string) => {
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey || input.length < 3) { setSuggestions([]); return; }
+    try {
+      const res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Goog-Api-Key": apiKey },
+        body: JSON.stringify({ input, regionCode: "CA", languageCode: "fr" }),
+      });
+      const data = await res.json();
+      const items = (data.suggestions || []).map((s: { placePrediction: { placeId: string; structuredFormat: { mainText: { text: string }; secondaryText: { text: string } } } }) => ({
+        placeId: s.placePrediction.placeId,
+        text: s.placePrediction.structuredFormat.mainText.text,
+        secondary: s.placePrediction.structuredFormat.secondaryText.text,
+      }));
+      setSuggestions(items);
+      setShowSuggestions(items.length > 0);
+    } catch { setSuggestions([]); }
+  }, []);
+
+  const handleAdresseChange = (value: string) => {
+    update("adresse", value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
+  };
+
+  const selectSuggestion = async (placeId: string, text: string) => {
+    setShowSuggestions(false);
+    setSuggestions([]);
+    update("adresse", text);
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) return;
+    try {
+      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents&languageCode=fr`, {
+        headers: { "X-Goog-Api-Key": apiKey },
+      });
+      const place = await res.json();
+      let streetNumber = "", route = "", city = "", postalCode = "";
+      for (const c of (place.addressComponents || [])) {
+        if (c.types.includes("street_number")) streetNumber = c.longText;
+        if (c.types.includes("route")) route = c.longText;
+        if (c.types.includes("locality")) city = c.longText;
+        if (c.types.includes("postal_code")) postalCode = c.longText;
+      }
+      if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
+      if (city) setForm(f => ({ ...f, ville: city }));
+      if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
+    } catch { /* keep typed value */ }
+  };
 
   const update = (field: keyof FormData, value: string) => {
     setForm((f) => ({ ...f, [field]: value }));
     setErrors((e) => ({ ...e, [field]: "" }));
   };
+
+  if (!isOpen) return null;
 
   const validateStep = (): boolean => {
     const errs: Partial<FormData> = {};
@@ -344,23 +398,35 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               {/* Step 1 */}
               {step === 1 && (
                 <div className="flex flex-col gap-4">
-                  <Field label="Code postal" error={errors.codePostal}>
-                    <input
-                      type="text"
-                      value={form.codePostal}
-                      onChange={(e) => update("codePostal", e.target.value)}
-                      placeholder="ex: J2G 3A1"
-                      className={inputCls(!!errors.codePostal)}
-                    />
-                  </Field>
                   <Field label="Adresse complète" error={errors.adresse}>
-                    <input
-                      type="text"
-                      value={form.adresse}
-                      onChange={(e) => update("adresse", e.target.value)}
-                      placeholder="123 rue Principale"
-                      className={inputCls(!!errors.adresse)}
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={form.adresse}
+                        onChange={(e) => handleAdresseChange(e.target.value)}
+                        onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                        onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                        placeholder="123 rue Principale"
+                        autoComplete="off"
+                        className={inputCls(!!errors.adresse)}
+                      />
+                      {showSuggestions && suggestions.length > 0 && (
+                        <ul className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                          {suggestions.map((s) => (
+                            <li key={s.placeId}>
+                              <button
+                                type="button"
+                                onMouseDown={() => selectSuggestion(s.placeId, s.text)}
+                                className="w-full text-left px-4 py-3 hover:bg-brand/5 flex flex-col gap-0.5 border-b border-gray-100 last:border-0"
+                              >
+                                <span className="text-sm font-semibold text-gray-800">{s.text}</span>
+                                <span className="text-xs text-gray-400">{s.secondary}</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </Field>
                   <Field label="Ville" error={errors.ville}>
                     <input
@@ -368,7 +434,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       value={form.ville}
                       onChange={(e) => update("ville", e.target.value)}
                       placeholder="Granby"
+                      autoComplete="address-level2"
                       className={inputCls(!!errors.ville)}
+                    />
+                  </Field>
+                  <Field label="Code postal" error={errors.codePostal}>
+                    <input
+                      type="text"
+                      value={form.codePostal}
+                      onChange={(e) => update("codePostal", e.target.value)}
+                      placeholder="ex: J2G 3A1"
+                      autoComplete="postal-code"
+                      className={inputCls(!!errors.codePostal)}
                     />
                   </Field>
                 </div>
@@ -383,6 +460,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       value={form.nom}
                       onChange={(e) => update("nom", e.target.value)}
                       placeholder="Jean Tremblay"
+                      autoComplete="name"
                       className={inputCls(!!errors.nom)}
                     />
                   </Field>
@@ -392,6 +470,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       value={form.telephone}
                       onChange={(e) => update("telephone", e.target.value)}
                       placeholder="450-558-5788"
+                      autoComplete="tel"
                       className={inputCls(!!errors.telephone)}
                     />
                   </Field>
@@ -401,6 +480,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       value={form.courriel}
                       onChange={(e) => update("courriel", e.target.value)}
                       placeholder="jean@exemple.com"
+                      autoComplete="email"
                       className={inputCls(!!errors.courriel)}
                     />
                   </Field>
