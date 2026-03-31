@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Anton } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/Footer";
 import { BookingModalProvider } from "@/context/BookingModalContext";
 
@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="fr" className={`${poppins.variable} ${anton.variable} antialiased`}>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <BookingModalProvider>
-          <Header />
+          <ConditionalHeader />
           <main className="flex-1">{children}</main>
           <Footer />
         </BookingModalProvider>
