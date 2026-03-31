@@ -10,10 +10,10 @@ const serviceLinks = [
   { href: "/reparation-urgente-de-porte-de-garage", label: "Réparation urgente 24/7" },
   { href: "/installation-de-nouvelle-porte-de-garage", label: "Nouvelle installation" },
   { href: "/reparation-ouvre-porte-de-garage", label: "Ouvre-porte de garage" },
+  { href: "/remplacement-coupe-froid-porte-de-garage", label: "Remplacement de coupe-froid" },
 ];
 
 const mainNavLinks = [
-  { href: "/configurateur-porte-de-garage", label: "Configurateur" },
   { href: "/a-propos", label: "À propos" },
   { href: "/carriere", label: "Carrières" },
 ];
