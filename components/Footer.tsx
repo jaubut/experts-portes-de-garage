@@ -6,10 +6,6 @@ const serviceLinks = [
   { href: "/reparation-urgente-de-porte-de-garage", label: "Réparation urgente 24/7" },
   { href: "/installation-de-nouvelle-porte-de-garage", label: "Nouvelle installation" },
   { href: "/reparation-ouvre-porte-de-garage", label: "Ouvre-porte de garage" },
-  { href: "/remplacement-de-ressort-de-porte-de-garage", label: "Remplacement de ressorts" },
-  { href: "/entretien-de-porte-de-garage", label: "Entretien de portes" },
-  { href: "/coupe-froid-de-porte-de-garage", label: "Coupe-froid et joints" },
-  { href: "/services-de-porte-de-garage", label: "Tous les services →" },
 ];
 
 const companyLinks = [

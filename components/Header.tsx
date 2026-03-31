@@ -10,18 +10,10 @@ const serviceLinks = [
   { href: "/reparation-urgente-de-porte-de-garage", label: "Réparation urgente 24/7" },
   { href: "/installation-de-nouvelle-porte-de-garage", label: "Nouvelle installation" },
   { href: "/reparation-ouvre-porte-de-garage", label: "Ouvre-porte de garage" },
-  { href: "/remplacement-de-ressort-de-porte-de-garage", label: "Remplacement de ressorts" },
-  { href: "/coupe-froid-de-porte-de-garage", label: "Coupe-froid et joints" },
-  { href: "/entretien-de-porte-de-garage", label: "Entretien de portes" },
-  { href: "/porte-de-garage-endommagee", label: "Porte endommagée" },
-  { href: "/remplacement-de-cables-de-porte-de-garage", label: "Remplacement de câbles" },
-  { href: "/remplacement-de-panneau-de-porte-de-garage", label: "Remplacement de panneaux" },
-  { href: "/remplacement-de-roulettes-de-porte-de-garage", label: "Remplacement de roulettes" },
-  { href: "/remplacement-de-tambour-de-porte-de-garage", label: "Remplacement de tambour" },
-  { href: "/reparation-de-rails-de-porte-de-garage", label: "Réparation de rails" },
 ];
 
 const mainNavLinks = [
+  { href: "/configurateur-porte-de-garage", label: "Configurateur" },
   { href: "/a-propos", label: "À propos" },
   { href: "/carriere", label: "Carrières" },
 ];
@@ -31,7 +23,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
-  const isServiceActive = serviceLinks.some((s) => s.href === pathname) || pathname === "/services-de-porte-de-garage";
+  const isServiceActive = serviceLinks.some((s) => s.href === pathname);
   const { openModal } = useBookingModal();
 
   return (
@@ -46,15 +38,15 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-28 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <Image
-            src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp"
+            src="/logo_experts.png"
             alt="Experts Portes de Garage"
-            width={180}
-            height={60}
-            className="h-12 w-auto object-contain"
+            width={320}
+            height={100}
+            className="h-24 w-auto object-contain"
             priority
           />
         </Link>
@@ -91,17 +83,6 @@ export default function Header() {
                       {label}
                     </Link>
                   ))}
-                </div>
-                <div className="border-t border-gray-100 pt-2">
-                  <Link
-                    href="/services-de-porte-de-garage"
-                    className="text-sm font-bold text-brand flex items-center gap-1 px-3 py-1.5 hover:underline"
-                  >
-                    Voir tous les services
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
                 </div>
               </div>
             </div>
@@ -187,13 +168,6 @@ export default function Header() {
                   {label}
                 </Link>
               ))}
-              <Link
-                href="/services-de-porte-de-garage"
-                onClick={() => setMobileOpen(false)}
-                className="text-sm font-bold text-brand py-2 px-3 hover:underline"
-              >
-                Voir tous les services →
-              </Link>
             </div>
           )}
 

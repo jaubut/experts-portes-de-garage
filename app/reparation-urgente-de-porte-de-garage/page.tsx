@@ -1,16 +1,12 @@
 import { getPageBySlug } from "@/lib/content";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import type { Components } from "react-markdown";
 import Image from "next/image";
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import GallerySection from "@/components/GallerySection";
-import InspectionBanner from "@/components/InspectionBanner";
 
 const SLUG = "reparation-urgente-de-porte-de-garage";
 
@@ -18,41 +14,6 @@ const HERO_BG =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
 const LOGO_SRC =
   "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
-
-type ContentBlock =
-  | { kind: "text"; content: string }
-  | { kind: "image-text"; imageUrl: string; alt: string; text: string };
-
-function parseContentBlocks(markdown: string): ContentBlock[] {
-  const paras = markdown.split(/\n\n+/);
-  const blocks: ContentBlock[] = [];
-  let i = 0;
-
-  while (i < paras.length) {
-    const para = paras[i].trim();
-    if (!para) { i++; continue; }
-
-    const imgMatch = para.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-    if (imgMatch && i + 1 < paras.length) {
-      const next = paras[i + 1].trim();
-      if (next && !next.startsWith("#") && !next.match(/^!\[/)) {
-        blocks.push({ kind: "image-text", alt: imgMatch[1], imageUrl: imgMatch[2], text: next });
-        i += 2;
-        continue;
-      }
-    }
-
-    const last = blocks[blocks.length - 1];
-    if (last?.kind === "text") {
-      last.content += "\n\n" + para;
-    } else {
-      blocks.push({ kind: "text", content: para });
-    }
-    i++;
-  }
-
-  return blocks;
-}
 
 function extractFullExcerpt(raw: string): string {
   const lines = raw.split("\n");
@@ -79,57 +40,6 @@ function extractFullExcerpt(raw: string): string {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .trim();
 }
-
-const mdComponents: Components = {
-  img: ({ src, alt }) =>
-    src ? (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={src as string}
-        alt={(alt as string) ?? ""}
-        className="rounded-lg max-w-full h-auto my-4 shadow-sm"
-      />
-    ) : null,
-  a: ({ href, children }) => (
-    <a
-      href={href}
-      className="text-brand font-semibold hover:underline"
-      {...(href?.startsWith("http")
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : {})}
-    >
-      {children}
-    </a>
-  ),
-  h1: ({ children }) => (
-    <h1 className="font-heading text-3xl text-brand text-center mt-2 mb-8 uppercase">
-      {children}
-    </h1>
-  ),
-  h2: ({ children }) => (
-    <h2 className="font-heading text-2xl text-brand mt-12 mb-4 pb-2 border-b-2 border-brand/20 uppercase">
-      {children}
-    </h2>
-  ),
-  h3: ({ children }) => (
-    <h3 className="text-xl font-bold text-[#1a1a1a] mt-8 mb-3">{children}</h3>
-  ),
-  p: ({ children }) => (
-    <p className="mb-5 leading-relaxed text-gray-700 text-[1.02rem]">{children}</p>
-  ),
-  ul: ({ children }) => (
-    <ul className="list-none pl-0 mb-6 flex flex-col gap-2 text-gray-700">{children}</ul>
-  ),
-  li: ({ children }) => (
-    <li className="flex items-start gap-2.5 leading-relaxed">
-      <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
-      <span>{children}</span>
-    </li>
-  ),
-  strong: ({ children }) => (
-    <strong className="font-bold text-[#1a1a1a]">{children}</strong>
-  ),
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = getPageBySlug(SLUG);
@@ -224,34 +134,123 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
         </div>
       </section>
 
-      {/* ── 2. INSPECTION BANNER ── */}
-      <InspectionBanner />
+      {/* ── 2. URGENT BANNER ── */}
+      <section className="bg-[#1a1a1a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left">
+            <p className="font-heading text-white text-xl md:text-2xl uppercase tracking-wide mb-1">
+              VOTRE PORTE EST BLOQUÉE? ON SE DÉPLACE AUJOURD&apos;HUI!
+            </p>
+            <p className="text-gray-400 text-sm">
+              Service d&apos;urgence 24h/24 — nos techniciens interviennent le jour même.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <a
+              href="tel:4505585788"
+              className="bg-brand text-white font-bold px-6 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm whitespace-nowrap shadow-sm text-center"
+            >
+              Appelez maintenant
+            </a>
+            <a
+              href="tel:4505585788"
+              className="border-2 border-white text-white font-bold px-6 py-3 rounded-lg hover:bg-white hover:text-[#1a1a1a] transition-colors text-sm whitespace-nowrap text-center"
+            >
+              450-558-5788
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* ── 3. MAIN CONTENT ── */}
       <div className="bg-white pt-10">
-        {parseContentBlocks(page.bodyContent).map((block, idx) =>
-          block.kind === "image-text" ? (
-            <div key={idx} className="px-6 md:px-16 lg:px-24 py-6 flex flex-col sm:flex-row items-start gap-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={block.imageUrl}
-                alt={block.alt}
-                className="w-full sm:w-1/3 sm:h-[250px] object-cover rounded-lg shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                  {block.text}
-                </ReactMarkdown>
-              </div>
+
+        {/* Intro section */}
+        <div className="px-8 md:px-16 py-4 text-center">
+          <h2 className="font-heading text-2xl text-brand mt-4 mb-4 pb-2 border-b-2 border-brand/20 uppercase">
+            Signes que vous avez besoin d&apos;une réparation urgente de porte de garage
+          </h2>
+          <p className="mb-5 leading-relaxed text-gray-700 text-[1.02rem]">
+            Votre porte de garage est coincée, fait des bruits étranges ou refuse d&apos;ouvrir ou de fermer&nbsp;? Les pannes arrivent presque toujours au pire moment — vous laissant bloqué à l&apos;extérieur ou compromettant la sécurité de votre maison. Voici quelques-unes des raisons les plus fréquentes nécessitant une réparation urgente de porte de garage&nbsp;:
+          </p>
+        </div>
+
+        {/* ── Hardcoded image+text sections ── */}
+        {[
+          {
+            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-8-oct.-2025-14_54_03-1024x683.webp",
+            title: "Votre porte de garage ne s'ouvre plus ou ne se ferme plus ?",
+            content: `Plusieurs causes peuvent expliquer ce problème. L'une des plus fréquentes est une défaillance de la roue d'entraînement principale du moteur, souvent causée par une porte déséquilibrée, une chaîne ou une courroie trop tendue, une utilisation fréquente ou simplement l'usure avec le temps. D'autres raisons possibles incluent des capteurs mal alignés, un problème électrique ou un moteur défectueux.\n\nAvant d'appeler un technicien, assurez-vous que l'ouvre-porte est bien branché et que les capteurs de sécurité ne sont pas obstrués. Si le problème persiste, une inspection professionnelle est fortement recommandée.`,
+            list: null as string[] | null,
+          },
+          {
+            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-24-oct.-2025-21_00_24-1024x683.webp",
+            title: "Votre porte de garage est coincée ou bloquée",
+            content: `Une porte de garage fonctionne grâce à plusieurs composantes qui doivent être parfaitement synchronisées. Lorsqu'elle se bloque ou se coince, une réparation urgente devient souvent nécessaire.\n\nIl est probable que les ressorts soient brisés. Évitez de forcer l'ouverture ou la fermeture — cela pourrait aggraver les dommages.`,
+            list: [
+              "Câbles défectueux ou brisés",
+              "Système de poulies usé ou endommagé",
+              "Rails tordus, obstrués ou désalignés",
+              "Ressorts cassés",
+            ],
+          },
+          {
+            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-25-oct.-2025-07_55_46-1024x683.webp",
+            title: "Le type de bruit peut souvent révéler la cause du problème",
+            content: `Si le bruit persiste, une réparation urgente est généralement nécessaire.`,
+            list: [
+              "Claquements (popping) – Souvent causés par des roulettes usées ou détériorées.",
+              "Grincements (squeaking) – Indiquent généralement un manque de lubrification.",
+              "Frottements ou grattements (scraping/grinding) – Peuvent être dus à un câble effiloché ou des rails désalignés.",
+            ],
+          },
+          {
+            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-8-oct.-2025-14_42_59-1024x683.webp",
+            title: "Votre télécommande de porte de garage ne fonctionne plus ?",
+            content: `Si votre porte et votre ouvre-porte semblent en bon état, mais que la télécommande ne répond plus, le problème peut provenir de plusieurs causes :\n\nEssayez de remplacer les piles, de reprogrammer la télécommande ou de vous rapprocher de l'ouvre-porte lorsque vous l'utilisez. Si le problème persiste, il est conseillé de faire appel à un technicien pour un diagnostic et une réparation professionnelle.`,
+            list: [
+              "Piles faibles ou déchargées – C'est la cause la plus simple et la plus fréquente.",
+              "Interférences de signal – D'autres appareils sans fil à la maison peuvent perturber la communication.",
+              "Erreur de programmation – La télécommande doit peut-être être reprogrammée pour se synchroniser avec l'ouvre-porte.",
+              "Récepteur défectueux – Si le bouton mural fonctionne mais pas la télécommande, le problème vient probablement du récepteur de l'ouvre-porte.",
+            ],
+          },
+        ].map((section, idx) => (
+          <div key={idx} className="max-w-5xl mx-auto px-6 md:px-10 mb-12 flex flex-col sm:flex-row items-start gap-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={section.img}
+              alt={section.title}
+              className="w-64 h-48 object-cover rounded-lg flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <h2 className="font-heading text-xl text-brand mb-3 pb-1 border-b-2 border-brand/20 uppercase">
+                {section.title}
+              </h2>
+              {section.content.split("\n\n").map((para, i, arr) =>
+                section.list && i === 0 && arr.length > 1 ? (
+                  // First paragraph shown before list when there are multiple paragraphs
+                  <p key={i} className="mb-4 leading-relaxed text-gray-700 text-[1.02rem]">{para}</p>
+                ) : null
+              )}
+              {section.list && (
+                <ul className="list-none pl-0 mb-4 flex flex-col gap-2 text-gray-700">
+                  {section.list.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5 leading-relaxed">
+                      <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {section.content.split("\n\n").map((para, i, arr) =>
+                !section.list || i > 0 || arr.length === 1 ? (
+                  <p key={i} className="mb-4 leading-relaxed text-gray-700 text-[1.02rem]">{para}</p>
+                ) : null
+              )}
             </div>
-          ) : (
-            <div key={idx} className="max-w-4xl mx-auto px-4 sm:px-6">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                {block.content}
-              </ReactMarkdown>
-            </div>
-          )
-        )}
+          </div>
+        ))}
 
         {/* Mid-page CTA */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14">

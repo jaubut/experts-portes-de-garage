@@ -23,12 +23,12 @@ export default function NotFound() {
         >
           Retour à l&apos;accueil
         </Link>
-        <Link
-          href="/services-de-porte-de-garage"
+        <a
+          href="tel:4505585788"
           className="border-2 border-brand text-brand font-bold px-7 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors"
         >
-          Voir nos services
-        </Link>
+          450-558-5788
+        </a>
       </div>
       <div className="mt-12 text-sm text-gray-400">
         Besoin d&apos;aide?{" "}

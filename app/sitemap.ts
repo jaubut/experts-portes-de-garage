@@ -18,11 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    {
-      url: `${BASE_URL}/services-de-porte-de-garage`,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    ...pages.filter((p) => p.url !== `${BASE_URL}/services-de-porte-de-garage`),
+    ...pages,
   ];
 }

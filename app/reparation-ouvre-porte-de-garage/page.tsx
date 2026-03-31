@@ -9,6 +9,8 @@ import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
+import ImageAccordion from "@/components/ImageAccordion";
+import MotorSection from "@/components/MotorSection";
 import GallerySection from "@/components/GallerySection";
 import InspectionBanner from "@/components/InspectionBanner";
 
@@ -164,10 +166,10 @@ export default function ReparationOuvrePorteDeGaragePage() {
                   Accueil
                 </Link>
                 <span>/</span>
-                <span className="text-white/80">{page.title}</span>
+                <span className="text-white/80">Ouvre-porte de garage — Installation &amp; Réparation</span>
               </nav>
               <h1 className="font-heading text-3xl md:text-4xl text-white uppercase leading-tight mb-5">
-                {page.title}
+                Ouvre-porte de garage — Installation &amp; Réparation
               </h1>
               {heroExcerpt && (
                 <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
@@ -228,58 +230,106 @@ export default function ReparationOuvrePorteDeGaragePage() {
       <InspectionBanner />
 
       {/* ── 3. MAIN CONTENT ── */}
-      <div className="bg-white pt-10">
-        {parseContentBlocks(page.bodyContent).map((block, idx) =>
-          block.kind === "image-text" ? (
-            <div key={idx} className="px-6 md:px-16 lg:px-24 py-6 flex flex-col sm:flex-row items-start gap-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={block.imageUrl}
-                alt={block.alt}
-                className="w-full sm:w-1/3 sm:h-[250px] object-cover rounded-lg shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                  {block.text}
-                </ReactMarkdown>
-              </div>
-            </div>
-          ) : (
-            <div key={idx} className="max-w-4xl mx-auto px-4 sm:px-6">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                {block.content}
-              </ReactMarkdown>
-            </div>
-          )
-        )}
-
-        {/* Mid-page CTA */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14">
-          <div className="mt-6 bg-muted rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <p className="font-heading text-lg text-brand uppercase mb-1">
-                Prêt à planifier votre service?
-              </p>
-              <p className="text-gray-500 text-sm">
-                Nos techniciens se déplacent rapidement partout en Estrie et Montérégie.
-              </p>
-            </div>
-            <div className="flex gap-3 shrink-0">
-              <PlanifierButton className="bg-brand text-white font-bold px-5 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm">
-                Planifier maintenant
-              </PlanifierButton>
-              <a
-                href="tel:4505585788"
-                className="border-2 border-brand text-brand font-bold px-5 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm"
-              >
-                450-558-5788
-              </a>
-            </div>
-          </div>
+      <section className="bg-white py-16">
+        <div className="px-8 md:px-16">
+          <h2 className="font-heading text-2xl md:text-3xl text-brand text-center uppercase mb-10">
+            Nos services d&apos;ouvre-porte
+          </h2>
+          <ImageAccordion
+            items={[
+              {
+                title: "Installation d'ouvre-porte de garage",
+                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-6-oct.-2025-09_32_16.webp",
+                content: (
+                  <div>
+                    <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
+                      {[
+                        { label: "Belt Drive", desc: "fluide, silencieux et durable, idéal pour les maisons où le garage se trouve sous une chambre." },
+                        { label: "Chain Drive", desc: "classique, robuste, fiable et abordable, légèrement plus bruyant mais puissant pour les grandes portes." },
+                        { label: "Screw Drive", desc: "puissant et silencieux, parfait pour les portes lourdes ou les garages à plafonds bas." },
+                        { label: "Jackshaft", desc: "ouvre-porte mural idéal pour les garages à hauts plafonds ou espaces restreints." },
+                      ].map((t) => (
+                        <li key={t.label} className="flex items-start gap-2">
+                          <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
+                          <span><strong className="text-[#1a1a1a]">{t.label}</strong> – {t.desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                      Peu importe la conception de votre garage, nous offrons des services de réparation et d&apos;installation professionnelles. Appelez 450-558-5788.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="tel:4505585788" className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
+                        Appeler → 450-558-5788
+                      </a>
+                      <PlanifierButton className="border-2 border-brand text-brand font-bold px-5 py-2.5 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm">
+                        Planifier
+                      </PlanifierButton>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                title: "Problèmes courants d'ouvre-porte de garage que nous réparons",
+                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp",
+                content: (
+                  <div>
+                    <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
+                      {[
+                        { label: "Moteur de porte de garage défectueux", desc: "Le moteur ou le mécanisme d'entraînement peut avoir cessé de fonctionner." },
+                        { label: "Problèmes de capteurs", desc: "Les capteurs peuvent ne plus détecter les signaux correctement." },
+                        { label: "Programmation du clavier et de la télécommande", desc: "Reprogrammation ou nouvelle configuration." },
+                      ].map((t) => (
+                        <li key={t.label} className="flex items-start gap-2">
+                          <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
+                          <span><strong className="text-[#1a1a1a]">{t.label}</strong> – {t.desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="tel:4505585788" className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
+                        Appeler → 450-558-5788
+                      </a>
+                      <PlanifierButton className="border-2 border-brand text-brand font-bold px-5 py-2.5 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm">
+                        Planifier
+                      </PlanifierButton>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                title: "Télécommandes pour ouvre-portes de garage",
+                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-24-oct.-2025-13_13_30.webp",
+                content: (
+                  <div>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                      Posséder une porte de garage à télécommande apporte commodité, sécurité et tranquillité d&apos;esprit. Nos produits sont conçus pour s&apos;intégrer parfaitement à ton ouvre-porte. Nos techniciens qualifiés s&apos;occupent de toute l&apos;installation.
+                    </p>
+                    <ul className="list-none pl-0 flex flex-col gap-2.5 text-gray-700 text-sm">
+                      {[
+                        { label: "Belt Drive", desc: "fluide, silencieux et durable, idéal pour les maisons où le garage se trouve sous une chambre." },
+                        { label: "Chain Drive", desc: "classique, robuste, fiable et abordable, légèrement plus bruyant mais puissant pour les grandes portes." },
+                        { label: "Screw Drive", desc: "puissant et silencieux, parfait pour les portes lourdes ou les garages à plafonds bas." },
+                        { label: "Jackshaft", desc: "ouvre-porte mural idéal pour les garages à hauts plafonds ou espaces restreints." },
+                      ].map((t) => (
+                        <li key={t.label} className="flex items-start gap-2">
+                          <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
+                          <span><strong className="text-[#1a1a1a]">{t.label}</strong> – {t.desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
-      </div>
+      </section>
 
-      {/* ── 4. REVIEWS ── */}
+      {/* ── 4. MOTOR SECTION ── */}
+      <MotorSection />
+
+      {/* ── 5. REVIEWS ── */}
       <ReviewsSection />
 
       {/* ── 5. FAQ ACCORDION ── */}

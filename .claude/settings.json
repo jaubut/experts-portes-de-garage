@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(head -10 /c/Users/lambe/OneDrive/Bureau/experts-portes-de-garage/content/pages/*.md)"
+    ]
+  }
+}

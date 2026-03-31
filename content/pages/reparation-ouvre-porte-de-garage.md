@@ -1,5 +1,5 @@
 ---
-title: "Ouvre-porte de garage – Installation &amp; Réparation"
+title: "Ouvre-porte de garage – Installation & Réparation"
 slug: "reparation-ouvre-porte-de-garage"
 date: "2025-10-08"
 status: "publish"
