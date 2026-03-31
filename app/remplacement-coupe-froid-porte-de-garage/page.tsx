@@ -272,7 +272,7 @@ export default function RemplacementCoupeFroidPage() {
           </h2>
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px flex-1 bg-white/10 max-w-[100px]" />
-            <p className="text-white/60 text-sm line-through">Valeur régulière 125$</p>
+            <p className="text-brand/80 text-sm line-through">Valeur régulière 125$</p>
             <div className="h-px flex-1 bg-white/10 max-w-[100px]" />
           </div>
           <p className="text-white/80 text-base mb-10 max-w-lg mx-auto leading-relaxed">
