@@ -185,6 +185,8 @@ function Field({ label, error, children }: { label: string; error?: string; chil
 export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSealBookingModalProps) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
@@ -197,7 +199,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) { setStep(1); setSubmitted(false); setErrors({}); setForm(EMPTY_FORM); setSuggestions([]); }
+    if (!isOpen) { setStep(1); setSubmitted(false); setIsSubmitting(false); setSubmitError(""); setErrors({}); setForm(EMPTY_FORM); setSuggestions([]); }
   }, [isOpen]);
 
   const fetchSuggestions = useCallback(async (input: string) => {
@@ -304,10 +306,27 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
     return Object.keys(errs).length === 0;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!validate()) return;
-    if (step < TOTAL_STEPS) setStep(s => s + 1);
-    else setSubmitted(true);
+    if (step < TOTAL_STEPS) {
+      setStep(s => s + 1);
+    } else {
+      setIsSubmitting(true);
+      setSubmitError("");
+      try {
+        const res = await fetch("/api/booking-coupe-froid", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        if (!res.ok) throw new Error();
+        setSubmitted(true);
+      } catch {
+        setSubmitError("Une erreur est survenue. Veuillez réessayer ou nous appeler au 450-558-5788.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
   };
 
   const prenom = form.nom.trim().split(/\s+/)[0] || "vous";
@@ -613,17 +632,22 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               )}
 
               {/* Navigation */}
-              <div className={`flex items-center mt-8 ${step > 1 ? "justify-between" : "justify-end"}`}>
+              {submitError && (
+                <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mt-6">{submitError}</p>
+              )}
+              <div className={`flex items-center mt-4 ${step > 1 ? "justify-between" : "justify-end"}`}>
                 {step > 1 && (
                   <button type="button" onClick={() => setStep(s => s - 1)}
-                    className="text-sm font-semibold text-gray-400 hover:text-brand transition-colors flex items-center gap-1">
+                    disabled={isSubmitting}
+                    className="text-sm font-semibold text-gray-400 hover:text-brand transition-colors flex items-center gap-1 disabled:opacity-50">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     Retour
                   </button>
                 )}
                 <button type="button" onClick={handleNext}
-                  className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm">
-                  {step === TOTAL_STEPS ? "Confirmer la réservation" : "Suivant"}
+                  disabled={isSubmitting}
+                  className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm disabled:opacity-70 disabled:cursor-not-allowed">
+                  {isSubmitting ? "Envoi en cours..." : step === TOTAL_STEPS ? "Confirmer la réservation" : "Suivant"}
                 </button>
               </div>
             </>

@@ -188,6 +188,8 @@ function Calendar({ value, onChange, hasError }: CalendarProps) {
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
@@ -207,6 +209,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     if (!isOpen) {
       setStep(1);
       setSubmitted(false);
+      setIsSubmitting(false);
+      setSubmitError("");
       setErrors({});
       setForm(EMPTY_FORM);
       setSuggestions([]);
@@ -292,12 +296,26 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     return Object.keys(errs).length === 0;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!validateStep()) return;
     if (step < 3) {
       setStep((s) => s + 1);
     } else {
-      setSubmitted(true);
+      setIsSubmitting(true);
+      setSubmitError("");
+      try {
+        const res = await fetch("/api/booking", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        if (!res.ok) throw new Error();
+        setSubmitted(true);
+      } catch {
+        setSubmitError("Une erreur est survenue. Veuillez réessayer ou nous appeler au 450-558-5788.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -523,12 +541,16 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               )}
 
               {/* Navigation */}
-              <div className={`flex items-center mt-8 ${step > 1 ? "justify-between" : "justify-end"}`}>
+              {submitError && (
+                <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mt-6">{submitError}</p>
+              )}
+              <div className={`flex items-center mt-4 ${step > 1 ? "justify-between" : "justify-end"}`}>
                 {step > 1 && (
                   <button
                     type="button"
                     onClick={() => setStep((s) => s - 1)}
-                    className="text-sm font-semibold text-gray-400 hover:text-brand transition-colors flex items-center gap-1"
+                    disabled={isSubmitting}
+                    className="text-sm font-semibold text-gray-400 hover:text-brand transition-colors flex items-center gap-1 disabled:opacity-50"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -539,9 +561,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm"
+                  disabled={isSubmitting}
+                  className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {step === 3 ? "Confirmer la réservation" : "Suivant"}
+                  {isSubmitting ? "Envoi en cours..." : step === 3 ? "Confirmer la réservation" : "Suivant"}
                 </button>
               </div>
             </>
