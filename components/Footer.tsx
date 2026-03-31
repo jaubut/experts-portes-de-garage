@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PlanifierButton from "@/components/PlanifierButton";
 import CopyrightYear from "@/components/CopyrightYear";
 
 const serviceLinks = [
@@ -14,28 +15,47 @@ const serviceLinks = [
 const companyLinks = [
   { href: "/a-propos", label: "À propos" },
   { href: "/carriere", label: "Carrières" },
-  { href: "/planifier-une-visite", label: "Planifier une visite" },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-[#111111] text-gray-400">
+      {/* Pre-footer CTA strip */}
+      <div className="bg-brand">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-heading text-white text-lg md:text-xl uppercase tracking-wide text-center sm:text-left">
+            Besoin d&apos;un expert maintenant?
+          </p>
+          <div className="flex items-center gap-3">
+            <a
+              href="tel:4505585788"
+              className="bg-white text-brand font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              450-558-5788
+            </a>
+            <PlanifierButton className="border-2 border-white text-white font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-white hover:text-brand transition-colors">
+              Planifier une visite
+            </PlanifierButton>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="sm:col-span-2 lg:col-span-1">
           <Link
             href="/"
-            className="text-brand font-extrabold text-lg tracking-tight block mb-4"
+            className="font-heading text-brand text-xl tracking-tight block mb-4 uppercase"
           >
-            EXPERTS PORTES DE GARAGE
+            Experts Portes de Garage
           </Link>
-          <p className="text-sm leading-relaxed text-gray-500 mb-4">
+          <p className="text-sm leading-relaxed text-gray-500 mb-5">
             Service local de réparation de portes de garage — Granby &amp; régions.
             Résultats garantis dès la première visite.
           </p>
           <a
             href="tel:4505585788"
-            className="inline-flex items-center gap-2 bg-brand text-white text-sm font-bold px-4 py-2 rounded hover:bg-brand-dark transition-colors"
+            className="inline-flex items-center gap-2 bg-brand text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors"
           >
             450-558-5788
           </a>
@@ -43,10 +63,10 @@ export default function Footer() {
 
         {/* Services */}
         <div>
-          <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-4">
+          <h3 className="font-heading text-white text-sm uppercase tracking-widest mb-5">
             Services
           </h3>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2.5">
             {serviceLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
@@ -62,10 +82,10 @@ export default function Footer() {
 
         {/* Entreprise */}
         <div>
-          <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-4">
+          <h3 className="font-heading text-white text-sm uppercase tracking-widest mb-5">
             Entreprise
           </h3>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2.5">
             {companyLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
@@ -81,7 +101,7 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <h3 className="text-white font-bold text-sm uppercase tracking-widest mb-4">
+          <h3 className="font-heading text-white text-sm uppercase tracking-widest mb-5">
             Contact
           </h3>
           <ul className="flex flex-col gap-3 text-sm">

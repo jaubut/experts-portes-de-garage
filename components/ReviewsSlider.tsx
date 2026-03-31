@@ -43,53 +43,44 @@ export default function ReviewsSlider() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-      {/* ── Left: speech bubble ── */}
+      {/* Left: speech bubble */}
       <div className="relative flex items-center gap-3">
-        {/* Prev arrow */}
         <button
           onClick={prev}
           aria-label="Avis précédent"
-          className="flex-shrink-0 w-9 h-9 rounded-full border-2 border-brand text-brand flex items-center justify-center hover:bg-brand hover:text-white transition-colors"
+          className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-brand text-brand flex items-center justify-center hover:bg-brand hover:text-white transition-colors"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
 
-        {/* Bubble */}
-        <div className="relative flex-1 border-2 border-brand rounded-2xl px-8 py-10 text-center">
-          {/* Decorative quote — top left */}
+        <div className="relative flex-1 bg-white border-2 border-brand rounded-2xl px-8 py-10 text-center shadow-sm">
           <span className="absolute -top-4 left-5 text-brand leading-none select-none" style={{ fontSize: "4.5rem", lineHeight: 1 }}>
             &ldquo;
           </span>
 
-          {/* Stars */}
           <div className="mb-4">
             <Stars />
           </div>
 
-          {/* Review text */}
           <p className="text-gray-700 leading-relaxed text-[0.95rem] mb-6">
             {review.text}
           </p>
 
-          {/* Author */}
-          <p className="font-extrabold text-brand text-base">— {review.author}</p>
+          <p className="font-heading text-brand text-lg uppercase">— {review.author}</p>
 
-          {/* Decorative quote — bottom right */}
           <span className="absolute -bottom-8 right-5 text-brand leading-none select-none rotate-180" style={{ fontSize: "4.5rem", lineHeight: 1 }}>
             &ldquo;
           </span>
 
-          {/* Tail */}
           <div className="absolute -bottom-[10px] left-10 w-4 h-4 bg-white border-b-2 border-r-2 border-brand rotate-45" />
         </div>
 
-        {/* Next arrow */}
         <button
           onClick={next}
           aria-label="Avis suivant"
-          className="flex-shrink-0 w-9 h-9 rounded-full border-2 border-brand text-brand flex items-center justify-center hover:bg-brand hover:text-white transition-colors"
+          className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-brand text-brand flex items-center justify-center hover:bg-brand hover:text-white transition-colors"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -97,11 +88,9 @@ export default function ReviewsSlider() {
         </button>
       </div>
 
-      {/* ── Right: Google badge ── */}
+      {/* Right: Google badge */}
       <div className="flex flex-col items-center gap-6">
-        {/* Badge */}
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm px-10 py-8 flex flex-col items-center gap-3 w-full max-w-xs">
-          {/* Google G */}
           <svg className="w-10 h-10" viewBox="0 0 48 48">
             <path fill="#4285F4" d="M46.145 24.5c0-1.546-.138-3.032-.395-4.455H24v8.42h12.445c-.537 2.9-2.17 5.36-4.627 7.01v5.824h7.49c4.383-4.038 6.837-9.987 6.837-16.8z" />
             <path fill="#34A853" d="M24 47c6.24 0 11.47-2.07 15.293-5.606l-7.49-5.823C29.71 37.24 27.02 38 24 38c-6.014 0-11.104-4.063-12.923-9.528H3.35v6.014C7.154 42.533 15.02 47 24 47z" />
@@ -114,7 +103,6 @@ export default function ReviewsSlider() {
           <p className="text-sm text-gray-500">Basé sur nos avis Google</p>
         </div>
 
-        {/* Buttons */}
         <div className="flex flex-col gap-3 w-full max-w-xs">
           <a
             href="https://www.google.com/search?q=Experts+Portes+de+Garage+Granby"
@@ -134,7 +122,6 @@ export default function ReviewsSlider() {
           </a>
         </div>
 
-        {/* Dots */}
         <div className="flex gap-2">
           {reviews.map((_, i) => (
             <button

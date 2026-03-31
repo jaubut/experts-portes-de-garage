@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 py-24 text-center">
-      <p className="text-brand font-extrabold text-6xl mb-4">404</p>
-      <h1 className="text-2xl md:text-3xl font-extrabold text-[#1a1a1a] mb-4">
+      <p className="font-heading text-brand text-7xl mb-4">404</p>
+      <h1 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase mb-4">
         Page introuvable
       </h1>
       <p className="text-gray-500 max-w-md mb-10">
@@ -19,13 +19,13 @@ export default function NotFound() {
       <div className="flex flex-col sm:flex-row gap-4">
         <Link
           href="/"
-          className="bg-brand text-white font-bold px-6 py-3 rounded hover:bg-brand-dark transition-colors"
+          className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors"
         >
           Retour à l&apos;accueil
         </Link>
         <Link
           href="/services-de-porte-de-garage"
-          className="border-2 border-brand text-brand font-bold px-6 py-3 rounded hover:bg-brand hover:text-white transition-colors"
+          className="border-2 border-brand text-brand font-bold px-7 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors"
         >
           Voir nos services
         </Link>

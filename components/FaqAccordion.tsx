@@ -26,20 +26,20 @@ export default function FaqAccordion({ items }: Props) {
             >
               <span
                 className={`font-bold text-sm md:text-base leading-snug transition-colors ${
-                  isOpen ? "text-red-600" : "text-gray-800 group-hover:text-red-600"
+                  isOpen ? "text-brand" : "text-gray-800 group-hover:text-brand"
                 }`}
               >
                 {item.q}
               </span>
               <span
-                className={`flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center transition-colors ${
+                className={`flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
                   isOpen
-                    ? "border-red-600 bg-red-600 text-white"
-                    : "border-gray-300 text-gray-400 group-hover:border-red-600 group-hover:text-red-600"
+                    ? "border-brand bg-brand text-white rotate-45"
+                    : "border-gray-300 text-gray-400 group-hover:border-brand group-hover:text-brand"
                 }`}
               >
                 <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
+                  className="w-3.5 h-3.5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -56,9 +56,8 @@ export default function FaqAccordion({ items }: Props) {
               }`}
             >
               <div className="px-6 pb-6 pt-0">
-                <div className="h-px bg-red-100 mb-4" />
+                <div className="h-px bg-brand/20 mb-4" />
                 <p className="text-gray-600 leading-relaxed text-sm md:text-[0.97rem] whitespace-pre-line">
-                  {/* Strip markdown bold/links for plain text display */}
                   {item.a
                     .replace(/\*\*([^*]+)\*\*/g, "$1")
                     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")}
