@@ -146,11 +146,12 @@ export default function RemplacementCoupeFroidPage() {
               <div className="bg-white rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
 
                 {/* Card header */}
-                <div className="bg-brand px-5 py-4 flex items-center justify-between gap-3">
-                  <Image src={LOGO_SRC} alt="Experts Portes de Garage" width={160} height={52}
-                    className="h-10 w-auto object-contain brightness-0 invert shrink-0" />
-                  <span className="font-heading text-white text-sm text-right leading-tight uppercase">
-                    Réservez votre service
+                <div className="bg-brand px-5 py-4 flex items-center justify-center gap-3">
+                  <svg className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                  <span className="font-heading text-white text-lg leading-tight uppercase tracking-wide">
+                    Prix instantané en ligne
                   </span>
                 </div>
 
