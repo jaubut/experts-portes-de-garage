@@ -8,7 +8,7 @@ const sealTypes = [
     label: "Joint de bas de porte",
     desc: "Le caoutchouc fixé au bas du panneau inférieur. Amortit le contact avec le sol et bloque les infiltrations. Le plus sollicité — et le plus souvent à remplacer.",
     detail: "Ce joint absorbe les chocs à chaque ouverture et fermeture. Il est en contact direct avec le sol, la neige et l'eau. Un joint de bas de porte usé laisse passer l'air froid, l'eau et les insectes sous la porte.",
-    image: "/images/joint-bas.webp",
+    image: "/images/joint_de_bas_de_portes_de_garage.jpg",
   },
   {
     id: "lateraux",

@@ -178,7 +178,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
         {/* ── Hardcoded image+text sections ── */}
         {[
           {
-            img: "/images/joint-bas.webp",
+            img: "/images/joint_de_bas_de_portes_de_garage.jpg",
             title: "Votre porte de garage ne s'ouvre plus ou ne se ferme plus ?",
             content: `Plusieurs causes peuvent expliquer ce problème. L'une des plus fréquentes est une défaillance de la roue d'entraînement principale du moteur, souvent causée par une porte déséquilibrée, une chaîne ou une courroie trop tendue, une utilisation fréquente ou simplement l'usure avec le temps. D'autres raisons possibles incluent des capteurs mal alignés, un problème électrique ou un moteur défectueux.\n\nAvant d'appeler un technicien, assurez-vous que l'ouvre-porte est bien branché et que les capteurs de sécurité ne sont pas obstrués. Si le problème persiste, une inspection professionnelle est fortement recommandée.`,
             list: null as string[] | null,
