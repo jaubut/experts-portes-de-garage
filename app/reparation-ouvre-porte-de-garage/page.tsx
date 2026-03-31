@@ -17,9 +17,9 @@ import InspectionBanner from "@/components/InspectionBanner";
 const SLUG = "reparation-ouvre-porte-de-garage";
 
 const HERO_BG =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
+  "/images/gallery-5.webp";
 const LOGO_SRC =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
+  "/images/logo.webp";
 
 type ContentBlock =
   | { kind: "text"; content: string }
@@ -211,7 +211,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-6-oct.-2025-09_32_16.webp"
+                        src="/images/equipe.webp"
                         alt=""
                         width={96}
                         height={130}
@@ -239,7 +239,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
             items={[
               {
                 title: "Installation d'ouvre-porte de garage",
-                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-6-oct.-2025-09_32_16.webp",
+                imageUrl: "/images/equipe.webp",
                 content: (
                   <div>
                     <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
@@ -271,7 +271,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
               },
               {
                 title: "Problèmes courants d'ouvre-porte de garage que nous réparons",
-                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp",
+                imageUrl: "/images/gallery-5.webp",
                 content: (
                   <div>
                     <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
@@ -299,7 +299,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
               },
               {
                 title: "Télécommandes pour ouvre-portes de garage",
-                imageUrl: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-24-oct.-2025-13_13_30.webp",
+                imageUrl: "/images/ouvre-porte.webp",
                 content: (
                   <div>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">

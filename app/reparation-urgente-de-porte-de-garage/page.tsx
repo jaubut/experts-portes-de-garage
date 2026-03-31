@@ -11,9 +11,9 @@ import GallerySection from "@/components/GallerySection";
 const SLUG = "reparation-urgente-de-porte-de-garage";
 
 const HERO_BG =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
+  "/images/gallery-5.webp";
 const LOGO_SRC =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
+  "/images/logo.webp";
 
 function extractFullExcerpt(raw: string): string {
   const lines = raw.split("\n");
@@ -119,7 +119,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-6-oct.-2025-09_32_16.webp"
+                        src="/images/equipe.webp"
                         alt=""
                         width={96}
                         height={130}
@@ -178,13 +178,13 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
         {/* ── Hardcoded image+text sections ── */}
         {[
           {
-            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-8-oct.-2025-14_54_03-1024x683.webp",
+            img: "/images/joint-bas.webp",
             title: "Votre porte de garage ne s'ouvre plus ou ne se ferme plus ?",
             content: `Plusieurs causes peuvent expliquer ce problème. L'une des plus fréquentes est une défaillance de la roue d'entraînement principale du moteur, souvent causée par une porte déséquilibrée, une chaîne ou une courroie trop tendue, une utilisation fréquente ou simplement l'usure avec le temps. D'autres raisons possibles incluent des capteurs mal alignés, un problème électrique ou un moteur défectueux.\n\nAvant d'appeler un technicien, assurez-vous que l'ouvre-porte est bien branché et que les capteurs de sécurité ne sont pas obstrués. Si le problème persiste, une inspection professionnelle est fortement recommandée.`,
             list: null as string[] | null,
           },
           {
-            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-24-oct.-2025-21_00_24-1024x683.webp",
+            img: "/images/gallery-2.webp",
             title: "Votre porte de garage est coincée ou bloquée",
             content: `Une porte de garage fonctionne grâce à plusieurs composantes qui doivent être parfaitement synchronisées. Lorsqu'elle se bloque ou se coince, une réparation urgente devient souvent nécessaire.\n\nIl est probable que les ressorts soient brisés. Évitez de forcer l'ouverture ou la fermeture — cela pourrait aggraver les dommages.`,
             list: [
@@ -195,7 +195,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
             ],
           },
           {
-            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-25-oct.-2025-07_55_46-1024x683.webp",
+            img: "/images/urgence.webp",
             title: "Le type de bruit peut souvent révéler la cause du problème",
             content: `Si le bruit persiste, une réparation urgente est généralement nécessaire.`,
             list: [
@@ -205,7 +205,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
             ],
           },
           {
-            img: "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-8-oct.-2025-14_42_59-1024x683.webp",
+            img: "/images/joint-lateral.webp",
             title: "Votre télécommande de porte de garage ne fonctionne plus ?",
             content: `Si votre porte et votre ouvre-porte semblent en bon état, mais que la télécommande ne répond plus, le problème peut provenir de plusieurs causes :\n\nEssayez de remplacer les piles, de reprogrammer la télécommande ou de vous rapprocher de l'ouvre-porte lorsque vous l'utilisez. Si le problème persiste, il est conseillé de faire appel à un technicien pour un diagnostic et une réparation professionnelle.`,
             list: [

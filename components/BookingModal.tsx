@@ -329,7 +329,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
         {/* Header */}
         <div className="bg-brand px-6 py-4 flex items-center justify-between gap-4">
           <Image
-            src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp"
+            src="/images/logo.webp"
             alt="Experts Portes de Garage"
             width={140}
             height={46}

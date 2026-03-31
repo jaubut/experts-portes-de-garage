@@ -11,9 +11,9 @@ import AnimatedSteps from "@/components/AnimatedSteps";
 import { WeatherSealBookingProvider } from "@/context/WeatherSealBookingContext";
 
 const HERO_BG =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
+  "/images/gallery-5.webp";
 const LOGO_SRC =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
+  "/images/logo.webp";
 
 export const metadata: Metadata = {
   title: "Remplacement de coupe-froid de porte de garage — Experts Portes de Garage",

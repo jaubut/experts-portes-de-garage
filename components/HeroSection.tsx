@@ -32,7 +32,7 @@ export default function HeroSection() {
 
         <div className="flex-1 flex justify-center w-full">
           <Image
-            src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-22-oct.-2025-22_20_39.webp"
+            src="/images/camion.webp"
             alt="Technicien Experts Portes de Garage"
             width={540}
             height={540}

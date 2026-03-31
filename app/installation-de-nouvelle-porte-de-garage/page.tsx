@@ -15,9 +15,9 @@ import InspectionBanner from "@/components/InspectionBanner";
 const SLUG = "installation-de-nouvelle-porte-de-garage";
 
 const HERO_BG =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp";
+  "/images/gallery-5.webp";
 const LOGO_SRC =
-  "https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-14_03_41.webp";
+  "/images/logo.webp";
 
 type ContentBlock =
   | { kind: "text"; content: string }
@@ -209,7 +209,7 @@ export default function InstallationDeNouvellePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-6-oct.-2025-09_32_16.webp"
+                        src="/images/equipe.webp"
                         alt=""
                         width={96}
                         height={130}

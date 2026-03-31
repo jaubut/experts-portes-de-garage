@@ -8,7 +8,7 @@ export default function CTABanner() {
         {/* Technician image — bleeds to bottom edge */}
         <div className="flex-shrink-0 flex justify-center self-end">
           <Image
-            src="https://expertsportesdegarage.ca/wp-content/uploads/2025/11/ChatGPT-Image-15-nov.-2025-10_02_00.webp"
+            src="/images/cta-bg.webp"
             alt="Technicien Experts Portes de Garage"
             width={340}
             height={380}
