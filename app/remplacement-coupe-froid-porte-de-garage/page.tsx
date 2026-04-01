@@ -11,7 +11,7 @@ import AnimatedSteps from "@/components/AnimatedSteps";
 import { WeatherSealBookingProvider } from "@/context/WeatherSealBookingContext";
 
 const HERO_BG =
-  "/images/gallery-5.webp";
+  "/images/page_coupe_froid_background.jpg";
 const LOGO_SRC =
   "/images/logo.webp";
 
@@ -64,7 +64,7 @@ export default function RemplacementCoupeFroidPage() {
         style={{ backgroundImage: `url(${HERO_BG})` }}
       >
         {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/70 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/80 to-black/70" />
 
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-14 md:py-20">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
