@@ -80,8 +80,8 @@ export default function RemplacementCoupeFroidPage() {
               </nav>
 
               {/* Urgency badge */}
-              <div className="inline-flex items-center gap-2 bg-brand/20 border border-brand/50 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-5">
-                <span className="w-2 h-2 bg-brand rounded-full animate-pulse" />
+              <div className="inline-flex items-center gap-2 bg-brand/20 border border-brand/50 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-5 animate-heartbeat">
+                <span className="w-2 h-2 bg-brand rounded-full" />
                 Offre limitée — Printemps 2025
               </div>
 
