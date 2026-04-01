@@ -483,7 +483,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                                     value={form.measurements[id] || ""}
                                     onChange={(e) => updateMeasurement(id, e.target.value)}
                                     placeholder="ex: 7"
-                                    className={`w-full border rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 transition-colors pr-14 ${errors[`measure_${id}`] ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-brand/20 focus:border-brand"}`}
+                                    className={`w-full border rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 transition-colors pr-14 ${errors[`measure_${id}`] ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-brand/20 focus:border-brand"}`}
                                   />
                                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">pieds</span>
                                 </div>
