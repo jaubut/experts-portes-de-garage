@@ -594,7 +594,7 @@ function Field({
 }
 
 function inputCls(hasError: boolean) {
-  return `w-full border rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 transition-colors ${
+  return `w-full border rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 transition-colors ${
     hasError
       ? "border-red-400 focus:ring-red-200 focus:border-red-400"
       : "border-gray-200 focus:ring-brand/20 focus:border-brand"

@@ -167,7 +167,7 @@ function Calendar({ value, onChange, hasError }: { value: string; onChange: (d: 
 }
 
 function inputCls(hasError: boolean) {
-  return `w-full border rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 transition-colors ${
+  return `w-full border rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 transition-colors ${
     hasError ? "border-red-400 focus:ring-red-200 focus:border-red-400" : "border-gray-200 focus:ring-brand/20 focus:border-brand"
   }`;
 }
@@ -446,7 +446,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                   <Field label="Informations supplémentaires (optionnel)">
                     <textarea value={form.notes} onChange={(e) => update("notes", e.target.value)}
                       placeholder="Décrivez votre situation, le type de porte, toute information utile..."
-                      rows={2} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors resize-none" />
+                      rows={2} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors resize-none" />
                   </Field>
                 </div>
               )}
