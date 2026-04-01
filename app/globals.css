@@ -19,10 +19,10 @@ body {
 }
 
 @keyframes heartbeat {
-  0%, 49%, 100% { opacity: 1; }
-  50%, 99% { opacity: 0.25; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
 }
 
 .animate-heartbeat {
-  animation: heartbeat 1s step-start infinite;
+  animation: heartbeat 2s ease-in-out infinite;
 }
