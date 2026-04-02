@@ -7,13 +7,13 @@ export default function CTABanner() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-row items-end gap-4">
 
         {/* Personnage — 40% sur mobile, fixe sur desktop */}
-        <div className="w-[40%] md:w-[200px] flex-shrink-0 self-end">
+        <div className="w-[40%] md:w-[220px] flex-shrink-0 self-end">
           <Image
             src="/images/personnage_transparent.png"
             alt="Technicien Experts Portes de Garage"
-            width={200}
-            height={300}
-            className="w-full h-auto object-contain object-bottom block"
+            width={220}
+            height={420}
+            className="w-full h-[280px] sm:h-[320px] md:h-[360px] object-contain object-bottom block translate-y-10"
           />
         </div>
 
