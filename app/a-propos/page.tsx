@@ -57,7 +57,7 @@ export default function AProposPage() {
     <>
       {/* ── 1. HERO ── */}
       <section className="relative secretaire-bg py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[#1a1a1a]/60" />
+        <div className="absolute inset-0 bg-[#1a1a1a]/80" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <nav className=" text-sm text-white/50 mb-6 flex items-center gap-2 justify-center">
             <Link href="/" className="hover:text-white transition-colors">Accueil</Link>
