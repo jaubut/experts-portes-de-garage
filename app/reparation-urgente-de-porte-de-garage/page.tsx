@@ -1,5 +1,3 @@
-import { getPageBySlug } from "@/lib/content";
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,90 +5,99 @@ import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 
-const SLUG = "reparation-urgente-de-porte-de-garage";
+export const metadata: Metadata = {
+  title: "Réparation Urgente de Porte de Garage — Experts Portes de Garage",
+  description: "Service d'urgence 24/7 pour votre porte de garage en Estrie et Montérégie. Intervention le jour même. Appelez le 450-558-5788.",
+};
 
-const HERO_BG =
-  "/images/gallery-5.webp";
-const LOGO_SRC =
-  "/images/logo_experts.png";
+const faqItems = [
+  {
+    question: "Ça coûte combien?",
+    answer: "Appelez-nous pour un devis gratuit. On évalue la situation et on vous donne un prix clair avant de commencer quoi que ce soit.",
+  },
+  {
+    question: "Vous venez vraiment le jour même?",
+    answer: "Oui, c'est notre engagement. On se déplace le jour même pour les urgences dans notre zone de service.",
+  },
+  {
+    question: "Vous travaillez la nuit?",
+    answer: "Oui, on est disponible 24h/24, 7 jours/7. Une urgence n'attend pas les heures d'ouverture.",
+  },
+];
 
-function extractFullExcerpt(raw: string): string {
-  const lines = raw.split("\n");
-  let collecting = false;
-  const paragraphLines: string[] = [];
+const problems = [
+  "Porte bloquée ou coincée",
+  "Ressorts cassés",
+  "Moteur défaillant",
+  "Télécommande qui ne marche plus",
+  "Bruits étranges (grincements, claquements)",
+  "Porte qui s'arrête ou vibre",
+];
 
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      if (collecting && paragraphLines.length > 0) break;
-      continue;
-    }
-    if (trimmed.startsWith("#") || trimmed.startsWith("![]") || trimmed.startsWith("Planifier")) {
-      if (collecting) break;
-      continue;
-    }
-    collecting = true;
-    paragraphLines.push(trimmed);
-  }
+const whyUs = [
+  "Intervention le jour même",
+  "Disponible 24h/24, 7 jours/semaine",
+  "Équipe qualifiée et expérimentée",
+  "Service fiable et rapide",
+];
 
-  return paragraphLines
-    .join(" ")
-    .replace(/\*\*/g, "")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .trim();
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  const page = getPageBySlug(SLUG);
-  if (!page) return {};
-  return {
-    title: `${page.title} — Experts Portes de Garage`,
-    description: page.excerpt,
-  };
-}
+const steps = [
+  { num: "1", title: "Appelle ou envoie un message", desc: "Contacte-nous par téléphone ou via le formulaire." },
+  { num: "2", title: "On pose quelques questions", desc: "On évalue rapidement la situation pour préparer l'intervention." },
+  { num: "3", title: "On arrive aujourd'hui", desc: "Un technicien se déplace le jour même dans ta zone." },
+  { num: "4", title: "On répare ton problème", desc: "On diagnostique et règle le problème sur place." },
+];
 
 export default function ReparationUrgenteDePorteDeGaragePage() {
-  const page = getPageBySlug(SLUG);
-  if (!page) notFound();
-
-  const heroExcerpt = extractFullExcerpt(page.content);
-
   return (
     <>
       {/* ── 1. HERO ── */}
-      <section
-        className="relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
-      >
-        <div className="absolute inset-0 bg-black/65" />
+      <section className="relative bg-[#1a1a1a] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-black/80 to-brand/20" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-14 md:pt-20 pb-10">
           <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-14">
-            {/* Left — title + excerpt */}
+
+            {/* Left */}
             <div className="flex-1 text-center lg:text-left">
               <nav className="text-sm text-white/60 mb-5 flex items-center gap-2 justify-center lg:justify-start">
-                <Link href="/" className="hover:text-white transition-colors">
-                  Accueil
-                </Link>
+                <Link href="/" className="hover:text-white transition-colors">Accueil</Link>
                 <span>/</span>
-                <span className="text-white/80">{page.title}</span>
+                <span className="text-white/80">Réparation urgente</span>
               </nav>
-              <h1 className="font-heading text-3xl md:text-4xl text-white uppercase leading-tight mb-5">
-                {page.title}
+
+              <div className="inline-flex items-center gap-2 bg-brand/20 border border-brand/40 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand" />
+                </span>
+                Urgence 24/7
+              </div>
+
+              <h1 className="font-heading text-3xl md:text-5xl text-white uppercase leading-tight mb-4">
+                Porte de Garage Bloquée?{" "}
+                <span className="text-brand">On Arrive Aujourd&apos;hui!</span>
               </h1>
-              {heroExcerpt && (
-                <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  {heroExcerpt}
-                </p>
-              )}
+              <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto lg:mx-0">
+                Service d&apos;urgence 24/7 — Intervention le jour même en Estrie et Montérégie.
+              </p>
+              <a
+                href="tel:4505585788"
+                className="inline-flex items-center gap-3 bg-brand text-white font-heading text-lg md:text-xl px-8 py-4 rounded-xl hover:bg-brand-dark transition-colors shadow-lg shadow-brand/30 uppercase tracking-wide"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.18 21 3 13.82 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" />
+                </svg>
+                Appeler maintenant : 450-558-5788
+              </a>
             </div>
 
             {/* Right — booking card */}
-            <div className="w-full lg:min-w-[420px] lg:w-[420px] shrink-0">
+            <div className="w-full lg:min-w-[400px] lg:w-[400px] shrink-0">
               <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
                 <div className="bg-brand px-5 py-4 flex items-center justify-between gap-3">
                   <Image
-                    src={LOGO_SRC}
+                    src="/images/logo_experts.png"
                     alt="Experts Portes de Garage"
                     width={160}
                     height={52}
@@ -107,8 +114,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                 </div>
                 <div className="px-5 pt-4 pb-0">
                   <p className="text-gray-600 leading-snug text-sm mb-3">
-                    Faites-nous savoir ce dont vous avez besoin, choisissez le
-                    moment qui vous convient le mieux, et nous serons sur place.
+                    Faites-nous savoir ce dont vous avez besoin, choisissez le moment qui vous convient le mieux, et nous serons sur place.
                   </p>
                   <div className="flex items-end gap-3">
                     <div className="flex-1 pb-4">
@@ -129,169 +135,130 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── 2. URGENT BANNER ── */}
-      <section className="bg-[#1a1a1a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <p className="font-heading text-white text-xl md:text-2xl uppercase tracking-wide mb-1">
-              VOTRE PORTE EST BLOQUÉE? ON SE DÉPLACE AUJOURD&apos;HUI!
-            </p>
-            <p className="text-gray-400 text-sm">
-              Service d&apos;urgence 24h/24 — nos techniciens interviennent le jour même.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <a
-              href="tel:4505585788"
-              className="bg-brand text-white font-bold px-6 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm whitespace-nowrap shadow-sm text-center"
-            >
-              Appelez maintenant
-            </a>
-            <a
-              href="tel:4505585788"
-              className="border-2 border-white text-white font-bold px-6 py-3 rounded-lg hover:bg-white hover:text-[#1a1a1a] transition-colors text-sm whitespace-nowrap text-center"
-            >
-              450-558-5788
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. MAIN CONTENT ── */}
-      <div className="bg-white pt-10">
-
-        {/* Intro section */}
-        <div className="px-8 md:px-16 py-4 text-center">
-          <h2 className="font-heading text-2xl text-brand mt-4 mb-4 pb-2 border-b-2 border-brand/20 uppercase">
-            Signes que vous avez besoin d&apos;une réparation urgente de porte de garage
+      {/* ── 2. POURQUOI NOUS ── */}
+      <section className="bg-white py-14">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <p className="text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Pourquoi nous choisir</p>
+          <h2 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+            Notre engagement envers vous
           </h2>
-          <p className="mb-5 leading-relaxed text-gray-700 text-[1.02rem]">
-            Votre porte de garage est coincée, fait des bruits étranges ou refuse d&apos;ouvrir ou de fermer&nbsp;? Les pannes arrivent presque toujours au pire moment — vous laissant bloqué à l&apos;extérieur ou compromettant la sécurité de votre maison. Voici quelques-unes des raisons les plus fréquentes nécessitant une réparation urgente de porte de garage&nbsp;:
-          </p>
-        </div>
-
-        {/* ── Hardcoded image+text sections ── */}
-        {[
-          {
-            img: "/images/coupe-froid/joint_de_bas_de_portes_de_garage.jpg",
-            title: "Votre porte de garage ne s'ouvre plus ou ne se ferme plus ?",
-            content: `Plusieurs causes peuvent expliquer ce problème. L'une des plus fréquentes est une défaillance de la roue d'entraînement principale du moteur, souvent causée par une porte déséquilibrée, une chaîne ou une courroie trop tendue, une utilisation fréquente ou simplement l'usure avec le temps. D'autres raisons possibles incluent des capteurs mal alignés, un problème électrique ou un moteur défectueux.\n\nAvant d'appeler un technicien, assurez-vous que l'ouvre-porte est bien branché et que les capteurs de sécurité ne sont pas obstrués. Si le problème persiste, une inspection professionnelle est fortement recommandée.`,
-            list: null as string[] | null,
-          },
-          {
-            img: "/images/gallery-2.webp",
-            title: "Votre porte de garage est coincée ou bloquée",
-            content: `Une porte de garage fonctionne grâce à plusieurs composantes qui doivent être parfaitement synchronisées. Lorsqu'elle se bloque ou se coince, une réparation urgente devient souvent nécessaire.\n\nIl est probable que les ressorts soient brisés. Évitez de forcer l'ouverture ou la fermeture — cela pourrait aggraver les dommages.`,
-            list: [
-              "Câbles défectueux ou brisés",
-              "Système de poulies usé ou endommagé",
-              "Rails tordus, obstrués ou désalignés",
-              "Ressorts cassés",
-            ],
-          },
-          {
-            img: "/images/urgence.webp",
-            title: "Le type de bruit peut souvent révéler la cause du problème",
-            content: `Si le bruit persiste, une réparation urgente est généralement nécessaire.`,
-            list: [
-              "Claquements (popping) – Souvent causés par des roulettes usées ou détériorées.",
-              "Grincements (squeaking) – Indiquent généralement un manque de lubrification.",
-              "Frottements ou grattements (scraping/grinding) – Peuvent être dus à un câble effiloché ou des rails désalignés.",
-            ],
-          },
-          {
-            img: "/images/coupe-froid/coupe_froid_de_cote.jpg",
-            title: "Votre télécommande de porte de garage ne fonctionne plus ?",
-            content: `Si votre porte et votre ouvre-porte semblent en bon état, mais que la télécommande ne répond plus, le problème peut provenir de plusieurs causes :\n\nEssayez de remplacer les piles, de reprogrammer la télécommande ou de vous rapprocher de l'ouvre-porte lorsque vous l'utilisez. Si le problème persiste, il est conseillé de faire appel à un technicien pour un diagnostic et une réparation professionnelle.`,
-            list: [
-              "Piles faibles ou déchargées – C'est la cause la plus simple et la plus fréquente.",
-              "Interférences de signal – D'autres appareils sans fil à la maison peuvent perturber la communication.",
-              "Erreur de programmation – La télécommande doit peut-être être reprogrammée pour se synchroniser avec l'ouvre-porte.",
-              "Récepteur défectueux – Si le bouton mural fonctionne mais pas la télécommande, le problème vient probablement du récepteur de l'ouvre-porte.",
-            ],
-          },
-        ].map((section, idx) => (
-          <div key={idx} className="max-w-5xl mx-auto px-6 md:px-10 mb-12 flex flex-col sm:flex-row items-start gap-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={section.img}
-              alt={section.title}
-              className="w-64 h-48 object-cover rounded-lg flex-shrink-0"
-            />
-            <div className="flex-1 min-w-0">
-              <h2 className="font-heading text-xl text-brand mb-3 pb-1 border-b-2 border-brand/20 uppercase">
-                {section.title}
-              </h2>
-              {section.content.split("\n\n").map((para, i, arr) =>
-                section.list && i === 0 && arr.length > 1 ? (
-                  // First paragraph shown before list when there are multiple paragraphs
-                  <p key={i} className="mb-4 leading-relaxed text-gray-700 text-[1.02rem]">{para}</p>
-                ) : null
-              )}
-              {section.list && (
-                <ul className="list-none pl-0 mb-4 flex flex-col gap-2 text-gray-700">
-                  {section.list.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5 leading-relaxed">
-                      <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {section.content.split("\n\n").map((para, i, arr) =>
-                !section.list || i > 0 || arr.length === 1 ? (
-                  <p key={i} className="mb-4 leading-relaxed text-gray-700 text-[1.02rem]">{para}</p>
-                ) : null
-              )}
-            </div>
-          </div>
-        ))}
-
-        {/* Mid-page CTA */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-14">
-          <div className="mt-6 bg-muted rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <p className="font-heading text-lg text-brand uppercase mb-1">
-                Prêt à planifier votre service?
-              </p>
-              <p className="text-gray-500 text-sm">
-                Nos techniciens se déplacent rapidement partout en Estrie et Montérégie.
-              </p>
-            </div>
-            <div className="flex gap-3 shrink-0">
-              <PlanifierButton className="bg-brand text-white font-bold px-5 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm">
-                Planifier maintenant
-              </PlanifierButton>
-              <a
-                href="tel:4505585788"
-                className="border-2 border-brand text-brand font-bold px-5 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm"
-              >
-                450-558-5788
-              </a>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {whyUs.map((item) => (
+              <div key={item} className="flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-xl px-5 py-4">
+                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-brand flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <span className="text-[#1a1a1a] font-semibold text-sm">{item}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── 4. REVIEWS ── */}
+      {/* ── 3. PROBLÈMES QU'ON RÉPARE ── */}
+      <section className="bg-[#f5f5f5] py-14">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <p className="text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Nos interventions</p>
+          <h2 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+            Problèmes qu&apos;on répare
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {problems.map((p) => (
+              <div key={p} className="bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center gap-3 shadow-sm">
+                <span className="flex-shrink-0 w-2 h-2 rounded-full bg-brand" />
+                <span className="text-[#1a1a1a] text-sm font-medium">{p}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. COMMENT ÇA MARCHE ── */}
+      <section className="bg-white py-14">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <p className="text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Simple et rapide</p>
+          <h2 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+            Comment ça marche
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {steps.map((s) => (
+              <div key={s.num} className="flex flex-col items-center text-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-brand flex items-center justify-center">
+                  <span className="font-heading text-white text-xl">{s.num}</span>
+                </div>
+                <p className="font-bold text-[#1a1a1a] text-sm">{s.title}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. ZONES DESSERVIES ── */}
+      <section className="bg-brand py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-white/80 text-sm font-bold uppercase tracking-widest mb-2">Zone de service</p>
+          <h2 className="font-heading text-2xl md:text-3xl text-white uppercase leading-tight mb-3">
+            Zones desservies
+          </h2>
+          <div className="inline-flex items-center gap-3 bg-white/15 border border-white/30 rounded-2xl px-6 py-4 mt-2">
+            <svg className="w-6 h-6 text-white flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p className="text-white font-bold text-lg">Granby et rayon de 45 km</p>
+          </div>
+          <p className="text-white/70 text-sm mt-4">Estrie · Montérégie · Rive-Sud</p>
+        </div>
+      </section>
+
+      {/* ── 6. CONTACT PRINCIPAL ── */}
+      <section className="bg-white py-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-brand font-bold text-sm uppercase tracking-widest mb-2">Contactez-nous</p>
+          <h2 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase mb-8 leading-tight">
+            On est là pour vous
+          </h2>
+          <a
+            href="tel:4505585788"
+            className="block font-heading text-4xl md:text-5xl text-brand uppercase mb-2 hover:text-brand-dark transition-colors"
+          >
+            450-558-5788
+          </a>
+          <p className="text-gray-400 text-sm mb-8">Disponible 24h/24 · 7 jours/7</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <PlanifierButton className="bg-brand text-white font-bold px-8 py-4 rounded-xl text-base hover:bg-brand-dark transition-colors shadow-lg shadow-brand/20">
+              Demander un devis →
+            </PlanifierButton>
+            <a
+              href="mailto:info@expertsportesdegarage.ca"
+              className="border-2 border-brand text-brand font-bold px-8 py-4 rounded-xl text-base hover:bg-brand hover:text-white transition-colors text-center"
+            >
+              info@expertsportesdegarage.ca
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. AVIS CLIENTS ── */}
       <ReviewsSection />
 
-      {/* ── 5. FAQ ACCORDION ── */}
-      {page.faq.length > 0 && (
-        <section className="bg-white py-16">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <h2 className="font-heading text-2xl md:text-3xl text-brand text-center uppercase mb-10">
-              Foire aux questions
-            </h2>
-            <FaqAccordion items={page.faq} />
-          </div>
-        </section>
-      )}
-
+      {/* ── 8. FAQ ── */}
+      <section className="bg-white py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="font-heading text-2xl md:text-3xl text-brand text-center uppercase mb-10">
+            Questions fréquentes
+          </h2>
+          <FaqAccordion items={faqItems} />
+        </div>
+      </section>
     </>
   );
 }
