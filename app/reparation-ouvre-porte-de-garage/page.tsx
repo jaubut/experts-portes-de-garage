@@ -11,7 +11,6 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import ImageAccordion from "@/components/ImageAccordion";
 import MotorSection from "@/components/MotorSection";
-import GallerySection from "@/components/GallerySection";
 import InspectionBanner from "@/components/InspectionBanner";
 
 const SLUG = "reparation-ouvre-porte-de-garage";
@@ -344,8 +343,6 @@ export default function ReparationOuvrePorteDeGaragePage() {
         </section>
       )}
 
-      {/* ── 6. GALLERY ── */}
-      <GallerySection />
     </>
   );
 }

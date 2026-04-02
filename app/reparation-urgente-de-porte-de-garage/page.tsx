@@ -6,7 +6,6 @@ import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
-import GallerySection from "@/components/GallerySection";
 
 const SLUG = "reparation-urgente-de-porte-de-garage";
 
@@ -293,8 +292,6 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
         </section>
       )}
 
-      {/* ── 6. GALLERY ── */}
-      <GallerySection />
     </>
   );
 }
