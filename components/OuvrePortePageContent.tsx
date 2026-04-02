@@ -88,12 +88,69 @@ const services = [
 ];
 
 const problems = [
-  "Moteur qui ne fonctionne plus",
-  "Bruit excessif ou grincement",
-  "Télécommande qui ne marche plus",
-  "Porte qui s'arrête ou ne bouge pas",
-  "Courroie cassée ou usée",
-  "Capteurs défectueux",
+  {
+    label: "Moteur qui ne fonctionne plus",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+      </svg>
+    ),
+  },
+  {
+    label: "Bruit excessif ou grincement",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path d="M15.54 8.46a5 5 0 010 7.07" />
+        <path d="M19.07 4.93a10 10 0 010 14.14" />
+      </svg>
+    ),
+  },
+  {
+    label: "Télécommande qui ne marche plus",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <rect x="7" y="2" width="10" height="20" rx="2" ry="2" />
+        <line x1="12" y1="18" x2="12.01" y2="18" />
+        <line x1="10" y1="7" x2="14" y2="7" />
+        <line x1="12" y1="5" x2="12" y2="9" />
+      </svg>
+    ),
+  },
+  {
+    label: "Porte qui s'arrête ou ne bouge pas",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <line x1="9" y1="3" x2="9" y2="21" />
+        <circle cx="6" cy="12" r="1" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    label: "Courroie cassée ou usée",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="12" r="3" />
+        <line x1="9" y1="10" x2="15" y2="10" />
+        <line x1="9" y1="14" x2="15" y2="14" />
+        <line x1="3" y1="12" x2="1" y2="12" />
+        <line x1="23" y1="12" x2="21" y2="12" />
+      </svg>
+    ),
+  },
+  {
+    label: "Capteurs défectueux",
+    icon: (
+      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+        <line x1="2" y1="2" x2="22" y2="22" />
+      </svg>
+    ),
+  },
 ];
 
 const steps = [
@@ -156,13 +213,11 @@ export default function OuvrePortePageContent() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
             {problems.map((p, i) => (
-              <div key={p} className={`reveal ${d[i]} flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-5 py-3.5`}>
+              <div key={p.label} className={`reveal ${d[i]} flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-5 py-3.5`}>
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
-                  </svg>
+                  {p.icon}
                 </span>
-                <span className="text-[#1a1a1a] font-medium text-sm">{p}</span>
+                <span className="text-[#1a1a1a] font-medium text-sm">{p.label}</span>
               </div>
             ))}
           </div>
