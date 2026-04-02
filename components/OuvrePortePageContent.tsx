@@ -147,7 +147,30 @@ export default function OuvrePortePageContent() {
         </div>
       </section>
 
-      {/* ── 2. POURQUOI UN BON OUVRE-PORTE ── */}
+      {/* ── 2. PROBLÈMES COURANTS ── */}
+      <section className="bg-[#f5f5f5] py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">On répare ça</p>
+          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+            Problèmes courants
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            {problems.map((p, i) => (
+              <div key={p} className={`reveal ${d[i]} flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-5 py-3.5`}>
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand flex items-center justify-center">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+                  </svg>
+                </span>
+                <span className="text-[#1a1a1a] font-medium text-sm">{p}</span>
+              </div>
+            ))}
+          </div>
+          <p className="reveal text-center text-gray-500 text-sm">Peu importe le problème, nos techniciens qualifiés peuvent le régler rapidement.</p>
+        </div>
+      </section>
+
+      {/* ── 3. POURQUOI UN BON OUVRE-PORTE ── */}
       <section className="bg-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les bénéfices</p>
@@ -166,7 +189,7 @@ export default function OuvrePortePageContent() {
         </div>
       </section>
 
-      {/* ── 3. NOS SERVICES ── */}
+      {/* ── 4. NOS SERVICES ── */}
       <section className="bg-[#1a1a1a] py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Ce qu'on fait</p>
@@ -200,29 +223,6 @@ export default function OuvrePortePageContent() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── 4. PROBLÈMES COURANTS ── */}
-      <section className="bg-[#f5f5f5] py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">On répare ça</p>
-          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
-            Problèmes courants
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-            {problems.map((p, i) => (
-              <div key={p} className={`reveal ${d[i]} flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-5 py-3.5`}>
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
-                  </svg>
-                </span>
-                <span className="text-[#1a1a1a] font-medium text-sm">{p}</span>
-              </div>
-            ))}
-          </div>
-          <p className="reveal text-center text-gray-500 text-sm">Peu importe le problème, nos techniciens qualifiés peuvent le régler rapidement.</p>
         </div>
       </section>
 
