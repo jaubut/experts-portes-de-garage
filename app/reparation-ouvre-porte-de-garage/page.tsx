@@ -213,7 +213,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="/images/personnage_transparent.png"
+                        src="/images/moteurs/moteur_DDO8900W.png"
                         alt=""
                         width={96}
                         height={130}
@@ -238,7 +238,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
             items={[
               {
                 title: "Installation d'ouvre-porte de garage",
-                imageUrl: "/images/personnage_transparent.png",
+                imageUrl: "/images/moteurs/moteur_DDO8900W.png",
                 content: (
                   <div>
                     <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
