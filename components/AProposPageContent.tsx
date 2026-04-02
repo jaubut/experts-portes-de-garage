@@ -13,10 +13,40 @@ const services = [
 ];
 
 const team = [
-  "Techniciens qualifiés et certifiés",
-  "Formation continue obligatoire",
-  "Nous apprenons les dernières techniques et technologies",
-  "Nous ne nous contentons pas de faire «correct» — nous visons l'excellence",
+  {
+    label: "Techniciens qualifiés et certifiés",
+    icon: (
+      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+        <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5" />
+      </svg>
+    ),
+  },
+  {
+    label: "Formation continue obligatoire",
+    icon: (
+      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Nous apprenons les dernières techniques et technologies",
+    icon: (
+      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+    ),
+  },
+  {
+    label: "Nous ne nous contentons pas de faire «correct» — nous visons l'excellence",
+    icon: (
+      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ),
+  },
 ];
 
 const distinctions: { text: string; svg: ReactNode }[] = [
@@ -147,13 +177,11 @@ export default function AProposPageContent() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {team.map((t, i) => (
-              <div key={t} className={`reveal-scale ${d[i]} flex items-start gap-4 bg-white/10 border border-white/20 rounded-xl px-5 py-4`}>
+              <div key={t.label} className={`reveal-scale ${d[i]} flex items-start gap-4 bg-white/10 border border-white/20 rounded-xl px-5 py-4`}>
                 <span className="flex-shrink-0 w-8 h-8 rounded-full bg-brand flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  {t.icon}
                 </span>
-                <span className="text-white font-medium text-sm leading-relaxed">{t}</span>
+                <span className="text-white font-medium text-sm leading-relaxed">{t.label}</span>
               </div>
             ))}
           </div>
