@@ -46,16 +46,16 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-              On se déplace rapidement en Estrie et Montérégie pour diagnostiquer et réparer votre porte de garage.{" "}
-              <strong className="text-[#1a1a1a]">Devis gratuit, sans engagement.</strong>
+              Une entreprise locale spécialisée en portes de garage, basée en Estrie et Montérégie.{" "}
+              <strong className="text-[#1a1a1a]">On intervient directement chez vous, avec soin et transparence.</strong>
             </p>
 
-            {/* Trust row */}
+            {/* Who we are row */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-2 mb-10">
               {[
-                { icon: "🛡️", text: "Garantie 2 ans" },
-                { icon: "📋", text: "Devis gratuit" },
-                { icon: "⚡", text: "Déplacement rapide" },
+                { icon: "📍", text: "Entreprise locale" },
+                { icon: "🔧", text: "Techniciens spécialisés" },
+                { icon: "🤝", text: "Travail transparent" },
               ].map((b) => (
                 <span key={b.text} className="flex items-center gap-1.5 text-sm text-gray-500 font-medium">
                   <span>{b.icon}</span>{b.text}
