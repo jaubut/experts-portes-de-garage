@@ -48,6 +48,26 @@ export default function ChatBot() {
     if (open) setTimeout(() => inputRef.current?.focus(), 100);
   }, [open]);
 
+  // Lock body scroll on mobile when chat is open — prevents iOS from shifting fixed elements
+  useEffect(() => {
+    if (open && window.innerWidth < 640) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.overflow = "";
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [open]);
+
 
   async function send(text?: string) {
     const content = (text ?? input).trim();
