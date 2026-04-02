@@ -12,7 +12,7 @@ const SLUG = "reparation-urgente-de-porte-de-garage";
 const HERO_BG =
   "/images/gallery-5.webp";
 const LOGO_SRC =
-  "/images/logo.webp";
+  "/images/logo_experts.png";
 
 function extractFullExcerpt(raw: string): string {
   const lines = raw.split("\n");
@@ -118,7 +118,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="/images/equipe.webp"
+                        src="/images/personnage_transparent2.png"
                         alt=""
                         width={96}
                         height={130}
