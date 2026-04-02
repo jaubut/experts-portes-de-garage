@@ -11,7 +11,6 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import ImageAccordion from "@/components/ImageAccordion";
 import MotorSection from "@/components/MotorSection";
-import InspectionBanner from "@/components/InspectionBanner";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const SLUG = "reparation-ouvre-porte-de-garage";
@@ -229,10 +228,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
         </div>
       </section>
 
-      {/* ── 2. INSPECTION BANNER ── */}
-      <InspectionBanner />
-
-      {/* ── 3. MAIN CONTENT ── */}
+      {/* ── 2. MAIN CONTENT ── */}
       <section className="bg-white py-16">
         <div className="px-8 md:px-16">
           <h2 className="font-heading text-2xl md:text-3xl text-brand text-center uppercase mb-10">

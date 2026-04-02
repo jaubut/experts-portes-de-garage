@@ -93,26 +93,40 @@ export default function UrgentPageContent() {
             </div>
 
             {/* Right — booking card */}
-            <div className="reveal d3 w-full lg:min-w-[400px] lg:w-[400px] shrink-0">
-              <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
-                <div className="bg-brand px-5 py-4 flex items-center justify-between gap-3">
-                  <Image src="/images/logo_experts.png" alt="Experts Portes de Garage" width={160} height={52} className="h-10 w-auto object-contain shrink-0" />
-                  <span className="font-heading text-white text-sm text-right leading-tight uppercase">Réservez votre service</span>
+            <div className="reveal d3 w-full lg:min-w-[380px] lg:w-[380px] shrink-0">
+              <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                {/* Card header */}
+                <div className="bg-brand px-6 py-5 relative overflow-hidden">
+                  <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
+                  <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-black/10" />
+                  <div className="relative">
+                    <p className="text-white/70 text-xs font-bold uppercase tracking-widest mb-1">Intervention rapide</p>
+                    <p className="font-heading text-white text-xl uppercase leading-tight">Réservez votre service</p>
+                  </div>
                 </div>
-                <div className="bg-brand-dark px-5 py-2">
-                  <p className="text-white/90 text-xs text-center font-medium">Service rapide de porte de garage — Réparation ou remplacement.</p>
+
+                {/* Divider with badge */}
+                <div className="bg-[#1a1a1a] px-6 py-3 flex items-center gap-3">
+                  <span className="flex-shrink-0 w-2 h-2 rounded-full bg-brand animate-heartbeat" />
+                  <p className="text-white/70 text-xs font-medium">Service rapide — Réparation ou remplacement</p>
                 </div>
-                <div className="px-5 pt-4 pb-0">
-                  <p className="text-gray-600 leading-snug text-sm mb-3">Faites-nous savoir ce dont vous avez besoin, choisissez le moment qui vous convient le mieux, et nous serons sur place.</p>
-                  <div className="flex items-end gap-3">
-                    <div className="flex-1 pb-4">
-                      <PlanifierButton className="w-full bg-brand text-white font-bold py-2.5 px-4 rounded-lg hover:bg-brand-dark transition-colors text-sm">
-                        Planifier une réparation
-                      </PlanifierButton>
-                    </div>
-                    <div className="w-36 shrink-0 flex items-end justify-center">
-                      <Image src="/images/personnage_transparent2.png" alt="" width={144} height={180} className="h-44 w-auto object-contain object-bottom" />
-                    </div>
+
+                {/* Card body */}
+                <div className="bg-[#111] px-6 pt-5 pb-0 flex items-end gap-4">
+                  <div className="flex-1 pb-6">
+                    <p className="text-white/60 text-sm leading-relaxed mb-5">
+                      Choisissez le moment qui vous convient — nos techniciens se déplacent chez vous rapidement.
+                    </p>
+                    <PlanifierButton className="w-full bg-brand text-white font-heading text-sm uppercase px-4 py-3 rounded-xl hover:bg-brand-dark transition-colors tracking-wide shadow-lg shadow-brand/20">
+                      Planifier une réparation
+                    </PlanifierButton>
+                    <a href={PHONE_HREF} className="flex items-center justify-center gap-2 mt-3 text-white/40 hover:text-white/70 transition-colors text-xs font-medium">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.18 21 3 13.82 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" /></svg>
+                      ou appeler {PHONE_DISPLAY}
+                    </a>
+                  </div>
+                  <div className="w-28 shrink-0 flex items-end justify-center">
+                    <Image src="/images/personnage_transparent2.png" alt="" width={112} height={160} className="h-40 w-auto object-contain object-bottom" />
                   </div>
                 </div>
               </div>
