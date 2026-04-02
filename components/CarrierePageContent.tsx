@@ -44,10 +44,44 @@ const traits = [
 ];
 
 const perks = [
-  { label: "Formation payée", icon: "🎓" },
-  { label: "Camion de compagnie", icon: "🚚" },
-  { label: "Outils fournis", icon: "🔧" },
-  { label: "Carte d'essence", icon: "⛽" },
+  {
+    label: "Formation payée",
+    icon: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+        <path d="M6 12v5c0 1.657 2.686 3 6 3s6-1.343 6-3v-5" />
+      </svg>
+    ),
+  },
+  {
+    label: "Camion de compagnie",
+    icon: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 3h15v13H1z" />
+        <path d="M16 8h4l3 3v5h-7V8z" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+      </svg>
+    ),
+  },
+  {
+    label: "Outils fournis",
+    icon: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Carte d'essence",
+    icon: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16" />
+        <path d="M3 22h12M15 8h2a2 2 0 012 2v2a2 2 0 002 2h0V9l-3-3" />
+        <path d="M7 8h4M7 12h4" />
+      </svg>
+    ),
+  },
 ];
 
 const d = ["d1", "d2", "d3", "d4", "d5", "d6"];
@@ -130,7 +164,7 @@ export default function CarrierePageContent() {
             <div className="grid grid-cols-2 gap-3 shrink-0">
               {perks.map((p, i) => (
                 <div key={p.label} className={`reveal-scale ${d[i]} bg-white/15 border border-white/25 rounded-xl px-4 py-3 flex items-center gap-3`}>
-                  <span className="text-xl">{p.icon}</span>
+                  <span className="flex-shrink-0">{p.icon}</span>
                   <span className="text-white font-semibold text-sm">{p.label}</span>
                 </div>
               ))}
