@@ -74,25 +74,40 @@ export default function ChatBot() {
     <>
       {/* Bubble message */}
       {bubble && !open && (
-        <div className="fixed bottom-24 right-5 z-50 max-w-[230px] bg-white text-[#1a1a1a] text-sm font-medium px-4 py-3 pr-8 rounded-2xl rounded-br-sm shadow-xl animate-fade-in-up">
+        <div className="fixed bottom-20 right-5 z-50 w-[260px] bg-white rounded-2xl shadow-2xl animate-fade-in-up overflow-hidden">
           <button
             type="button"
             onClick={() => setBubble(false)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute top-2.5 right-2.5 text-gray-300 hover:text-gray-500 transition-colors"
             aria-label="Fermer"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          Je suis Alex, votre assistant. Des questions? Je suis là pour vous aider!
-          <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-white rotate-45" />
+          <div className="px-4 pt-4 pb-3">
+            <p className="text-[#1a1a1a] text-sm leading-relaxed pr-4">
+              Je suis Alex, votre assistant. Des questions sur vos portes de garage? Je suis là pour vous aider!
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => { setBubble(false); setOpen(true); }}
+            className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 border-t border-gray-100 text-gray-400 text-sm hover:bg-gray-100 transition-colors"
+          >
+            <span>Écrire un message...</span>
+            <span className="w-7 h-7 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </span>
+          </button>
         </div>
       )}
 
       {/* Floating button */}
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => { setOpen((o) => !o); setBubble(false); }}
         aria-label="Ouvrir le chat"
         className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-brand shadow-lg shadow-brand/40 flex items-center justify-center hover:bg-brand-dark transition-all hover:scale-105"
       >
