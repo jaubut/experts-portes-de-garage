@@ -9,7 +9,6 @@ import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
-import InspectionBanner from "@/components/InspectionBanner";
 
 const SLUG = "carriere";
 
@@ -223,8 +222,6 @@ export default function CarrierePage() {
         </div>
       </section>
 
-      {/* ── 2. INSPECTION BANNER ── */}
-      <InspectionBanner />
 
       {/* ── 3. MAIN CONTENT ── */}
       <div className="bg-white pt-10">
