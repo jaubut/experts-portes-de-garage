@@ -4,20 +4,20 @@ import PlanifierButton from "@/components/PlanifierButton";
 export default function CTABanner() {
   return (
     <section className="bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-row items-end gap-4 md:gap-12">
-        {/* Technician image — bleeds to bottom edge */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-row items-end gap-6">
+        {/* Technician image */}
         <div className="flex-shrink-0 flex justify-center self-end">
           <Image
             src="/images/personnage_transparent.png"
             alt="Technicien Experts Portes de Garage"
-            width={340}
-            height={380}
-            className="object-contain object-bottom h-[280px] w-[220px] sm:h-[300px] sm:w-[240px] md:h-[320px] md:w-auto block"
+            width={200}
+            height={340}
+            className="object-contain object-bottom h-[260px] w-auto md:h-[300px] block"
           />
         </div>
 
         {/* Text column */}
-        <div className="flex-1 flex flex-col items-start gap-4 py-10 md:py-14">
+        <div className="flex-1 flex flex-col items-start gap-4 py-8 md:py-12">
           <h2 className="font-heading text-xl md:text-3xl text-brand uppercase leading-tight">
             Vous ne savez pas par où commencer?
           </h2>
