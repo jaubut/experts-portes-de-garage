@@ -192,6 +192,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [addressVerified, setAddressVerified] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -224,7 +225,9 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   }, []);
 
   const handleAdresseChange = (value: string) => {
-    update("adresse", value);
+    setForm(f => ({ ...f, adresse: value, ville: "", codePostal: "" }));
+    setErrors(e => ({ ...e, adresse: "", ville: "", codePostal: "" }));
+    setAddressVerified(false);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
   };
@@ -233,10 +236,11 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
     setShowSuggestions(false);
     setSuggestions([]);
     update("adresse", text);
+    setAddressVerified(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!apiKey) return;
     try {
-      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents&languageCode=fr`, {
+      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents,location&languageCode=fr`, {
         headers: { "X-Goog-Api-Key": apiKey },
       });
       const place = await res.json();
@@ -250,6 +254,13 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
       if (city) setForm(f => ({ ...f, ville: city }));
       if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
+
+      if (place.location) {
+        const dist = haversineKm(place.location.latitude, place.location.longitude, 45.3972, -72.7330);
+        if (dist > 60) {
+          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 450-558-5788.` }));
+        }
+      }
     } catch { /* keep typed value */ }
   };
 
@@ -291,8 +302,12 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       });
       if (needsColor && !form.color) errs.color = "Sélectionnez une couleur";
     } else if (step === 3) {
+      if (!form.adresse.trim()) {
+        errs.adresse = "Ce champ est requis";
+      } else if (!addressVerified) {
+        errs.adresse = "Veuillez sélectionner une adresse dans la liste pour valider.";
+      }
       if (!form.codePostal.trim()) errs.codePostal = "Ce champ est requis";
-      if (!form.adresse.trim()) errs.adresse = "Ce champ est requis";
       if (!form.ville.trim()) errs.ville = "Ce champ est requis";
     } else if (step === 4) {
       if (!form.nom.trim()) errs.nom = "Ce champ est requis";
@@ -580,10 +595,10 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                     </div>
                   </Field>
                   <Field label="Ville" error={errors.ville}>
-                    <input type="text" value={form.ville} onChange={(e) => update("ville", e.target.value)} placeholder="Granby" autoComplete="address-level2" className={inputCls(!!errors.ville)} />
+                    <input type="text" value={form.ville} readOnly placeholder="Rempli automatiquement" className={`${inputCls(!!errors.ville)} bg-gray-50 text-gray-500 cursor-default`} />
                   </Field>
                   <Field label="Code postal" error={errors.codePostal}>
-                    <input type="text" value={form.codePostal} onChange={(e) => update("codePostal", e.target.value)} placeholder="ex: J2G 3A1" autoComplete="postal-code" className={inputCls(!!errors.codePostal)} />
+                    <input type="text" value={form.codePostal} readOnly placeholder="Rempli automatiquement" className={`${inputCls(!!errors.codePostal)} bg-gray-50 text-gray-500 cursor-default`} />
                   </Field>
                 </div>
               )}
@@ -657,4 +672,12 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       </div>
     </div>
   );
+}
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
