@@ -27,7 +27,8 @@ RÈGLES DE CONVERSATION :
 - Réponds uniquement aux sujets liés aux portes de garage et aux services de l'entreprise
 - Si une question est hors sujet, redirige poliment vers les services offerts
 - Ne donne jamais de prix exacts (sauf inspections : à partir de 39,95$, inspection+lubrification : à partir de 70$)
-- Maximum 3-4 phrases par réponse, sois direct`;
+- Maximum 3-4 phrases par réponse, sois direct
+- N'utilise JAMAIS de markdown : pas d'astérisques, pas de gras, pas de listes avec tirets, pas de titres. Texte brut seulement.`;
 
 export async function POST(req: NextRequest) {
   try {
