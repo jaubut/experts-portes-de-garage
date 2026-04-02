@@ -131,25 +131,25 @@ export default function ChatBot() {
       {/* ── Chat popover — never fullscreen, anchored above button ── */}
       {open && (
         <div
-          className={`fixed bottom-[76px] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-2xl flex flex-col bg-[#0f0f0f] border border-white/10 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
+          className={`fixed bottom-[76px] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-2xl flex flex-col bg-white border border-gray-200 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
           style={{ maxHeight: "min(520px, calc(100svh - 100px))" }}
         >
           {/* Header */}
-          <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-3 flex-shrink-0">
+          <div className="bg-brand px-4 py-3 flex items-center gap-3 flex-shrink-0">
             <div className="relative flex-shrink-0">
-              <div className="w-9 h-9 rounded-full bg-brand flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
                 <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[#1a1a1a]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-brand" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-bold text-sm leading-none">Assistant Experts</p>
-              <p className="text-green-400 text-[10px] font-medium mt-0.5">En ligne</p>
+              <p className="text-white/70 text-[10px] font-medium mt-0.5">En ligne</p>
             </div>
-            <button type="button" onClick={closeChat} aria-label="Fermer le chat" className="text-white/40 hover:text-white transition-colors p-1">
+            <button type="button" onClick={closeChat} aria-label="Fermer le chat" className="text-white/60 hover:text-white transition-colors p-1">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -158,7 +158,7 @@ export default function ChatBot() {
 
           {/* Messages — scrollable area */}
           <div
-            className="flex-1 overflow-y-auto overscroll-contain bg-[#0f0f0f] px-4 py-4 flex flex-col gap-3"
+            className="flex-1 overflow-y-auto overscroll-contain bg-gray-50 px-4 py-4 flex flex-col gap-3"
             style={{ minHeight: 0 }}
           >
             {messages.map((m, i) => (
@@ -166,7 +166,7 @@ export default function ChatBot() {
                 <div className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                   m.role === "user"
                     ? "bg-brand text-white rounded-br-sm"
-                    : "bg-white/8 border border-white/10 text-white/80 rounded-bl-sm"
+                    : "bg-white border border-gray-200 text-gray-700 rounded-bl-sm shadow-sm"
                 }`}>
                   {m.content}
                 </div>
@@ -183,10 +183,10 @@ export default function ChatBot() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-white/8 border border-white/10 rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div className="bg-white border border-gray-200 shadow-sm rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             )}
@@ -195,7 +195,7 @@ export default function ChatBot() {
 
           {/* Suggestions — only on first message */}
           {messages.length <= 1 && (
-            <div className="bg-[#0f0f0f] px-4 pb-2 flex gap-2 flex-wrap flex-shrink-0">
+            <div className="bg-gray-50 px-4 pb-2 flex gap-2 flex-wrap flex-shrink-0">
               {SUGGESTIONS.map((s) => (
                 <button
                   type="button"
@@ -210,7 +210,7 @@ export default function ChatBot() {
           )}
 
           {/* Input bar */}
-          <div className="bg-[#1a1a1a] px-3 py-3 flex-shrink-0">
+          <div className="bg-white border-t border-gray-100 px-3 py-3 flex-shrink-0">
             <div className="relative flex items-center">
               <input
                 ref={inputRef}
@@ -221,7 +221,7 @@ export default function ChatBot() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
                 placeholder="Écrivez votre message..."
-                className="w-full bg-white/8 border border-white/10 rounded-2xl pl-4 pr-14 py-3.5 text-[16px] text-white placeholder-white/30 outline-none focus:border-brand/50 transition-colors"
+                className="w-full bg-gray-100 border border-gray-200 rounded-2xl pl-4 pr-14 py-3.5 text-[16px] text-gray-800 placeholder-gray-400 outline-none focus:border-brand/50 focus:bg-white transition-colors"
               />
               <button
                 type="button"
