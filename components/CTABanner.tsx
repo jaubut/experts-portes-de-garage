@@ -12,7 +12,7 @@ export default function CTABanner() {
             alt="Technicien Experts Portes de Garage"
             width={340}
             height={380}
-            className="object-contain object-bottom h-[220px] w-[180px] sm:h-[260px] sm:w-[210px] md:h-[320px] md:w-auto block"
+            className="object-contain object-bottom h-[280px] w-[220px] sm:h-[300px] sm:w-[240px] md:h-[320px] md:w-auto block"
           />
         </div>
 
