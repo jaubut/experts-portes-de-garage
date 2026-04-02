@@ -12,8 +12,7 @@ import { WeatherSealBookingProvider } from "@/context/WeatherSealBookingContext"
 
 const HERO_BG =
   "/images/coupe-froid/page_coupe_froid_background.jpg";
-const LOGO_SRC =
-  "/images/logo.webp";
+const LOGO_SRC = "/images/logo_experts.png";
 
 export const metadata: Metadata = {
   title: "Remplacement de coupe-froid de porte de garage — Experts Portes de Garage",

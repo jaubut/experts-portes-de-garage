@@ -15,10 +15,8 @@ import InspectionBanner from "@/components/InspectionBanner";
 
 const SLUG = "reparation-ouvre-porte-de-garage";
 
-const HERO_BG =
-  "/images/gallery-5.webp";
-const LOGO_SRC =
-  "/images/logo.webp";
+const HERO_BG = "/images/maison_garage_v1.png";
+const LOGO_SRC = "/images/logo_experts.png";
 
 type ContentBlock =
   | { kind: "text"; content: string }
@@ -210,7 +208,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
                     </div>
                     <div className="w-24 shrink-0 flex items-end justify-center">
                       <Image
-                        src="/images/equipe.webp"
+                        src="/images/personnage_transparent.png"
                         alt=""
                         width={96}
                         height={130}
@@ -238,7 +236,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
             items={[
               {
                 title: "Installation d'ouvre-porte de garage",
-                imageUrl: "/images/equipe.webp",
+                imageUrl: "/images/personnage_transparent.png",
                 content: (
                   <div>
                     <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
@@ -270,7 +268,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
               },
               {
                 title: "Problèmes courants d'ouvre-porte de garage que nous réparons",
-                imageUrl: "/images/gallery-5.webp",
+                imageUrl: "/images/maison_garage_v1.png",
                 content: (
                   <div>
                     <ul className="list-none pl-0 mb-4 flex flex-col gap-2.5 text-gray-700 text-sm">
@@ -298,7 +296,7 @@ export default function ReparationOuvrePorteDeGaragePage() {
               },
               {
                 title: "Télécommandes pour ouvre-portes de garage",
-                imageUrl: "/images/ouvre-porte.webp",
+                imageUrl: "/images/moteurs/moteur_DDO8900W.png",
                 content: (
                   <div>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">

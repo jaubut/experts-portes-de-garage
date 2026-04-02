@@ -10,10 +10,8 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import InspectionBanner from "@/components/InspectionBanner";
 
-const HERO_BG =
-  "/images/gallery-5.webp";
-const LOGO_SRC =
-  "/images/logo.webp";
+const HERO_BG = "/images/maison_garage_v1.png";
+const LOGO_SRC = "/images/logo_experts.png";
 
 export async function generateStaticParams() {
   return getAllPageSlugs().map((slug) => ({ slug }));
