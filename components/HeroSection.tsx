@@ -87,8 +87,8 @@ export default function HeroSection() {
 
               {/* Card header */}
               <div className="bg-brand px-6 py-4">
-                <p className="text-white font-bold text-sm uppercase tracking-widest">Ce qu&apos;on répare</p>
-                <p className="text-white/70 text-xs mt-0.5">Portes de garage résidentielles</p>
+                <p className="text-white font-bold text-sm uppercase tracking-widest">Experts Portes de Garage</p>
+                <p className="text-white/70 text-xs mt-0.5">Bienvenue — on est là pour vous aider</p>
               </div>
 
               {/* Services list */}
