@@ -112,3 +112,10 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.smiling-technicien-bg {
+  background-image: url('/images/smiling_technicien.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}

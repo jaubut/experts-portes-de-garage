@@ -138,7 +138,7 @@ export default function AProposPageContent() {
       {/* ── 4. NOTRE ÉQUIPE ── */}
       <section className="relative py-14 overflow-hidden">
         <div className="absolute inset-0 technicien-bg" />
-        <div className="absolute inset-0 bg-[#1a1a1a]/55" />
+        <div className="absolute inset-0 bg-[#1a1a1a]/80" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les gens derrière le travail</p>
           <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-white uppercase text-center mb-10 leading-tight">
