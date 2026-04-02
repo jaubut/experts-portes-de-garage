@@ -94,7 +94,7 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                     alt="Experts Portes de Garage"
                     width={160}
                     height={52}
-                    className="h-10 w-auto object-contain brightness-0 invert shrink-0"
+                    className="h-10 w-auto object-contain shrink-0"
                   />
                   <span className="font-heading text-white text-sm text-right leading-tight uppercase">
                     Réservez votre service
@@ -116,13 +116,13 @@ export default function ReparationUrgenteDePorteDeGaragePage() {
                         Planifier une réparation
                       </PlanifierButton>
                     </div>
-                    <div className="w-24 shrink-0 flex items-end justify-center">
+                    <div className="w-36 shrink-0 flex items-end justify-center">
                       <Image
                         src="/images/personnage_transparent2.png"
                         alt=""
-                        width={96}
-                        height={130}
-                        className="h-32 w-auto object-contain object-bottom"
+                        width={144}
+                        height={180}
+                        className="h-44 w-auto object-contain object-bottom"
                       />
                     </div>
                   </div>
