@@ -111,21 +111,25 @@ export default function AProposPage() {
       </section>
 
       {/* ── 4. NOTRE ÉQUIPE ── */}
-      <section className="bg-white py-14">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <section className="relative py-14 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0 technicien-bg" />
+        <div className="absolute inset-0 bg-[#1a1a1a]/80" />
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
           <p className="text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les gens derrière le travail</p>
-          <h2 className="font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-white uppercase text-center mb-10 leading-tight">
             Notre équipe
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {team.map((t) => (
-              <div key={t} className="flex items-start gap-4 bg-gray-50 border border-gray-100 rounded-xl px-5 py-4">
-                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <div key={t} className="flex items-start gap-4 bg-white/10 border border-white/20 rounded-xl px-5 py-4">
+                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-brand flex items-center justify-center mt-0.5">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </span>
-                <span className="text-[#1a1a1a] font-medium text-sm leading-relaxed">{t}</span>
+                <span className="text-white font-medium text-sm leading-relaxed">{t}</span>
               </div>
             ))}
           </div>
