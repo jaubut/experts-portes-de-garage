@@ -32,6 +32,7 @@ export default function ChatBot() {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,6 +40,33 @@ export default function ChatBot() {
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 100);
+  }, [open]);
+
+  // Visual Viewport API — keeps chat pinned above keyboard on mobile
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv || !open) return;
+
+    const update = () => {
+      if (!chatRef.current) return;
+      const offsetTop = vv.offsetTop ?? 0;
+      const height = vv.height;
+      chatRef.current.style.top = `${offsetTop}px`;
+      chatRef.current.style.height = `${height}px`;
+    };
+
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    update();
+
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+      if (chatRef.current) {
+        chatRef.current.style.top = "";
+        chatRef.current.style.height = "";
+      }
+    };
   }, [open]);
 
   async function send(text?: string) {
@@ -133,7 +161,7 @@ export default function ChatBot() {
 
       {/* Chat window */}
       {open && (
-        <div className="fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10">
+        <div ref={chatRef} className="fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10">
           {/* Header */}
           <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-3 flex-shrink-0">
             <div className="relative">
