@@ -23,7 +23,15 @@ button, [role="button"] {
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in-up {
-  animation: fade-in-up 0.4s ease forwards;
+  animation: fade-in-up 0.25s ease forwards;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(10px); }
+}
+.animate-fade-out {
+  animation: fade-out 0.25s ease forwards;
 }
 
 /* Empêcher le zoom auto sur iOS quand on clique dans un input */

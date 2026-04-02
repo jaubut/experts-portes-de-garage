@@ -13,7 +13,13 @@ const SUGGESTIONS = [
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [bubble, setBubble] = useState(true);
+
+  const closeChat = () => {
+    setClosing(true);
+    setTimeout(() => { setOpen(false); setClosing(false); }, 250);
+  };
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -51,8 +57,12 @@ export default function ChatBot() {
       if (!chatRef.current) return;
       const offsetTop = vv.offsetTop ?? 0;
       const height = vv.height;
-      chatRef.current.style.top = `${offsetTop}px`;
-      chatRef.current.style.height = `${height}px`;
+      // Use requestAnimationFrame to avoid jumpy layout
+      requestAnimationFrame(() => {
+        if (!chatRef.current) return;
+        chatRef.current.style.top = `${offsetTop}px`;
+        chatRef.current.style.height = `${height}px`;
+      });
     };
 
     vv.addEventListener("resize", update);
@@ -144,7 +154,7 @@ export default function ChatBot() {
 
       {/* Floating button */}
       <button
-        onClick={() => { setOpen((o) => !o); setBubble(false); }}
+        onClick={() => { open ? closeChat() : setOpen(true); setBubble(false); }}
         aria-label="Ouvrir le chat"
         className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-brand shadow-lg shadow-brand/40 flex items-center justify-center hover:bg-brand-dark transition-all hover:scale-105"
       >
@@ -161,7 +171,7 @@ export default function ChatBot() {
 
       {/* Chat window */}
       {open && (
-        <div ref={chatRef} className="fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10">
+        <div ref={chatRef} className={`fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}>
           {/* Header */}
           <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-3 flex-shrink-0">
             <div className="relative">
@@ -177,7 +187,7 @@ export default function ChatBot() {
               <p className="text-white font-bold text-sm leading-none">Assistant Experts</p>
               <p className="text-green-400 text-[10px] font-medium mt-0.5">En ligne</p>
             </div>
-            <button onClick={() => setOpen(false)} className="text-white/40 hover:text-white transition-colors">
+            <button onClick={closeChat} className="text-white/40 hover:text-white transition-colors">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -201,7 +211,7 @@ export default function ChatBot() {
                   <Link
                     href={m.link.href}
                     className="mt-1.5 inline-flex items-center gap-1.5 bg-brand text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-brand-dark transition-colors"
-                    onClick={() => setOpen(false)}
+                    onClick={closeChat}
                   >
                     {m.link.label} →
                   </Link>
