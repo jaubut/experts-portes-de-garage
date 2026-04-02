@@ -115,7 +115,22 @@ export async function POST(req: NextRequest) {
     });
 
     const text = response.content[0].type === "text" ? response.content[0].text : "";
-    return NextResponse.json({ message: text });
+
+    // Detect intent and suggest a page link
+    const lower = text.toLowerCase() + " " + (messages.at(-1)?.content ?? "").toLowerCase();
+    let link: { label: string; href: string } | null = null;
+
+    if (/moteur|ouvre.porte|belt drive|chain drive|screw drive|jackshaft|télécommande/.test(lower)) {
+      link = { label: "Voir nos moteurs", href: "/reparation-ouvre-porte-de-garage" };
+    } else if (/installation|nouvelle porte|sectionnelle|installer/.test(lower)) {
+      link = { label: "Voir l'installation", href: "/installation-de-nouvelle-porte-de-garage" };
+    } else if (/coupe.froid|joint|étanch|weatherseal/.test(lower)) {
+      link = { label: "Voir le coupe-froid", href: "/remplacement-coupe-froid-porte-de-garage" };
+    } else if (/urgence|bloquée|ressort cassé|câble cassé|coincée|24h/.test(lower)) {
+      link = { label: "Service d'urgence", href: "/reparation-urgente-porte-de-garage" };
+    }
+
+    return NextResponse.json({ message: text, link });
   } catch {
     return NextResponse.json({ message: "Désolé, une erreur est survenue. Appelez-nous au 450-558-5788." }, { status: 500 });
   }

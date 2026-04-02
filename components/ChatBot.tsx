@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
-type Message = { role: "user" | "assistant"; content: string };
+type Message = { role: "user" | "assistant"; content: string; link?: { label: string; href: string } };
 
 const SUGGESTIONS = [
   "Réparation urgente",
@@ -55,7 +56,7 @@ export default function ChatBot() {
         }),
       });
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.message }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: data.message, link: data.link ?? undefined }]);
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -131,6 +132,15 @@ export default function ChatBot() {
                 >
                   {m.content}
                 </div>
+                {m.link && (
+                  <Link
+                    href={m.link.href}
+                    className="mt-1.5 inline-flex items-center gap-1.5 bg-brand text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-brand-dark transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {m.link.label} →
+                  </Link>
+                )}
               </div>
             ))}
             {loading && (
