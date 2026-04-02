@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PHONE_DISPLAY } from "@/lib/config";
 
@@ -10,6 +9,7 @@ interface BookingModalProps {
 }
 
 interface FormData {
+  service: string;
   codePostal: string;
   adresse: string;
   ville: string;
@@ -21,6 +21,7 @@ interface FormData {
 }
 
 const EMPTY_FORM: FormData = {
+  service: "",
   codePostal: "",
   adresse: "",
   ville: "",
@@ -31,9 +32,33 @@ const EMPTY_FORM: FormData = {
   timeSlot: "",
 };
 
+const SERVICES = [
+  { id: "reparation-urgente", label: "Réparation urgente", desc: "Porte bloquée, ressort cassé, câble brisé", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  )},
+  { id: "reparation-ouvre-porte", label: "Réparation d'ouvre-porte", desc: "Moteur, télécommande, capteurs défectueux", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+  )},
+  { id: "installation-ouvre-porte", label: "Installation d'ouvre-porte", desc: "Nouveau moteur Belt Drive, Chain Drive, Jackshaft", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+  )},
+  { id: "installation-porte", label: "Installation de nouvelle porte", desc: "Porte sectionnelle fournie et installée", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><circle cx="6" cy="12" r="1" fill="currentColor"/></svg>
+  )},
+  { id: "coupe-froid", label: "Remplacement de coupe-froid", desc: "Joint bas, latéraux, haut de porte", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
+  )},
+  { id: "inspection", label: "Inspection / Entretien", desc: "Inspection complète dès 39,95$", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+  )},
+  { id: "autre", label: "Autre / Je ne sais pas", desc: "Un technicien vous guidera", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  )},
+];
+
 const TIME_SLOTS = ["10h00 - 11h00", "12h00 - 13h00", "15h00 - 16h00"];
 
-const STEP_LABELS = ["Votre adresse", "Vos coordonnées", "Choisir un rendez-vous"];
+const STEP_LABELS = ["Votre service", "Votre adresse", "Vos coordonnées", "Rendez-vous"];
 
 const FR_MONTHS = [
   "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
@@ -280,10 +305,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const validateStep = (): boolean => {
     const errs: Partial<FormData> = {};
     if (step === 1) {
+      if (!form.service) errs.service = "Veuillez choisir un service";
+    } else if (step === 2) {
       if (!form.codePostal.trim()) errs.codePostal = "Ce champ est requis";
       if (!form.adresse.trim()) errs.adresse = "Ce champ est requis";
       if (!form.ville.trim()) errs.ville = "Ce champ est requis";
-    } else if (step === 2) {
+    } else if (step === 3) {
       if (!form.nom.trim()) errs.nom = "Ce champ est requis";
       if (!form.telephone.trim()) errs.telephone = "Ce champ est requis";
       if (!form.courriel.trim()) {
@@ -291,7 +318,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       } else if (!/\S+@\S+\.\S+/.test(form.courriel)) {
         errs.courriel = "Adresse courriel invalide";
       }
-    } else if (step === 3) {
+    } else if (step === 4) {
       if (!form.date) errs.date = "Veuillez choisir une date";
       if (!form.timeSlot) errs.timeSlot = "Veuillez choisir une plage horaire";
     }
@@ -301,7 +328,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   const handleNext = async () => {
     if (!validateStep()) return;
-    if (step < 3) {
+    if (step < 4) {
       setStep((s) => s + 1);
     } else {
       setIsSubmitting(true);
@@ -331,14 +358,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       <div className="relative bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="bg-brand px-6 py-4 flex items-center justify-between gap-4">
-          <Image
-            src="/images/logo_experts.png"
-            alt="Experts Portes de Garage"
-            width={140}
-            height={46}
-            className="h-9 w-auto object-contain brightness-0 invert shrink-0"
-          />
-          <span className="font-heading text-white text-sm sm:text-base leading-tight text-right uppercase">
+          <span className="font-heading text-white text-base sm:text-lg leading-tight uppercase">
             Réservez votre service
           </span>
           <button
@@ -381,11 +401,11 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
           ) : (
             <>
               {/* Step indicators */}
-              <div className="flex items-center gap-2 mb-6">
-                {[1, 2, 3].map((s) => (
+              <div className="flex items-center gap-1 mb-6">
+                {[1, 2, 3, 4].map((s) => (
                   <div key={s} className="flex-1 flex flex-col items-center gap-1.5">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
+                      className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
                         s === step
                           ? "bg-brand text-white"
                           : s < step
@@ -394,14 +414,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       }`}
                     >
                       {s < step ? (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
-                      ) : (
-                        s
-                      )}
+                      ) : s}
                     </div>
-                    <span className={`text-[10px] font-semibold ${s === step ? "text-brand" : "text-gray-400"}`}>
+                    <span className={`text-[9px] font-semibold text-center leading-tight ${s === step ? "text-brand" : "text-gray-400"}`}>
                       {STEP_LABELS[s - 1]}
                     </span>
                   </div>
@@ -412,12 +430,42 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               <div className="h-1 bg-gray-100 rounded-full overflow-hidden mb-7">
                 <div
                   className="h-full bg-brand rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(step / 3) * 100}%` }}
+                  style={{ width: `${(step / 4) * 100}%` }}
                 />
               </div>
 
-              {/* Step 1 */}
+              {/* Step 1 — Service */}
               {step === 1 && (
+                <div className="flex flex-col gap-2">
+                  {errors.service && <p className="text-xs text-red-500 mb-1">{errors.service}</p>}
+                  {SERVICES.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => update("service", s.id)}
+                      className={`flex items-center gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all w-full ${
+                        form.service === s.id
+                          ? "border-brand bg-brand/5 text-brand"
+                          : "border-gray-200 text-gray-700 hover:border-brand/40"
+                      }`}
+                    >
+                      <span className={`flex-shrink-0 ${form.service === s.id ? "text-brand" : "text-gray-400"}`}>{s.icon}</span>
+                      <div>
+                        <p className="font-semibold text-sm leading-tight">{s.label}</p>
+                        <p className="text-xs text-gray-400 leading-tight mt-0.5">{s.desc}</p>
+                      </div>
+                      {form.service === s.id && (
+                        <svg className="w-4 h-4 text-brand ml-auto flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Step 2 — Adresse */}
+              {step === 2 && (
                 <div className="flex flex-col gap-4">
                   <Field label="Adresse complète" error={errors.adresse}>
                     <div className="relative">
@@ -472,8 +520,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 </div>
               )}
 
-              {/* Step 2 */}
-              {step === 2 && (
+              {/* Step 3 — Coordonnées */}
+              {step === 3 && (
                 <div className="flex flex-col gap-4">
                   <Field label="Prénom et Nom" error={errors.nom}>
                     <input
@@ -508,8 +556,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 </div>
               )}
 
-              {/* Step 3 */}
-              {step === 3 && (
+              {/* Step 4 — Rendez-vous */}
+              {step === 4 && (
                 <div className="flex flex-col gap-5">
                   <div>
                     <p className="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</p>
@@ -567,7 +615,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   disabled={isSubmitting}
                   className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Envoi en cours..." : step === 3 ? "Confirmer la réservation" : "Suivant"}
+                  {isSubmitting ? "Envoi en cours..." : step === 4 ? "Confirmer la réservation" : "Suivant"}
                 </button>
               </div>
             </>
