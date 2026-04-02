@@ -12,16 +12,16 @@ export const metadata: Metadata = {
 
 const faqItems = [
   {
-    question: "Ça coûte combien?",
-    answer: "Appelez-nous pour un devis gratuit. On évalue la situation et on vous donne un prix clair avant de commencer quoi que ce soit.",
+    q: "Ça coûte combien?",
+    a: "Appelez-nous pour un devis gratuit. On évalue la situation et on vous donne un prix clair avant de commencer quoi que ce soit.",
   },
   {
-    question: "Vous venez vraiment le jour même?",
-    answer: "Oui, c'est notre engagement. On se déplace le jour même pour les urgences dans notre zone de service.",
+    q: "Vous venez vraiment le jour même?",
+    a: "Oui, c'est notre engagement. On se déplace le jour même pour les urgences dans notre zone de service.",
   },
   {
-    question: "Vous travaillez la nuit?",
-    answer: "Oui, on est disponible 24h/24, 7 jours/7. Une urgence n'attend pas les heures d'ouverture.",
+    q: "Vous travaillez la nuit?",
+    a: "Oui, on est disponible 24h/24, 7 jours/7. Une urgence n'attend pas les heures d'ouverture.",
   },
 ];
 
