@@ -92,6 +92,13 @@ body {
 .d5 { transition-delay: 0.45s; }
 .d6 { transition-delay: 0.55s; }
 
+.secretaire-bg {
+  background-image: url('/images/secretaire.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .technicien-bg {
   background-image: url('/images/technicien.webp');
   background-size: cover;
