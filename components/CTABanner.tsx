@@ -8,7 +8,7 @@ export default function CTABanner() {
         {/* Technician image — bleeds to bottom edge */}
         <div className="flex-shrink-0 flex justify-center self-end">
           <Image
-            src="/images/cta-bg.webp"
+            src="/images/personnage_transparent.png"
             alt="Technicien Experts Portes de Garage"
             width={340}
             height={380}
