@@ -84,21 +84,9 @@ const steps = [
 const doorTypes = [
   {
     title: "Sectionnelles",
-    tag: "La plus populaire",
-    desc: "Composée de panneaux horizontaux qui s'enroulent vers le plafond. Gain de place maximal, silencieuse, excellente isolation. Idéale pour presque tous les garages.",
+    tag: "Notre spécialité",
+    desc: "Composée de panneaux horizontaux qui s'enroulent vers le plafond. Gain de place maximal, silencieuse, excellente isolation. Idéale pour presque tous les garages résidentiels.",
     highlight: true,
-  },
-  {
-    title: "Basculantes",
-    tag: "Classique & robuste",
-    desc: "Un seul panneau rigide qui bascule vers l'extérieur puis monte. Simple, solide et fiable. Bon choix pour les garages plus anciens.",
-    highlight: false,
-  },
-  {
-    title: "Enroulables",
-    tag: "Ultra gain de place",
-    desc: "S'enroule autour d'un tambour au-dessus de l'ouverture. Parfaite pour les garages à faible hauteur sous plafond ou les espaces restreints.",
-    highlight: false,
   },
 ];
 
@@ -297,16 +285,20 @@ export default function InstallationPageContent() {
           <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-12 leading-tight">
             Types de portes disponibles
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {doorTypes.map((dt, i) => (
-              <div key={dt.title} className={`reveal-scale d${i + 1} rounded-2xl p-6 flex flex-col gap-3 ${dt.highlight ? "bg-brand text-white shadow-lg shadow-brand/20" : "bg-white border border-gray-100"}`}>
-                <span className={`text-xs font-bold uppercase tracking-widest ${dt.highlight ? "text-white/70" : "text-brand"}`}>{dt.tag}</span>
-                <p className={`font-heading text-xl uppercase ${dt.highlight ? "text-white" : "text-[#1a1a1a]"}`}>{dt.title}</p>
-                <p className={`text-sm leading-relaxed ${dt.highlight ? "text-white/80" : "text-gray-600"}`}>{dt.desc}</p>
-              </div>
-            ))}
+          <div className="reveal-scale d1 max-w-2xl mx-auto bg-brand rounded-2xl p-8 flex flex-col gap-4 shadow-lg shadow-brand/20">
+            <span className="text-white/70 text-xs font-bold uppercase tracking-widest">Notre spécialité</span>
+            <p className="font-heading text-3xl text-white uppercase">Portes sectionnelles</p>
+            <p className="text-white/80 text-base leading-relaxed">
+              Composée de panneaux horizontaux qui s&apos;enroulent vers le plafond. Gain de place maximal, silencieuse, excellente isolation — idéale pour presque tous les garages résidentiels.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+              {["Silencieuse", "Bien isolée", "Gain de place", "Durable"].map((f) => (
+                <div key={f} className="bg-white/15 border border-white/25 rounded-xl px-3 py-2 text-center">
+                  <span className="text-white text-xs font-semibold">{f}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <p className="reveal text-center text-gray-500 text-sm mt-8">Peu importe le type, nous avons la solution pour votre garage.</p>
         </div>
       </section>
 
