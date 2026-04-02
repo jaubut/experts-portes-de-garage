@@ -94,40 +94,59 @@ export default function UrgentPageContent() {
 
             {/* Right — booking card */}
             <div className="reveal d3 w-full lg:min-w-[380px] lg:w-[380px] shrink-0">
-              <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                {/* Card header */}
-                <div className="bg-brand px-6 py-5 relative overflow-hidden">
-                  <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
-                  <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-black/10" />
-                  <div className="relative">
-                    <p className="text-white/70 text-xs font-bold uppercase tracking-widest mb-1">Intervention rapide</p>
-                    <p className="font-heading text-white text-xl uppercase leading-tight">Réservez votre service</p>
-                  </div>
-                </div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{background: "linear-gradient(160deg, #1c1c1c 0%, #0d0d0d 100%)"}}>
 
-                {/* Divider with badge */}
-                <div className="bg-[#1a1a1a] px-6 py-3 flex items-center gap-3">
-                  <span className="flex-shrink-0 w-2 h-2 rounded-full bg-brand animate-heartbeat" />
-                  <p className="text-white/70 text-xs font-medium">Service rapide — Réparation ou remplacement</p>
-                </div>
+                {/* Top red glow */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-brand" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-20 bg-brand/20 blur-2xl rounded-full" />
 
-                {/* Card body */}
-                <div className="bg-[#111] px-6 pt-5 pb-0 flex items-end gap-4">
-                  <div className="flex-1 pb-6">
-                    <p className="text-white/60 text-sm leading-relaxed mb-5">
-                      Choisissez le moment qui vous convient — nos techniciens se déplacent chez vous rapidement.
-                    </p>
-                    <PlanifierButton className="w-full bg-brand text-white font-heading text-sm uppercase px-4 py-3 rounded-xl hover:bg-brand-dark transition-colors tracking-wide shadow-lg shadow-brand/20">
-                      Planifier une réparation
-                    </PlanifierButton>
-                    <a href={PHONE_HREF} className="flex items-center justify-center gap-2 mt-3 text-white/40 hover:text-white/70 transition-colors text-xs font-medium">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.18 21 3 13.82 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" /></svg>
-                      ou appeler {PHONE_DISPLAY}
-                    </a>
+                {/* Decorative corner marks */}
+                <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-brand/40 rounded-tr-md" />
+                <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-brand/40 rounded-bl-md" />
+
+                <div className="relative px-7 pt-7 pb-7">
+                  {/* Status pill */}
+                  <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/20 rounded-full px-3 py-1 mb-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand animate-heartbeat flex-shrink-0" />
+                    <span className="text-brand text-[10px] font-bold uppercase tracking-widest">Service rapide — Disponible maintenant</span>
                   </div>
-                  <div className="w-28 shrink-0 flex items-end justify-center">
-                    <Image src="/images/personnage_transparent2.png" alt="" width={112} height={160} className="h-40 w-auto object-contain object-bottom" />
+
+                  {/* Headline */}
+                  <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-1">Intervention rapide</p>
+                  <h3 className="font-heading text-white text-2xl uppercase leading-tight mb-6">
+                    Réservez votre<br />
+                    <span className="text-brand">service</span>
+                  </h3>
+
+                  {/* Trust row */}
+                  <div className="grid grid-cols-3 gap-2 mb-6">
+                    {[
+                      { icon: "⚡", label: "Rapide" },
+                      { icon: "✓", label: "Garanti" },
+                      { icon: "💬", label: "Sans frais cachés" },
+                    ].map((t) => (
+                      <div key={t.label} className="bg-white/5 border border-white/8 rounded-lg px-2 py-2.5 text-center">
+                        <div className="text-sm mb-0.5">{t.icon}</div>
+                        <div className="text-white/50 text-[10px] font-semibold leading-tight">{t.label}</div>
+                      </div>
+                    ))}
                   </div>
+
+                  {/* Body text */}
+                  <p className="text-white/50 text-sm leading-relaxed mb-6">
+                    Choisissez le moment qui vous convient — nos techniciens se déplacent chez vous rapidement.
+                  </p>
+
+                  {/* CTA */}
+                  <PlanifierButton className="w-full bg-brand text-white font-heading text-sm uppercase px-4 py-3.5 rounded-xl hover:bg-brand-dark transition-all tracking-widest shadow-lg shadow-brand/30 hover:shadow-brand/50">
+                    Planifier une réparation →
+                  </PlanifierButton>
+
+                  {/* Phone */}
+                  <a href={PHONE_HREF} className="flex items-center justify-center gap-2 mt-3.5 text-white/30 hover:text-white/60 transition-colors text-xs font-medium">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.18 21 3 13.82 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" /></svg>
+                    ou appeler {PHONE_DISPLAY}
+                  </a>
                 </div>
               </div>
             </div>

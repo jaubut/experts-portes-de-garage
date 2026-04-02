@@ -267,7 +267,7 @@ export default function InstallationPageContent() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {steps.map((s, i) => (
               <div key={s.num} className={`reveal d${i + 1} flex gap-5 bg-white/5 border border-white/10 rounded-2xl p-6`}>
-                <span className="font-heading text-4xl text-brand/30 leading-none flex-shrink-0">{s.num}</span>
+                <span className="font-heading text-4xl text-brand leading-none flex-shrink-0">{s.num}</span>
                 <div>
                   <p className="font-heading text-white uppercase text-base mb-2">{s.title}</p>
                   <p className="text-white/60 text-sm leading-relaxed">{s.desc}</p>
@@ -292,7 +292,7 @@ export default function InstallationPageContent() {
               Composée de panneaux horizontaux qui s&apos;enroulent vers le plafond. Gain de place maximal, silencieuse, excellente isolation — idéale pour presque tous les garages résidentiels.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
-              {["Silencieuse", "Bien isolée", "Gain de place", "Durable"].map((f) => (
+              {["Silencieuse", "Bien isolée", "Durable"].map((f) => (
                 <div key={f} className="bg-white/15 border border-white/25 rounded-xl px-3 py-2 text-center">
                   <span className="text-white text-xs font-semibold">{f}</span>
                 </div>
