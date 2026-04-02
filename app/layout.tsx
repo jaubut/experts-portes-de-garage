@@ -4,6 +4,7 @@ import "./globals.css";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/Footer";
 import { BookingModalProvider } from "@/context/BookingModalContext";
+import ChatBot from "@/components/ChatBot";
 import { BUSINESS_NAME, PHONE_DISPLAY, EMAIL, CITY, SERVICE_AREA } from "@/lib/config";
 
 const poppins = Poppins({
@@ -86,6 +87,7 @@ export default function RootLayout({
           <ConditionalHeader />
           <main className="flex-1">{children}</main>
           <Footer />
+          <ChatBot />
         </BookingModalProvider>
       </body>
     </html>
