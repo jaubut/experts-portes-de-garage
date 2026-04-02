@@ -1,105 +1,170 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import PlanifierButton from "@/components/PlanifierButton";
 
 export default function HeroSection() {
-  return (
-    <section className="relative bg-[#111111] min-h-[92vh] flex items-center overflow-hidden">
+  const [count, setCount] = useState(0);
+  const [visible, setVisible] = useState(false);
 
-      {/* Background subtle pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)",
-        backgroundSize: "20px 20px",
+  useEffect(() => {
+    setVisible(true);
+    let start = 0;
+    const end = 247;
+    const step = Math.ceil(end / (1800 / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= end) { setCount(end); clearInterval(timer); }
+      else setCount(start);
+    }, 16);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative bg-[#0a0a0a] min-h-screen flex items-center overflow-hidden">
+
+      {/* Grid texture */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: [
+          "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+          "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+        ].join(", "),
+        backgroundSize: "60px 60px",
       }} />
 
-      {/* Red accent block right side */}
-      <div className="absolute right-0 top-0 bottom-0 w-[45%] bg-brand/10 hidden lg:block" />
-      <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-brand hidden lg:block" />
+      {/* Red diagonal slash */}
+      <div
+        className="absolute top-0 right-[38%] w-[3px] h-full bg-brand hidden lg:block"
+        style={{ transform: "rotate(8deg) translateX(50%)", transformOrigin: "top center" }}
+      />
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-28">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      {/* Top red bar */}
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-brand" />
 
-          {/* Left copy */}
+      {/* Glow */}
+      <div
+        className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+        style={{ background: "radial-gradient(circle, #CC0000 0%, transparent 70%)" }}
+      />
+
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-24">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
+
+          {/* LEFT */}
           <div className="flex-1 text-center lg:text-left">
 
-            <div className="inline-flex items-center gap-2 bg-brand/15 border border-brand/40 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-6">
-              <span className="w-2 h-2 bg-brand rounded-full animate-pulse" />
-              Service disponible 24h/7j — Granby & régions
+            {/* Live badge */}
+            <div
+              className="inline-flex items-center gap-2 mb-8 transition-all duration-700"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(12px)" }}
+            >
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand" />
+              </span>
+              <span className="text-white/60 text-xs font-bold uppercase tracking-[0.2em]">
+                Service actif — Granby & régions
+              </span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white uppercase leading-tight mb-6">
-              Votre porte de garage{" "}
-              <span className="text-brand">ne répond plus?</span>
-            </h1>
+            {/* Headline */}
+            <div
+              className="mb-6 transition-all duration-700 delay-100"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(16px)" }}
+            >
+              <h1 className="font-heading uppercase leading-[0.9] text-white">
+                <span className="block text-5xl md:text-7xl lg:text-8xl">Votre porte</span>
+                <span className="block text-5xl md:text-7xl lg:text-8xl">de garage</span>
+                <span className="block text-5xl md:text-7xl lg:text-8xl text-brand">bloquée?</span>
+              </h1>
+            </div>
 
-            <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-              Nos techniciens se déplacent rapidement partout en Estrie et Montérégie pour régler le problème <strong className="text-white">dès la première visite</strong>. Service garanti.
+            {/* Subtext */}
+            <p
+              className="text-white/50 text-base md:text-lg leading-relaxed mb-10 max-w-md mx-auto lg:mx-0 transition-all duration-700 delay-200"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(16px)" }}
+            >
+              Techniciens certifiés. Intervention le jour même.
+              Résultat garanti dès la première visite — ou c&apos;est gratuit.
             </p>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
+            {/* Stats row */}
+            <div
+              className="flex flex-wrap justify-center lg:justify-start gap-8 mb-10 transition-all duration-700 delay-300"
+              style={{ opacity: visible ? 1 : 0 }}
+            >
               {[
-                { icon: "⭐", text: "4.9 / 200+ avis" },
-                { icon: "🛡️", text: "Garanti 2 ans" },
-                { icon: "⚡", text: "Intervention rapide" },
-                { icon: "✅", text: "Devis gratuit" },
-              ].map((b) => (
-                <div key={b.text} className="flex items-center gap-1.5 text-white/80 text-sm font-medium">
-                  <span>{b.icon}</span>
-                  <span>{b.text}</span>
+                { value: `${count}+`, label: "clients cette année" },
+                { value: "4.9★", label: "sur Google" },
+                { value: "2 ans", label: "de garantie" },
+              ].map((s) => (
+                <div key={s.label} className="text-center lg:text-left">
+                  <p className="text-2xl font-bold text-white font-heading">{s.value}</p>
+                  <p className="text-white/40 text-xs uppercase tracking-wider">{s.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 items-center lg:items-start">
-              <PlanifierButton className="bg-brand text-white font-bold px-8 py-4 rounded-lg text-base hover:bg-brand-dark transition-colors shadow-lg shadow-brand/30 w-full sm:w-auto">
+            {/* CTAs */}
+            <div
+              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start transition-all duration-700"
+              style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(16px)", transitionDelay: "400ms" }}
+            >
+              <PlanifierButton className="bg-brand text-white font-bold px-8 py-4 rounded-none text-sm uppercase tracking-widest hover:bg-brand-dark transition-all shadow-[4px_4px_0px_rgba(204,0,0,0.3)] hover:shadow-[2px_2px_0px_rgba(204,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] w-full sm:w-auto">
                 Planifier maintenant →
               </PlanifierButton>
               <a
                 href="tel:4505585788"
-                className="border-2 border-white/30 text-white font-bold px-8 py-4 rounded-lg text-base hover:border-white hover:bg-white/10 transition-colors w-full sm:w-auto text-center"
+                className="border border-white/20 text-white/70 font-bold px-8 py-4 rounded-none text-sm uppercase tracking-widest hover:border-white hover:text-white transition-all w-full sm:w-auto text-center"
               >
-                📞 450-558-5788
+                ☎ 450-558-5788
               </a>
             </div>
           </div>
 
-          {/* Right side card */}
-          <div className="flex-1 flex justify-center lg:justify-end w-full">
-            <div className="relative w-full max-w-md">
-              <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center text-white text-xl">🏠</div>
-                  <div>
-                    <p className="text-white font-bold text-sm">Experts Portes de Garage</p>
-                    <p className="text-white/50 text-xs">Estrie & Montérégie</p>
+          {/* RIGHT — availability card */}
+          <div
+            className="flex-shrink-0 w-full lg:w-[400px] transition-all duration-1000"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateX(0)" : "translateX(40px)", transitionDelay: "500ms" }}
+          >
+            <div className="border border-white/10 bg-white/[0.02] p-6 relative">
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-brand" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-brand" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-brand" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-brand" />
+
+              <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] mb-5">Disponibilité en temps réel</p>
+
+              <div className="space-y-0">
+                {[
+                  { service: "Ressort cassé", status: "Dispo aujourd'hui", ok: true },
+                  { service: "Câbles & roulettes", status: "Dispo aujourd'hui", ok: true },
+                  { service: "Coupe-froid", status: "Dispo aujourd'hui", ok: true },
+                  { service: "Ouvre-porte", status: "Dispo aujourd'hui", ok: true },
+                  { service: "Remplacement porte", status: "2–3 jours", ok: false },
+                ].map((item) => (
+                  <div key={item.service} className="flex items-center justify-between py-3.5 border-b border-white/5 last:border-0 group">
+                    <span className="text-white/70 text-sm group-hover:text-white transition-colors">{item.service}</span>
+                    <span className={`text-xs font-bold flex items-center gap-1.5 ${item.ok ? "text-emerald-400" : "text-amber-400"}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${item.ok ? "bg-emerald-400" : "bg-amber-400"}`} />
+                      {item.status}
+                    </span>
                   </div>
-                </div>
-
-                <div className="space-y-0">
-                  {[
-                    { service: "Réparation de ressort", time: "Dès aujourd'hui", color: "text-green-400" },
-                    { service: "Remplacement de porte", time: "2-3 jours", color: "text-yellow-400" },
-                    { service: "Coupe-froid", time: "Dès aujourd'hui", color: "text-green-400" },
-                    { service: "Ouvre-porte", time: "Dès aujourd'hui", color: "text-green-400" },
-                  ].map((item) => (
-                    <div key={item.service} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
-                      <span className="text-white/80 text-sm">{item.service}</span>
-                      <span className={`text-xs font-bold ${item.color}`}>{item.time}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 bg-brand/10 border border-brand/30 rounded-lg p-3 text-center">
-                  <p className="text-brand text-xs font-bold uppercase tracking-wide">Devis gratuit · Sans engagement</p>
-                </div>
+                ))}
               </div>
 
-              <div className="absolute -top-4 -right-4 bg-brand text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                Disponible maintenant
+              <div className="mt-5 bg-brand/10 border border-brand/20 p-3 text-center">
+                <p className="text-brand text-[11px] font-bold uppercase tracking-[0.15em]">
+                  Devis gratuit · Sans engagement
+                </p>
               </div>
             </div>
           </div>
 
         </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-white/5" />
     </section>
   );
 }
