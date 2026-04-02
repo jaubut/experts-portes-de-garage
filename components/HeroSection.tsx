@@ -81,7 +81,7 @@ export default function HeroSection() {
               </PlanifierButton>
               <a
                 href="tel:4505585788"
-                className="border-2 border-gray-200 text-[#1a1a1a] font-bold px-8 py-4 rounded-xl text-base hover:border-brand hover:text-brand transition-all w-full sm:w-auto text-center"
+                className="border-2 border-brand text-brand font-bold px-8 py-4 rounded-full text-base hover:bg-brand hover:text-white transition-all w-full sm:w-auto text-center"
               >
                 📞 450-558-5788
               </a>
