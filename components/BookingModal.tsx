@@ -222,6 +222,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [addressVerified, setAddressVerified] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -266,7 +267,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   }, []);
 
   const handleAdresseChange = (value: string) => {
-    update("adresse", value);
+    setForm(f => ({ ...f, adresse: value, ville: "", codePostal: "" }));
+    setErrors(e => ({ ...e, adresse: "", ville: "", codePostal: "" }));
+    setAddressVerified(false);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
   };
@@ -275,6 +278,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     setShowSuggestions(false);
     setSuggestions([]);
     update("adresse", text);
+    setAddressVerified(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!apiKey) return;
     try {
@@ -315,8 +319,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     if (step === 1) {
       if (!form.service) errs.service = "Veuillez choisir un service";
     } else if (step === 2) {
+      if (!form.adresse.trim()) {
+        errs.adresse = "Ce champ est requis";
+      } else if (!addressVerified) {
+        errs.adresse = "Veuillez sélectionner une adresse dans la liste pour valider.";
+      }
       if (!form.codePostal.trim()) errs.codePostal = "Ce champ est requis";
-      if (!form.adresse.trim()) errs.adresse = "Ce champ est requis";
       if (!form.ville.trim()) errs.ville = "Ce champ est requis";
     } else if (step === 3) {
       if (!form.nom.trim()) errs.nom = "Ce champ est requis";
@@ -509,20 +517,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     <input
                       type="text"
                       value={form.ville}
-                      onChange={(e) => update("ville", e.target.value)}
-                      placeholder="Granby"
-                      autoComplete="address-level2"
-                      className={inputCls(!!errors.ville)}
+                      readOnly
+                      placeholder="Rempli automatiquement"
+                      className={`${inputCls(!!errors.ville)} bg-gray-50 text-gray-500 cursor-default`}
                     />
                   </Field>
                   <Field label="Code postal" error={errors.codePostal}>
                     <input
                       type="text"
                       value={form.codePostal}
-                      onChange={(e) => update("codePostal", e.target.value)}
-                      placeholder="ex: J2G 3A1"
-                      autoComplete="postal-code"
-                      className={inputCls(!!errors.codePostal)}
+                      readOnly
+                      placeholder="Rempli automatiquement"
+                      className={`${inputCls(!!errors.codePostal)} bg-gray-50 text-gray-500 cursor-default`}
                     />
                   </Field>
                 </div>
