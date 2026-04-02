@@ -121,12 +121,35 @@ export default function UrgentPageContent() {
                   {/* Trust row */}
                   <div className="grid grid-cols-3 gap-2 mb-6">
                     {[
-                      { icon: "⚡", label: "Rapide" },
-                      { icon: "✓", label: "Garanti" },
-                      { icon: "💬", label: "Sans frais cachés" },
+                      {
+                        label: "Rapide",
+                        icon: (
+                          <svg className="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        label: "Garanti",
+                        icon: (
+                          <svg className="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <polyline points="9 12 11 14 15 10" />
+                          </svg>
+                        ),
+                      },
+                      {
+                        label: "Sans frais cachés",
+                        icon: (
+                          <svg className="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                          </svg>
+                        ),
+                      },
                     ].map((t) => (
-                      <div key={t.label} className="bg-white/5 border border-white/8 rounded-lg px-2 py-2.5 text-center">
-                        <div className="text-sm mb-0.5">{t.icon}</div>
+                      <div key={t.label} className="bg-white/5 border border-white/8 rounded-lg px-2 py-2.5 text-center flex flex-col items-center gap-1">
+                        <div className="flex items-center justify-center w-7 h-7 rounded-md bg-brand/10">{t.icon}</div>
                         <div className="text-white/50 text-[10px] font-semibold leading-tight">{t.label}</div>
                       </div>
                     ))}
