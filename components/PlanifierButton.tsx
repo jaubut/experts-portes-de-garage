@@ -11,7 +11,7 @@ export default function PlanifierButton({
 }) {
   const { openModal } = useBookingModal();
   return (
-    <button type="button" onClick={openModal} className={className}>
+    <button type="button" onClick={openModal} className={`cursor-pointer ${className ?? ""}`}>
       {children}
     </button>
   );
