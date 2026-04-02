@@ -42,8 +42,8 @@ export default function HeroSection() {
 
             {/* Headline */}
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] text-[#1a1a1a] uppercase leading-tight mb-5">
-              Votre porte de garage{" "}
-              <span className="text-brand">ne s&apos;ouvre plus?</span>
+              Bienvenue chez{" "}
+              <span className="text-brand">Experts Portes de Garage</span>
             </h1>
 
             <p className="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
