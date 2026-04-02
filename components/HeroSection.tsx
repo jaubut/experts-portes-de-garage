@@ -77,18 +77,6 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* CENTER — Cartoon character */}
-          <div
-            className={`hidden lg:flex flex-col items-center justify-end flex-shrink-0 transition-all duration-700 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/personnage_transparent.png"
-              alt="Technicien Experts Portes de Garage"
-              className="h-[380px] w-auto object-contain drop-shadow-xl"
-            />
-          </div>
-
           {/* RIGHT — Services card */}
           <div
             className={`w-full lg:w-auto lg:flex-shrink-0 pb-16 transition-all duration-700 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
