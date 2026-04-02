@@ -171,7 +171,7 @@ export default function ChatBot() {
 
       {/* Chat window */}
       {open && (
-        <div ref={chatRef} className={`fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}>
+        <div ref={chatRef} className={`fixed inset-x-0 top-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full h-[100dvh] sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col border-0 sm:border sm:border-white/10 bg-[#0f0f0f] ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}>
           {/* Header */}
           <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-3 flex-shrink-0">
             <div className="relative">
