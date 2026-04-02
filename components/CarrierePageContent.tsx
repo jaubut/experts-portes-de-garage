@@ -74,7 +74,7 @@ export default function CarrierePageContent() {
   return (
     <div ref={sectionRef}>
       {/* ── 1. HERO ── */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
+      <section className="relative py-28 md:py-40 overflow-hidden">
         <div className="absolute inset-0 smiling-technicien-bg" />
         <div className="absolute inset-0 bg-[#1a1a1a]/70" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
