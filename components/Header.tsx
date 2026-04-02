@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useBookingModal } from "@/context/BookingModalContext";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const serviceLinks = [
   { href: "/reparation-urgente-de-porte-de-garage", label: "Réparation urgente 24/7" },
@@ -32,8 +33,8 @@ export default function Header() {
       <div className="hidden lg:block bg-brand text-white">
         <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between text-xs font-medium">
           <span>Service d&apos;urgence 24/7 — Granby &amp; régions</span>
-          <a href="tel:4505585788" className="hover:underline font-bold">
-            450-558-5788
+          <a href={PHONE_HREF} className="hover:underline font-bold">
+            {PHONE_DISPLAY}
           </a>
         </div>
       </div>
@@ -114,10 +115,10 @@ export default function Header() {
         {/* Phone + hamburger */}
         <div className="flex items-center gap-3">
           <a
-            href="tel:4505585788"
+            href={PHONE_HREF}
             className="inline-flex lg:hidden items-center bg-brand text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-brand-dark transition-colors"
           >
-            450-558-5788
+            {PHONE_DISPLAY}
           </a>
           <button
             className="lg:hidden p-2 text-brand"
@@ -193,10 +194,10 @@ export default function Header() {
               Planifier une visite
             </button>
             <a
-              href="tel:4505585788"
+              href={PHONE_HREF}
               className="border-2 border-brand text-brand text-sm font-bold px-5 py-3 rounded-lg text-center hover:bg-brand hover:text-white transition-colors"
             >
-              450-558-5788
+              {PHONE_DISPLAY}
             </a>
           </div>
         </div>

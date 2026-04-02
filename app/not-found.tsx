@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Page introuvable — Experts Portes de Garage",
@@ -24,16 +25,16 @@ export default function NotFound() {
           Retour à l&apos;accueil
         </Link>
         <a
-          href="tel:4505585788"
+          href={PHONE_HREF}
           className="border-2 border-brand text-brand font-bold px-7 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors"
         >
-          450-558-5788
+          {PHONE_DISPLAY}
         </a>
       </div>
       <div className="mt-12 text-sm text-gray-400">
         Besoin d&apos;aide?{" "}
-        <a href="tel:4505585788" className="text-brand font-semibold hover:underline">
-          Appelez-nous au 450-558-5788
+        <a href={PHONE_HREF} className="text-brand font-semibold hover:underline">
+          Appelez-nous au {PHONE_DISPLAY}
         </a>
       </div>
     </div>

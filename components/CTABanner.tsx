@@ -1,5 +1,6 @@
 import Image from "next/image";
 import PlanifierButton from "@/components/PlanifierButton";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 export default function CTABanner() {
   return (
@@ -27,10 +28,10 @@ export default function CTABanner() {
           </p>
           <div className="flex flex-col gap-2 w-full sm:flex-row sm:w-auto">
             <a
-              href="tel:4505585788"
+              href={PHONE_HREF}
               className="inline-flex items-center justify-center gap-2 border-2 border-brand text-brand font-bold px-4 py-2.5 rounded-lg text-xs sm:text-sm hover:bg-brand hover:text-white transition-colors whitespace-nowrap"
             >
-              450-558-5788
+              {PHONE_DISPLAY}
             </a>
             <PlanifierButton className="inline-flex items-center justify-center gap-2 bg-brand text-white font-bold px-4 py-2.5 rounded-lg text-xs sm:text-sm hover:bg-brand-dark transition-colors whitespace-nowrap">
               Planifier maintenant

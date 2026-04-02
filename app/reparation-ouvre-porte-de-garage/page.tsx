@@ -12,6 +12,7 @@ import FaqAccordion from "@/components/FaqAccordion";
 import ImageAccordion from "@/components/ImageAccordion";
 import MotorSection from "@/components/MotorSection";
 import InspectionBanner from "@/components/InspectionBanner";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const SLUG = "reparation-ouvre-porte-de-garage";
 
@@ -253,11 +254,11 @@ export default function ReparationOuvrePorteDeGaragePage() {
                       ))}
                     </ul>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                      Peu importe la conception de votre garage, nous offrons des services de réparation et d&apos;installation professionnelles. Appelez 450-558-5788.
+                      Peu importe la conception de votre garage, nous offrons des services de réparation et d&apos;installation professionnelles. Appelez {PHONE_DISPLAY}.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <a href="tel:4505585788" className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
-                        Appeler → 450-558-5788
+                      <a href={PHONE_HREF} className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
+                        Appeler → {PHONE_DISPLAY}
                       </a>
                       <PlanifierButton className="border-2 border-brand text-brand font-bold px-5 py-2.5 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm">
                         Planifier
@@ -284,8 +285,8 @@ export default function ReparationOuvrePorteDeGaragePage() {
                       ))}
                     </ul>
                     <div className="flex flex-wrap gap-3">
-                      <a href="tel:4505585788" className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
-                        Appeler → 450-558-5788
+                      <a href={PHONE_HREF} className="bg-brand text-white font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors text-sm">
+                        Appeler → {PHONE_DISPLAY}
                       </a>
                       <PlanifierButton className="border-2 border-brand text-brand font-bold px-5 py-2.5 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm">
                         Planifier

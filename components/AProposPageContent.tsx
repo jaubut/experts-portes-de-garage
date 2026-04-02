@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 
@@ -254,8 +255,8 @@ export default function AProposPageContent() {
             Prêt à faire affaire avec une entreprise qui vise l&apos;excellence?
           </h2>
           <p className="reveal d1 text-white/80 mb-8">On est là pour vous. Appelez-nous!</p>
-          <a href="tel:4505585788" className="reveal d2 block font-heading text-4xl md:text-5xl text-white uppercase mb-6 hover:text-white/80 transition-colors">
-            450-558-5788
+          <a href={PHONE_HREF} className="reveal d2 block font-heading text-4xl md:text-5xl text-white uppercase mb-6 hover:text-white/80 transition-colors">
+            {PHONE_DISPLAY}
           </a>
           <div className="reveal d3">
             <PlanifierButton className="inline-flex items-center gap-2 bg-white text-brand font-bold px-8 py-4 rounded-xl text-base hover:bg-gray-100 transition-colors shadow-lg">

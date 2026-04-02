@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { google } from "googleapis";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL } from "@/lib/config";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -156,7 +157,7 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
         ${sealSection}
         <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 20px 0;">
         <p style="margin: 0; font-size: 12px; color: #9ca3af; text-align: center;">
-          Experts Portes de Garage · 450-558-5788 · info@expertsportesdegarage.ca
+          Experts Portes de Garage · ${PHONE_DISPLAY} · ${EMAIL}
         </p>
       </div>
     </div>`;
@@ -178,10 +179,10 @@ export function buildClientEmailHtml(data: BookingPayload): string {
           <p style="margin: 4px 0; font-size: 14px;"><strong>Heure :</strong> ${data.timeSlot}</p>
           <p style="margin: 4px 0; font-size: 14px;"><strong>Adresse :</strong> ${data.adresse}, ${data.ville}</p>
         </div>
-        <p style="font-size: 14px; color: #4b5563;">Des questions? Appelez-nous au <a href="tel:4505585788" style="color: #DC2626; font-weight: 700;">450-558-5788</a> ou répondez à ce courriel.</p>
+        <p style="font-size: 14px; color: #4b5563;">Des questions? Appelez-nous au <a href="${PHONE_HREF}" style="color: #DC2626; font-weight: 700;">${PHONE_DISPLAY}</a> ou répondez à ce courriel.</p>
         <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 20px 0;">
         <p style="margin: 0; font-size: 12px; color: #9ca3af; text-align: center;">
-          Experts Portes de Garage · 450-558-5788 · info@expertsportesdegarage.ca
+          Experts Portes de Garage · ${PHONE_DISPLAY} · ${EMAIL}
         </p>
       </div>
     </div>`;

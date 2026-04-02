@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import PlanifierButton from "@/components/PlanifierButton";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 export default function HeroSection() {
   const [visible, setVisible] = useState(false);
@@ -80,10 +81,10 @@ export default function HeroSection() {
                 Planifier une visite →
               </PlanifierButton>
               <a
-                href="tel:4505585788"
+                href={PHONE_HREF}
                 className="border-2 border-brand text-brand font-bold px-8 py-4 rounded-full text-base hover:bg-brand hover:text-white transition-all w-full sm:w-auto text-center"
               >
-                📞 450-558-5788
+                📞 {PHONE_DISPLAY}
               </a>
             </div>
           </div>

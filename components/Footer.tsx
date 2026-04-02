@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import CopyrightYear from "@/components/CopyrightYear";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const serviceLinks = [
   { href: "/reparation-urgente-de-porte-de-garage", label: "Réparation urgente 24/7" },
@@ -24,10 +25,10 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-3">
             <a
-              href="tel:4505585788"
+              href={PHONE_HREF}
               className="bg-white text-brand font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-gray-100 transition-colors"
             >
-              450-558-5788
+              {PHONE_DISPLAY}
             </a>
             <PlanifierButton className="border-2 border-white text-white font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-white hover:text-brand transition-colors">
               Planifier une visite
@@ -50,10 +51,10 @@ export default function Footer() {
             Résultats garantis dès la première visite.
           </p>
           <a
-            href="tel:4505585788"
+            href={PHONE_HREF}
             className="inline-flex items-center gap-2 bg-brand text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark transition-colors"
           >
-            450-558-5788
+            {PHONE_DISPLAY}
           </a>
         </div>
 
@@ -103,10 +104,10 @@ export default function Footer() {
           <ul className="flex flex-col gap-3 text-sm">
             <li>
               <a
-                href="tel:4505585788"
+                href={PHONE_HREF}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                450-558-5788
+                {PHONE_DISPLAY}
               </a>
             </li>
             <li>

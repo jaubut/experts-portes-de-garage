@@ -4,6 +4,7 @@ import "./globals.css";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/Footer";
 import { BookingModalProvider } from "@/context/BookingModalContext";
+import { BUSINESS_NAME, PHONE_DISPLAY, EMAIL, CITY, SERVICE_AREA } from "@/lib/config";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
@@ -23,6 +24,30 @@ export const metadata: Metadata = {
     "Service local de réparation de portes de garage — Granby & régions. Urgences 24/7, installation, entretien. Appelez le 450-558-5788.",
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": BUSINESS_NAME,
+  "telephone": PHONE_DISPLAY,
+  "email": EMAIL,
+  "url": "https://www.expertsportesdegarage.ca",
+  "logo": "https://www.expertsportesdegarage.ca/images/logo_experts.png",
+  "image": "https://www.expertsportesdegarage.ca/images/logo_experts.png",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": CITY,
+    "addressRegion": "QC",
+    "addressCountry": "CA",
+  },
+  "areaServed": SERVICE_AREA,
+  "openingHours": "Mo-Su 00:00-23:59",
+  "priceRange": "$$",
+  "description": "Service local de réparation et installation de portes de garage en Estrie et Montérégie. Urgences 24/7.",
+  "sameAs": [
+    "https://www.google.com/search?q=Experts+Portes+de+Garage+Granby",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,6 +55,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${poppins.variable} ${anton.variable} antialiased`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <BookingModalProvider>
           <ConditionalHeader />

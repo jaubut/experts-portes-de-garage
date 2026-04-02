@@ -9,6 +9,7 @@ import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import InspectionBanner from "@/components/InspectionBanner";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const HERO_BG = "/images/maison_garage_v1.png";
 const LOGO_SRC = "/images/logo_experts.png";
@@ -176,10 +177,10 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
                 Planifier maintenant
               </PlanifierButton>
               <a
-                href="tel:4505585788"
+                href={PHONE_HREF}
                 className="border-2 border-brand text-brand font-bold px-5 py-3 rounded-lg hover:bg-brand hover:text-white transition-colors text-sm"
               >
-                450-558-5788
+                {PHONE_DISPLAY}
               </a>
             </div>
           </div>

@@ -9,6 +9,7 @@ import AnimatedTestimonials from "@/components/AnimatedTestimonials";
 import AnimatedPainPoints from "@/components/AnimatedPainPoints";
 import AnimatedSteps from "@/components/AnimatedSteps";
 import { WeatherSealBookingProvider } from "@/context/WeatherSealBookingContext";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 const HERO_BG =
   "/images/coupe-froid/page_coupe_froid_background.jpg";
@@ -129,13 +130,13 @@ export default function RemplacementCoupeFroidPage() {
                   Planifier mon remplacement →
                 </WeatherSealPlanifierButton>
                 <a
-                  href="tel:4505585788"
+                  href={PHONE_HREF}
                   className="flex items-center justify-center gap-2 border-2 border-white/40 text-white font-bold px-8 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-all text-base"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                   </svg>
-                  450-558-5788
+                  {PHONE_DISPLAY}
                 </a>
               </div>
             </div>
@@ -193,12 +194,12 @@ export default function RemplacementCoupeFroidPage() {
                   <WeatherSealPlanifierButton className="w-full bg-brand text-white font-bold py-4 px-4 rounded-xl hover:bg-brand-dark transition-all text-base shadow-md hover:shadow-lg">
                     Planifier mon remplacement →
                   </WeatherSealPlanifierButton>
-                  <a href="tel:4505585788"
+                  <a href={PHONE_HREF}
                     className="w-full flex items-center justify-center gap-2 border-2 border-brand text-brand font-bold py-3.5 px-4 rounded-xl hover:bg-brand hover:text-white transition-all text-sm text-center">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                     </svg>
-                    Appeler le 450-558-5788
+                    Appeler le {PHONE_DISPLAY}
                   </a>
                   <p className="text-gray-400 text-xs text-center">Sans engagement · Réponse le jour même</p>
                 </div>
@@ -283,12 +284,12 @@ export default function RemplacementCoupeFroidPage() {
             <WeatherSealPlanifierButton className="bg-brand text-white font-bold px-10 py-4 rounded-xl hover:bg-brand-dark transition-all text-base shadow-[0_4px_24px_rgba(220,38,38,0.45)] hover:-translate-y-0.5">
               Profiter de l&apos;offre →
             </WeatherSealPlanifierButton>
-            <a href="tel:4505585788"
+            <a href={PHONE_HREF}
               className="flex items-center justify-center gap-2 border-2 border-white/30 text-white font-bold px-10 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-all text-base text-center">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
               </svg>
-              450-558-5788
+              {PHONE_DISPLAY}
             </a>
           </div>
         </div>

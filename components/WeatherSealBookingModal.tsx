@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { PHONE_DISPLAY } from "@/lib/config";
 
 interface WeatherSealBookingModalProps {
   isOpen: boolean;
@@ -322,7 +323,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         if (!res.ok) throw new Error();
         setSubmitted(true);
       } catch {
-        setSubmitError("Une erreur est survenue. Veuillez réessayer ou nous appeler au 450-558-5788.");
+        setSubmitError(`Une erreur est survenue. Veuillez réessayer ou nous appeler au ${PHONE_DISPLAY}.`);
       } finally {
         setIsSubmitting(false);
       }
