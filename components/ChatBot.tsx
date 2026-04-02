@@ -12,6 +12,12 @@ const SUGGESTIONS = [
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
+  const [bubble, setBubble] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setBubble(false), 4000);
+    return () => clearTimeout(t);
+  }, []);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -62,6 +68,14 @@ export default function ChatBot() {
 
   return (
     <>
+      {/* Bubble message */}
+      {bubble && !open && (
+        <div className="fixed bottom-24 right-5 z-50 max-w-[220px] bg-white text-[#1a1a1a] text-sm font-medium px-4 py-3 rounded-2xl rounded-br-sm shadow-xl animate-fade-in-up">
+          👋 Bonjour! Comment puis-je vous aider aujourd&apos;hui?
+          <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-white rotate-45" />
+        </div>
+      )}
+
       {/* Floating button */}
       <button
         onClick={() => setOpen((o) => !o)}
