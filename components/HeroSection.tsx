@@ -22,18 +22,17 @@ export default function HeroSection() {
       {/* Background image */}
       <div className="absolute inset-0 hero-bg" />
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/90 to-white/60 lg:to-white/30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-white/60 lg:to-white/25" />
 
       {/* Red accent top */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-brand z-10" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-28">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-0 md:pt-24 md:pb-0">
+        <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-10">
 
-          {/* LEFT */}
+          {/* LEFT — Text */}
           <div
-            className="flex-1 text-center lg:text-left transition-all duration-700"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)" }}
+            className={`flex-1 text-center lg:text-left pb-16 transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
           >
             {/* Zone label */}
             <div className="inline-flex items-center gap-2 bg-brand/8 border border-brand/20 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-6">
@@ -51,7 +50,7 @@ export default function HeroSection() {
               <strong className="text-[#1a1a1a]">Devis gratuit, sans engagement.</strong>
             </p>
 
-            {/* Honest trust row */}
+            {/* Trust row */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-2 mb-10">
               {[
                 { icon: "🛡️", text: "Garantie 2 ans" },
@@ -78,12 +77,23 @@ export default function HeroSection() {
             </div>
           </div>
 
+          {/* CENTER — Cartoon character */}
+          <div
+            className={`hidden lg:flex flex-col items-center justify-end flex-shrink-0 transition-all duration-700 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/personnage_transparent.png"
+              alt="Technicien Experts Portes de Garage"
+              className="h-[380px] w-auto object-contain drop-shadow-xl"
+            />
+          </div>
+
           {/* RIGHT — Services card */}
           <div
-            className="w-full lg:w-auto lg:flex-shrink-0 transition-all duration-700 delay-200"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)" }}
+            className={`w-full lg:w-auto lg:flex-shrink-0 pb-16 transition-all duration-700 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
           >
-            <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/80 border border-gray-100 overflow-hidden w-full lg:w-[340px]">
+            <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/80 border border-gray-100 overflow-hidden w-full lg:w-[320px]">
 
               {/* Card header */}
               <div className="bg-brand px-6 py-4">
