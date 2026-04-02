@@ -278,7 +278,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!apiKey) return;
     try {
-      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents&languageCode=fr`, {
+      const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents,location&languageCode=fr`, {
         headers: { "X-Goog-Api-Key": apiKey },
       });
       const place = await res.json();
@@ -292,6 +292,14 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       if (streetNumber || route) setForm(f => ({ ...f, adresse: `${streetNumber} ${route}`.trim() }));
       if (city) setForm(f => ({ ...f, ville: city }));
       if (postalCode) setForm(f => ({ ...f, codePostal: postalCode }));
+
+      // Vérifier la distance depuis Granby (max 60 km)
+      if (place.location) {
+        const dist = haversineKm(place.location.latitude, place.location.longitude, 45.3972, -72.7330);
+        if (dist > 60) {
+          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 450-558-5788.` }));
+        }
+      }
     } catch { /* keep typed value */ }
   };
 
@@ -642,6 +650,14 @@ function Field({
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
   );
+}
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function inputCls(hasError: boolean) {
