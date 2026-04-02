@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 
@@ -21,12 +22,27 @@ const team = [
   "Nous ne nous contentons pas de faire «correct» — nous visons l'excellence",
 ];
 
-const distinctions = [
-  { icon: "🚀", text: "Équipe moderne avec mentalité de croissance" },
-  { icon: "💡", text: "On adopte les nouvelles méthodes et technologies" },
-  { icon: "💬", text: "Transparent : pas de frais cachés, pas de surprises" },
-  { icon: "⚡", text: "Service professionnel et rapide" },
-  { icon: "📚", text: "Toujours disponible pour apprendre et s'adapter" },
+const distinctions: { text: string; svg: ReactNode }[] = [
+  {
+    text: "Équipe moderne avec mentalité de croissance",
+    svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M12 2L8 8H4l4 4-1.5 5.5L12 14l5.5 3.5L16 12l4-4h-4L12 2z"/><circle cx="12" cy="14" r="1" fill="currentColor"/></svg>,
+  },
+  {
+    text: "On adopte les nouvelles méthodes et technologies",
+    svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m1.636-6.364l.707.707M12 21a7 7 0 110-14 7 7 0 010 14z"/><path d="M12 8v4l2 2"/></svg>,
+  },
+  {
+    text: "Transparent : pas de frais cachés, pas de surprises",
+    svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/></svg>,
+  },
+  {
+    text: "Service professionnel et rapide",
+    svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
+  },
+  {
+    text: "Toujours disponible pour apprendre et s'adapter",
+    svg: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h6M9 11h4"/></svg>,
+  },
 ];
 
 const values = [
@@ -146,9 +162,11 @@ export default function AProposPage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {distinctions.map((d) => (
-              <div key={d.text} className="bg-white/10 border border-white/20 rounded-xl px-5 py-4 flex items-start gap-3">
-                <span className="text-2xl flex-shrink-0">{d.icon}</span>
-                <span className="text-white text-sm font-medium leading-relaxed">{d.text}</span>
+              <div key={d.text} className="group bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 rounded-2xl px-5 py-5 flex items-start gap-4 transition-all duration-300 hover:-translate-y-1">
+                <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white group-hover:bg-white/25 transition-colors">
+                  {d.svg}
+                </span>
+                <span className="text-white text-sm font-medium leading-relaxed pt-2">{d.text}</span>
               </div>
             ))}
           </div>
