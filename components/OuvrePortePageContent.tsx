@@ -170,26 +170,7 @@ export default function OuvrePortePageContent() {
         </div>
       </section>
 
-      {/* ── 3. POURQUOI UN BON OUVRE-PORTE ── */}
-      <section className="bg-white py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les bénéfices</p>
-          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-12 leading-tight">
-            Pourquoi un bon ouvre-porte?
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {benefits.map((b, i) => (
-              <div key={b.title} className={`reveal-scale ${d[i]} bg-gray-50 border border-gray-100 rounded-2xl p-6 flex flex-col gap-3`}>
-                <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">{b.icon}</div>
-                <p className="font-heading text-base text-[#1a1a1a] uppercase">{b.title}</p>
-                <p className="text-gray-600 text-sm leading-relaxed">{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. NOS SERVICES ── */}
+      {/* ── 3. NOS SERVICES ── */}
       <section className="bg-[#1a1a1a] py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Ce qu'on fait</p>
@@ -220,6 +201,25 @@ export default function OuvrePortePageContent() {
                     {s.cta}
                   </PlanifierButton>
                 )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. POURQUOI UN BON OUVRE-PORTE ── */}
+      <section className="bg-white py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les bénéfices</p>
+          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-12 leading-tight">
+            Pourquoi un bon ouvre-porte?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {benefits.map((b, i) => (
+              <div key={b.title} className={`reveal-scale ${d[i]} bg-gray-50 border border-gray-100 rounded-2xl p-6 flex flex-col gap-3`}>
+                <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">{b.icon}</div>
+                <p className="font-heading text-base text-[#1a1a1a] uppercase">{b.title}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{b.desc}</p>
               </div>
             ))}
           </div>
