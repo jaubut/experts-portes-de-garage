@@ -90,18 +90,27 @@ export default function ChatBot() {
               Je suis Alex, votre assistant. Des questions sur vos portes de garage? Je suis là pour vous aider!
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => { setBubble(false); setOpen(true); }}
-            className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 border-t border-gray-100 text-gray-400 text-sm hover:bg-gray-100 transition-colors"
-          >
-            <span>Écrire un message...</span>
-            <span className="w-7 h-7 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-2 px-3 py-2.5 bg-gray-50 border-t border-gray-100">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { setBubble(false); setOpen(true); send(); } }}
+              onFocus={() => { setBubble(false); setOpen(true); }}
+              placeholder="Écrire un message..."
+              className="flex-1 bg-transparent text-[16px] text-[#1a1a1a] placeholder-gray-400 outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => { setBubble(false); setOpen(true); send(); }}
+              aria-label="Envoyer"
+              className="w-7 h-7 rounded-full bg-brand flex items-center justify-center flex-shrink-0 hover:bg-brand-dark transition-colors"
+            >
               <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
-            </span>
-          </button>
+            </button>
+          </div>
         </div>
       )}
 
