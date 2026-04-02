@@ -67,7 +67,7 @@ En confiant le travail à des techniciens qualifiés, vous avez l’assurance qu
 
 Combien coûte une nouvelle porte de garage?
 
-Selon HomeAdvisor, le coût moyen d’une nouvelle porte de garage tourne autour de **5 000 $**, avec une fourchette typique entre **2 150 $ et plus de 10 000 $**. Le prix varie selon le modèle, le matériau, l’isolation, la dimension et le niveau de personnalisation choisis.
+Le coût moyen d’une nouvelle porte de garage tourne autour de **5 000 $**, avec une fourchette typique entre **2 150 $ et plus de 10 000 $**. Le prix varie selon le modèle, le matériau, l’isolation, la dimension et le niveau de personnalisation choisis.
 
 Chez **Experts Portes de Garage**, nous proposons des options flexibles pour vous aider à choisir une porte de garage adaptée à votre budget et à vos besoins, sans compromettre la qualité.
 
@@ -101,7 +101,7 @@ Même avec les bons outils, les bonnes connaissances et de l’expérience, l’
 
 En confiant le travail à des techniciens qualifiés, vous avez l’assurance que l’installation sera bien faite dès la première fois. Chez **Experts Portes de Garage**, nous faisons en sorte que l’expérience soit simple, rapide et sans stress. Dites-nous vos préférences et nous vous proposerons des solutions idéales et rentables, adaptées à votre situation.
 
-Selon HomeAdvisor, le coût moyen d’une nouvelle porte de garage tourne autour de **5 000 $**, avec une fourchette typique entre **2 150 $ et plus de 10 000 $**. Le prix varie selon le modèle, le matériau, l’isolation, la dimension et le niveau de personnalisation choisis.
+Le coût moyen d’une nouvelle porte de garage tourne autour de **5 000 $**, avec une fourchette typique entre **2 150 $ et plus de 10 000 $**. Le prix varie selon le modèle, le matériau, l’isolation, la dimension et le niveau de personnalisation choisis.
 
 Chez **Experts Portes de Garage**, nous proposons des options flexibles pour vous aider à choisir une porte de garage adaptée à votre budget et à vos besoins, sans compromettre la qualité.
 
