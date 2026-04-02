@@ -99,6 +99,7 @@ function Calendar({ value, onChange, hasError }: CalendarProps) {
           type="button"
           onClick={prevMonth}
           disabled={!canGoPrev}
+          aria-label="Mois précédent"
           className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
             canGoPrev ? "hover:bg-gray-200 text-gray-600" : "text-gray-300 cursor-not-allowed"
           }`}
@@ -113,6 +114,7 @@ function Calendar({ value, onChange, hasError }: CalendarProps) {
         <button
           type="button"
           onClick={nextMonth}
+          aria-label="Mois suivant"
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-600 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
