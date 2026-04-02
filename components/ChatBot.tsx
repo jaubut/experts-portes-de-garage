@@ -210,29 +210,31 @@ export default function ChatBot() {
           )}
 
           {/* Input bar */}
-          <div className="bg-[#1a1a1a] px-3 py-3 flex gap-2 flex-shrink-0">
-            <input
-              ref={inputRef}
-              type="text"
-              inputMode="text"
-              enterKeyHint="send"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Écrivez votre message..."
-              className="flex-1 bg-white/8 border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-white/30 outline-none focus:border-brand/50 transition-colors"
-            />
-            <button
-              type="button"
-              onClick={() => send()}
-              disabled={!input.trim() || loading}
-              aria-label="Envoyer"
-              className="w-12 h-12 rounded-xl bg-brand flex items-center justify-center hover:bg-brand-dark transition-colors disabled:opacity-40 flex-shrink-0 active:scale-95"
-            >
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </button>
+          <div className="bg-[#1a1a1a] px-3 py-3 flex-shrink-0">
+            <div className="relative flex items-center">
+              <input
+                ref={inputRef}
+                type="text"
+                inputMode="text"
+                enterKeyHint="send"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && send()}
+                placeholder="Écrivez votre message..."
+                className="w-full bg-white/8 border border-white/10 rounded-2xl pl-4 pr-14 py-3.5 text-[16px] text-white placeholder-white/30 outline-none focus:border-brand/50 transition-colors"
+              />
+              <button
+                type="button"
+                onClick={() => send()}
+                disabled={!input.trim() || loading}
+                aria-label="Envoyer"
+                className="absolute right-2 w-9 h-9 rounded-xl bg-brand flex items-center justify-center hover:bg-brand-dark transition-colors disabled:opacity-30 active:scale-90 flex-shrink-0"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       )}
