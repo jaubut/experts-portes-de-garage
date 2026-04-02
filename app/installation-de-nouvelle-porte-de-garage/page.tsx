@@ -135,6 +135,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `${page.title} — Experts Portes de Garage`,
     description: page.excerpt,
+    openGraph: {
+      title: `${page.title} — Experts Portes de Garage`,
+      description: page.excerpt,
+      url: `/${SLUG}`,
+    },
   };
 }
 

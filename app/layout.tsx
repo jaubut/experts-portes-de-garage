@@ -18,10 +18,30 @@ const anton = Anton({
   variable: "--font-anton",
 });
 
+const BASE_URL = "https://www.expertsportesdegarage.ca";
+
 export const metadata: Metadata = {
   title: "Experts Portes de Garage — Réparation rapide, service local",
   description:
     "Service local de réparation de portes de garage — Granby & régions. Urgences 24/7, installation, entretien. Appelez le 450-558-5788.",
+  metadataBase: new URL(BASE_URL),
+  openGraph: {
+    siteName: "Experts Portes de Garage",
+    locale: "fr_CA",
+    type: "website",
+    images: [
+      {
+        url: "/images/maison_garage_v1.webp",
+        width: 1200,
+        height: 630,
+        alt: "Experts Portes de Garage — Service local en Estrie et Montérégie",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/maison_garage_v1.webp"],
+  },
 };
 
 const jsonLd = {

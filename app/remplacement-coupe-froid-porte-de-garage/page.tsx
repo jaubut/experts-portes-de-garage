@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Remplacement de coupe-froid de porte de garage — Experts Portes de Garage",
   description:
     "Votre coupe-froid est usé, craquelé ou décollé? Nos techniciens remplacent rapidement les joints d'étanchéité pour protéger votre garage du froid, de l'humidité et des infiltrations — Estrie et Montérégie.",
+  openGraph: {
+    title: "Remplacement de Coupe-Froid de Porte de Garage",
+    description: "Coupe-froid usé ou décollé? Nos techniciens interviennent rapidement pour protéger votre garage du froid et de l'humidité.",
+    url: "/remplacement-coupe-froid-porte-de-garage",
+  },
 };
 
 const faqItems: FaqItem[] = [
