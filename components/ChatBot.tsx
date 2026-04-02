@@ -48,24 +48,14 @@ export default function ChatBot() {
     if (open) setTimeout(() => inputRef.current?.focus(), 100);
   }, [open]);
 
-  // Lock body scroll on mobile when chat is open — prevents iOS from shifting fixed elements
+  // Prevent page scroll on mobile when chat is open
   useEffect(() => {
-    if (open && window.innerWidth < 640) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = "0";
-      document.body.style.right = "0";
+    if (open) {
       document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.left = "";
-        document.body.style.right = "";
-        document.body.style.overflow = "";
-        window.scrollTo(0, scrollY);
-      };
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
 
@@ -161,7 +151,7 @@ export default function ChatBot() {
 
       {/* Chat window */}
       {open && (
-        <div ref={chatRef} className={`fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-5 z-50 w-full sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col sm:border sm:border-white/10 bg-[#0f0f0f] ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}>
+        <div ref={chatRef} className={`fixed top-0 left-0 right-0 h-screen sm:inset-auto sm:top-auto sm:bottom-24 sm:right-5 sm:left-auto z-50 w-full sm:w-[380px] sm:h-auto sm:max-h-[520px] sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col sm:border sm:border-white/10 bg-[#0f0f0f] ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}>
           {/* Header */}
           <div className="bg-[#1a1a1a] px-4 py-3 flex items-center gap-3 flex-shrink-0">
             <div className="relative">
