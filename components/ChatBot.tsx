@@ -16,9 +16,12 @@ export default function ChatBot() {
   const [bubble, setBubble] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setBubble(false), 4000);
-    return () => clearTimeout(t);
-  }, []);
+    let timer: ReturnType<typeof setTimeout>;
+    if (!bubble) {
+      timer = setTimeout(() => setBubble(true), 3 * 60 * 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [bubble]);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -71,8 +74,18 @@ export default function ChatBot() {
     <>
       {/* Bubble message */}
       {bubble && !open && (
-        <div className="fixed bottom-24 right-5 z-50 max-w-[220px] bg-white text-[#1a1a1a] text-sm font-medium px-4 py-3 rounded-2xl rounded-br-sm shadow-xl animate-fade-in-up">
-          👋 Bonjour! Comment puis-je vous aider aujourd&apos;hui?
+        <div className="fixed bottom-24 right-5 z-50 max-w-[230px] bg-white text-[#1a1a1a] text-sm font-medium px-4 py-3 pr-8 rounded-2xl rounded-br-sm shadow-xl animate-fade-in-up">
+          <button
+            type="button"
+            onClick={() => setBubble(false)}
+            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+            aria-label="Fermer"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          Je suis Alex, votre assistant. Des questions? Je suis là pour vous aider!
           <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-white rotate-45" />
         </div>
       )}
