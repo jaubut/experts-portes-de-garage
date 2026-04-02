@@ -357,18 +357,16 @@ export default function InstallationPageContent() {
           <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-white uppercase text-center mb-12 leading-tight">
             Combien de temps ça prend?
           </h2>
-          <div className="flex flex-col gap-0">
+          <div className="relative flex flex-col gap-6">
+            <div className="absolute left-5 top-5 bottom-5 w-0.5 bg-brand/20" />
             {timeline.map((t, i) => (
-              <div key={t.label} className={`reveal d${i + 1} flex items-center gap-5`}>
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm">{i + 1}</span>
-                  </div>
-                  {i < timeline.length - 1 && <div className="w-0.5 h-10 bg-brand/30" />}
+              <div key={t.label} className={`reveal d${i + 1} relative flex items-center gap-5`}>
+                <div className="w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0 z-10">
+                  <span className="text-white font-bold text-sm">{i + 1}</span>
                 </div>
-                <div className="flex-1 flex items-center justify-between py-2">
+                <div className="flex-1 flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
                   <p className="text-white font-medium text-sm">{t.label}</p>
-                  <span className="text-brand font-bold text-sm bg-brand/10 px-3 py-1 rounded-full">{t.time}</span>
+                  <span className="text-brand font-bold text-sm bg-brand/10 px-3 py-1 rounded-full ml-4 whitespace-nowrap">{t.time}</span>
                 </div>
               </div>
             ))}
