@@ -211,13 +211,7 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdf
         </tr>`;
       }).join("");
       priceSection = `
-        ${pdfAttached ? `
-        <div style="background: #f9fafb; border-radius: 8px; padding: 16px 20px; margin: 24px 0 12px;">
-          <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #1a1a1a;">💳 Payer en avance par virement Interac</p>
-          <p style="margin: 0 0 4px; font-size: 14px; color: #1a1a1a;">Envoyez <strong>${total.toFixed(2)} $</strong> à : <strong style="color: #DC2626;">${EMAIL}</strong></p>
-          <p style="margin: 0; font-size: 12px; color: #9ca3af;">Votre numéro de soumission se trouve sur le PDF ci-joint.</p>
-        </div>` : ""}
-        <div style="margin: ${pdfAttached ? "0" : "24px 0"} 0;">
+        <div style="margin: 24px 0;">
           <p style="margin: 0 0 12px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">💰 Votre estimation</p>
           <table style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -237,6 +231,16 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdf
               <td style="padding: 10px 0 4px; font-size: 15px; font-weight: 700; color: #1a1a1a;">Total (taxes incluses)</td>
               <td style="padding: 10px 0 4px; font-size: 18px; font-weight: 700; color: #DC2626; text-align: right;">${total.toFixed(2)} $</td>
             </tr>
+            ${pdfAttached ? `
+            <tr style="background: #f9fafb; border-radius: 8px;">
+              <td colspan="3" style="padding: 12px 0 0;">
+                <div style="background: #f9fafb; border-radius: 8px; padding: 12px 16px;">
+                  <p style="margin: 0 0 4px; font-size: 13px; font-weight: 700; color: #1a1a1a;">💳 Payer en avance par virement Interac</p>
+                  <p style="margin: 0 0 2px; font-size: 13px; color: #1a1a1a;">Envoyez <strong>${total.toFixed(2)} $</strong> à : <strong style="color: #DC2626;">${EMAIL}</strong></p>
+                  <p style="margin: 0; font-size: 11px; color: #9ca3af;">Votre numéro de soumission se trouve sur le PDF ci-joint.</p>
+                </div>
+              </td>
+            </tr>` : ""}
           </table>
         </div>`;
     }
