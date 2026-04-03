@@ -104,7 +104,7 @@ export default function AdminPage() {
     setEvents((prev) => prev.filter((e) => e.id !== eventId));
   };
 
-  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout>; intervalId: ReturnType<typeof setInterval>; nom: string; courriel: string } | null>(null);
+  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout>; intervalId: ReturnType<typeof setInterval>; nom: string; courriel: string; previousStatus: string } | null>(null);
   const [countdown, setCountdown] = useState(15);
 
   const updateStatus = async (eventId: string, status: string) => {
@@ -114,6 +114,7 @@ export default function AdminPage() {
       const info = event ? parseDescription(event.description) : {};
       const nom = info["Client"] ?? "";
       const courriel = info["Courriel"] ?? "";
+      const previousStatus = event?.status ?? "nouveau";
       setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine-pending" } : e));
       setCountdown(15);
       const intervalId = setInterval(() => setCountdown((c) => c - 1), 1000);
@@ -129,14 +130,14 @@ export default function AdminPage() {
         setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine" } : e));
         setUpdating(null);
       }, 15000);
-      setPendingTermine({ eventId, timeoutId, intervalId, nom, courriel });
+      setPendingTermine({ eventId, timeoutId, intervalId, nom, courriel, previousStatus });
       return;
     }
     if (pendingTermine?.eventId === eventId) {
       clearTimeout(pendingTermine.timeoutId);
       clearInterval(pendingTermine.intervalId);
       setPendingTermine(null);
-      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "confirme" } : e));
+      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: pendingTermine.previousStatus } : e));
       return;
     }
     setUpdating(eventId);
