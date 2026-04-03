@@ -300,7 +300,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         const ft = parseFloat(form.measurements[id] || "0");
         if (!ft || ft <= 0) errs[`measure_${id}`] = "Entrez une mesure valide";
       });
-      if (needsColor && !form.color) errs.color = "Sélectionnez une couleur";
+      if (needsColor && (!form.color || form.color === "__autre__")) errs.color = "Sélectionnez ou précisez une couleur";
     } else if (step === 3) {
       if (!form.adresse.trim()) {
         errs.adresse = "Ce champ est requis";
@@ -519,21 +519,26 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                       {needsColor && (
                         <div>
                           <p className="text-sm font-semibold text-gray-700 mb-1">Couleur du coupe-froid</p>
-                          <p className="text-xs text-gray-400 mb-3">Joints latéraux et de tête disponibles en noir ou blanc</p>
+                          <p className="text-xs text-gray-400 mb-3">Joints latéraux et de tête disponibles en noir, blanc ou autre</p>
                           {errors.color && <p className="text-xs text-red-500 mb-2">{errors.color}</p>}
-                          <div className="flex gap-3">
+                          <div className="flex gap-3 mb-3">
                             {[
                               { id: "noir", label: "Noir", bg: "bg-[#1a1a1a]", border: "border-[#1a1a1a]" },
                               { id: "blanc", label: "Blanc", bg: "bg-white", border: "border-gray-300" },
+                              { id: "autre", label: "Autre", bg: "bg-gradient-to-br from-red-400 via-yellow-300 to-blue-400", border: "border-gray-300" },
                             ].map((c) => {
-                              const selected = form.color === c.id;
+                              const isAutre = c.id === "autre";
+                              const selected = isAutre
+                                ? form.color !== "noir" && form.color !== "blanc" && form.color !== ""
+                                : form.color === c.id;
                               return (
-                                <button key={c.id} type="button" onClick={() => update("color", c.id)}
-                                  className={`flex-1 flex items-center gap-3 border-2 rounded-xl px-4 py-3 transition-all ${selected ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
+                                <button key={c.id} type="button"
+                                  onClick={() => update("color", isAutre ? "__autre__" : c.id)}
+                                  className={`flex-1 flex items-center gap-2 border-2 rounded-xl px-3 py-3 transition-all ${selected ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
                                   <div className={`w-6 h-6 rounded-full ${c.bg} border ${c.border} shrink-0 shadow-sm`} />
                                   <span className={`text-sm font-semibold ${selected ? "text-brand" : "text-gray-700"}`}>{c.label}</span>
                                   {selected && (
-                                    <svg className="w-4 h-4 text-brand ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                    <svg className="w-4 h-4 text-brand ml-auto shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                     </svg>
                                   )}
@@ -541,6 +546,16 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                               );
                             })}
                           </div>
+                          {form.color !== "noir" && form.color !== "blanc" && form.color !== "" && (
+                            <input
+                              type="text"
+                              placeholder="Précisez la couleur souhaitée..."
+                              value={form.color === "__autre__" ? "" : form.color}
+                              onChange={(e) => update("color", e.target.value || "__autre__")}
+                              autoFocus
+                              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors"
+                            />
+                          )}
                         </div>
                       )}
 
