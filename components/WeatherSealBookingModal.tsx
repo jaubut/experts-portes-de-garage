@@ -357,10 +357,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
 
         {/* Header */}
         <div className="bg-brand px-6 py-4 flex items-center justify-between gap-4">
-          <Image src="/images/logo_experts.png"
-            alt="Experts Portes de Garage" width={140} height={46}
-            className="h-9 w-auto object-contain brightness-0 invert shrink-0" />
-          <span className="font-heading text-white text-sm sm:text-base leading-tight text-right uppercase">
+          <span className="font-heading text-white text-sm sm:text-base leading-tight uppercase">
             Remplacement de coupe-froid
           </span>
           <button onClick={onClose} aria-label="Fermer" className="text-white/70 hover:text-white transition-colors shrink-0">
