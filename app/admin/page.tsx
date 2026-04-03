@@ -104,34 +104,40 @@ export default function AdminPage() {
     setEvents((prev) => prev.filter((e) => e.id !== eventId));
   };
 
-  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout> } | null>(null);
+  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout>; intervalId: ReturnType<typeof setInterval>; nom: string; courriel: string } | null>(null);
+  const [countdown, setCountdown] = useState(15);
 
   const updateStatus = async (eventId: string, status: string) => {
-    // If clicking Terminé, show 15s countdown with cancel option
     if (status === "termine") {
-      // Cancel any previous pending
-      if (pendingTermine) clearTimeout(pendingTermine.timeoutId);
+      if (pendingTermine) { clearTimeout(pendingTermine.timeoutId); clearInterval(pendingTermine.intervalId); }
+      const event = events.find((e) => e.id === eventId);
+      const info = event ? parseDescription(event.description) : {};
+      const nom = info["Client"] ?? "";
+      const courriel = info["Courriel"] ?? "";
       setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine-pending" } : e));
+      setCountdown(15);
+      const intervalId = setInterval(() => setCountdown((c) => c - 1), 1000);
       const timeoutId = setTimeout(async () => {
+        clearInterval(intervalId);
         setPendingTermine(null);
-        const event = events.find((e) => e.id === eventId);
-        const info = event ? parseDescription(event.description) : {};
         setUpdating(eventId);
         await fetch("/api/admin/status", {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-admin-password": password },
-          body: JSON.stringify({ eventId, status: "termine", nom: info["Client"] ?? "", courriel: info["Courriel"] ?? "" }),
+          body: JSON.stringify({ eventId, status: "termine", nom, courriel }),
         });
         setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine" } : e));
         setUpdating(null);
       }, 15000);
-      setPendingTermine({ eventId, timeoutId });
+      setPendingTermine({ eventId, timeoutId, intervalId, nom, courriel });
       return;
     }
-    // Cancel pending terminé if changing to something else
     if (pendingTermine?.eventId === eventId) {
       clearTimeout(pendingTermine.timeoutId);
+      clearInterval(pendingTermine.intervalId);
       setPendingTermine(null);
+      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "confirme" } : e));
+      return;
     }
     setUpdating(eventId);
     const event = events.find((e) => e.id === eventId);
@@ -288,7 +294,7 @@ export default function AdminPage() {
                   ) : (
                     <div className="flex flex-col gap-3">
                       {filtered(todayEvents).map((e) => (
-                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
+                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} countdown={countdown} />
                       ))}
                     </div>
                   )}
@@ -300,7 +306,7 @@ export default function AdminPage() {
                   ) : (
                     <div className="flex flex-col gap-3">
                       {filtered(upcomingEvents).map((e) => (
-                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
+                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} countdown={countdown} />
                       ))}
                     </div>
                   )}
@@ -351,11 +357,12 @@ export default function AdminPage() {
   );
 }
 
-function EventCard({ event, onStatusChange, onDelete, updating }: {
+function EventCard({ event, onStatusChange, onDelete, updating, countdown }: {
   event: Event;
   onStatusChange: (id: string, status: string) => void;
   onDelete: (id: string) => void;
   updating: string | null;
+  countdown: number;
 }) {
   const info = parseDescription(event.description);
   const status = STATUS_LABELS[event.status] ?? STATUS_LABELS.nouveau;
@@ -432,10 +439,10 @@ function EventCard({ event, onStatusChange, onDelete, updating }: {
           {event.status === "termine-pending" && (
             <button
               type="button"
-              onClick={() => onStatusChange(event.id, "confirme")}
+              onClick={() => onStatusChange(event.id, "annuler-pending")}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition-colors animate-pulse"
             >
-              ✕ Annuler (15s)
+              ✕ Annuler ({countdown}s)
             </button>
           )}
         </div>
