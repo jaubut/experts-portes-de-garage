@@ -33,6 +33,9 @@ const EMPTY_FORM: FormData = {
 };
 
 const SERVICES = [
+  { id: "reparation-porte", label: "Réparation de porte de garage", desc: "Porte abîmée, bruyante, mal alignée ou lente", icon: (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="2" y1="15" x2="22" y2="15"/><circle cx="12" cy="6" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>
+  )},
   { id: "reparation-urgente", label: "Réparation urgente", desc: "Porte bloquée, ressort cassé, câble brisé", icon: (
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
   )},
