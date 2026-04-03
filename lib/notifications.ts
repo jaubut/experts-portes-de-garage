@@ -164,7 +164,7 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
     </div>`;
 }
 
-export function buildClientEmailHtml(data: BookingPayload, eventId?: string): string {
+export function buildClientEmailHtml(data: BookingPayload, eventId?: string, withQuote?: boolean): string {
   const prenom = data.nom.trim().split(/\s+/)[0];
   const dateFormatted = formatDateFr(data.date);
   const secret = process.env.ADMIN_PASSWORD ?? "";
@@ -185,6 +185,55 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string): st
       </div>
     </div>` : "";
 
+  let priceSection = "";
+  if (withQuote && data.serviceType === "Remplacement de coupe-froid") {
+    const ws = data as WeatherSealBookingPayload;
+    const measurableSeals = ws.seals.filter((id) => id !== "inconnu" && ws.measurements[id]);
+    const subtotal = calcTotal(ws.seals, ws.measurements);
+    const tps = subtotal * 0.05;
+    const tvq = subtotal * 0.09975;
+    const total = subtotal + tps + tvq;
+    if (subtotal > 0) {
+      const rows = measurableSeals.map((id) => {
+        const ft = parseFloat(ws.measurements[id] || "0") || 0;
+        const lineTotal = ft * (PRICE_PER_FOOT[id] || 0);
+        return `<tr>
+          <td style="padding: 8px 0; font-size: 14px; color: #1a1a1a; border-bottom: 1px solid #f3f4f6;">${SEAL_LABELS[id]}</td>
+          <td style="padding: 8px 0; font-size: 14px; color: #6b7280; text-align: center; border-bottom: 1px solid #f3f4f6;">${ft} pi</td>
+          <td style="padding: 8px 0; font-size: 14px; font-weight: 700; color: #1a1a1a; text-align: right; border-bottom: 1px solid #f3f4f6;">${lineTotal.toFixed(2)} $</td>
+        </tr>`;
+      }).join("");
+      priceSection = `
+        <div style="margin: 24px 0;">
+          <p style="margin: 0 0 12px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">💰 Votre estimation</p>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f9fafb;">
+                <th style="padding: 8px 0; font-size: 11px; color: #6b7280; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                <th style="padding: 8px 0; font-size: 11px; color: #6b7280; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Mesure</th>
+                <th style="padding: 8px 0; font-size: 11px; color: #6b7280; text-align: right; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Montant</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+            <tr><td style="padding: 4px 0; font-size: 13px; color: #6b7280;">Sous-total</td><td style="padding: 4px 0; font-size: 13px; text-align: right; color: #1a1a1a;">${subtotal.toFixed(2)} $</td></tr>
+            <tr><td style="padding: 4px 0; font-size: 13px; color: #6b7280;">TPS (5%)</td><td style="padding: 4px 0; font-size: 13px; text-align: right; color: #1a1a1a;">${tps.toFixed(2)} $</td></tr>
+            <tr><td style="padding: 4px 0; font-size: 13px; color: #6b7280;">TVQ (9,975%)</td><td style="padding: 4px 0; font-size: 13px; text-align: right; color: #1a1a1a;">${tvq.toFixed(2)} $</td></tr>
+            <tr style="border-top: 2px solid #DC2626;">
+              <td style="padding: 10px 0 4px; font-size: 15px; font-weight: 700; color: #1a1a1a;">Total (taxes incluses)</td>
+              <td style="padding: 10px 0 4px; font-size: 18px; font-weight: 700; color: #DC2626; text-align: right;">${total.toFixed(2)} $</td>
+            </tr>
+          </table>
+        </div>
+        <div style="background: #f9fafb; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
+          <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #1a1a1a;">💳 Payer en avance par virement Interac</p>
+          <p style="margin: 0 0 4px; font-size: 14px; color: #1a1a1a;">Envoyez <strong>${total.toFixed(2)} $</strong> à : <strong style="color: #DC2626;">${EMAIL}</strong></p>
+          <p style="margin: 0; font-size: 12px; color: #9ca3af;">Votre numéro de soumission se trouve sur le PDF ci-joint.</p>
+        </div>`;
+    }
+  }
+
   return `
     <div style="${baseStyle} max-width: 600px; margin: 0 auto;">
       <div style="background: #DC2626; padding: 24px 28px; border-radius: 8px 8px 0 0;">
@@ -204,6 +253,8 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string): st
           <p style="margin: 6px 0; font-size: 15px;"><strong>Heure :</strong> ${data.timeSlot}</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>Adresse :</strong> ${data.adresse}, ${data.ville}</p>
         </div>
+
+        ${priceSection}
 
         ${actionButtons}
 
@@ -308,9 +359,22 @@ export async function sendQuoteEmail(data: WeatherSealBookingPayload, pdfBuffer:
   });
 }
 
-export async function sendBookingEmails(data: BookingPayload, eventId?: string): Promise<void> {
+export async function sendBookingEmails(data: BookingPayload, eventId?: string, pdfBuffer?: Buffer): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
+  const withQuote = !!pdfBuffer;
+  const clientEmail: Parameters<typeof resend.emails.send>[0] = {
+    from,
+    to: [data.courriel],
+    subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, votre rendez-vous du ${formatDateFr(data.date)} — Experts Portes de Garage`,
+    html: buildClientEmailHtml(data, eventId, withQuote),
+  };
+  if (pdfBuffer) {
+    clientEmail.attachments = [{
+      filename: `soumission_coupe_froid_${data.date}.pdf`,
+      content: pdfBuffer,
+    }];
+  }
   await Promise.all([
     resend.emails.send({
       from,
@@ -318,12 +382,7 @@ export async function sendBookingEmails(data: BookingPayload, eventId?: string):
       subject: `Nouvelle réservation — ${data.serviceType} — ${data.nom}`,
       html: buildOwnerEmailHtml(data),
     }),
-    resend.emails.send({
-      from,
-      to: [data.courriel],
-      subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, votre rendez-vous du ${formatDateFr(data.date)} — Experts Portes de Garage`,
-      html: buildClientEmailHtml(data, eventId),
-    }),
+    resend.emails.send(clientEmail),
   ]);
 }
 

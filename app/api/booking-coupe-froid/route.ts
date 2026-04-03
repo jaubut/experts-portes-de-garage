@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendBookingEmails, sendQuoteEmail, createCalendarEvent } from "@/lib/notifications";
+import { sendBookingEmails, createCalendarEvent } from "@/lib/notifications";
 import { generateQuotePdf, generateQuoteNum } from "@/lib/quote-pdf";
 import type { WeatherSealBookingPayload } from "@/lib/notifications";
 
@@ -36,13 +36,11 @@ export async function POST(req: Request) {
     if (process.env.GOOGLE_PRIVATE_KEY) {
       try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking-coupe-froid] calendar error:", err); }
     }
-    await sendBookingEmails(payload, eventId);
+    let pdfBuffer: Buffer | undefined;
     if (wantQuote && quoteNum) {
-      try {
-        const pdfBuffer = await generateQuotePdf(payload, quoteNum);
-        await sendQuoteEmail(payload, pdfBuffer);
-      } catch (err) { console.error("[booking-coupe-froid] quote pdf error:", err); }
+      try { pdfBuffer = await generateQuotePdf(payload, quoteNum); } catch (err) { console.error("[booking-coupe-froid] quote pdf error:", err); }
     }
+    await sendBookingEmails(payload, eventId, pdfBuffer);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[booking-coupe-froid] error:", err);
