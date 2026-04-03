@@ -24,6 +24,7 @@ interface FormData {
   date: string;
   timeSlot: string;
   wantQuote: boolean;
+  measureConfirmed: boolean;
 }
 
 const EMPTY_FORM: FormData = {
@@ -41,6 +42,7 @@ const EMPTY_FORM: FormData = {
   date: "",
   timeSlot: "",
   wantQuote: false,
+  measureConfirmed: false,
 };
 
 const SEAL_OPTIONS = [
@@ -316,6 +318,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         if (!ft || ft <= 0) errs[`measure_${id}`] = "Entrez une mesure valide";
       });
       if (needsColor && (!form.color || form.color === "__autre__")) errs.color = "Sélectionnez ou précisez une couleur";
+      if (!form.measureConfirmed) errs.measureConfirmed = "Vous devez confirmer l'exactitude de vos mesures pour continuer";
     } else if (step === 3) {
       if (!form.adresse.trim()) {
         errs.adresse = "Ce champ est requis";
@@ -487,6 +490,17 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {/* ── Step 2 — Measurements & price ── */}
               {step === 2 && (
                 <div className="flex flex-col gap-5">
+                  {!onlyInconnu && (
+                    <div className="bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 flex gap-3">
+                      <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-bold text-amber-800">Mesurez avec précision</p>
+                        <p className="text-xs text-amber-700 leading-relaxed mt-0.5">La commande sera faite selon vos mesures. <strong>En cas d&apos;erreur de votre part</strong>, les matériaux commandés ne pourront être retournés et les frais demeurent à votre charge.</p>
+                      </div>
+                    </div>
+                  )}
                   {onlyInconnu ? (
                     <div className="bg-brand/5 border border-brand/20 rounded-xl p-5 text-center">
                       <svg className="w-10 h-10 text-brand mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -612,6 +626,18 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                           <p className="text-white/40 text-[10px]">Fournitures + installation incluses</p>
                         </div>
                       )}
+                      {/* Measure confirmation checkbox */}
+                      <button type="button" onClick={() => setForm(f => ({ ...f, measureConfirmed: !f.measureConfirmed }))}
+                        className={`flex items-start gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all w-full ${form.measureConfirmed ? "border-brand bg-brand/5" : errors.measureConfirmed ? "border-red-400 bg-red-50" : "border-gray-200 hover:border-brand/40"}`}>
+                        <div className={`w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors ${form.measureConfirmed ? "bg-brand" : "border-2 border-gray-300"}`}>
+                          {form.measureConfirmed && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                        </div>
+                        <div>
+                          <p className={`text-sm font-semibold ${form.measureConfirmed ? "text-brand" : errors.measureConfirmed ? "text-red-600" : "text-gray-700"}`}>Je confirme l&apos;exactitude de mes mesures</p>
+                          <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">Je comprends que la commande sera faite selon ces mesures et qu&apos;Experts Portes de Garage ne peut être tenu responsable en cas d&apos;erreur de ma part.</p>
+                        </div>
+                      </button>
+                      {errors.measureConfirmed && <p className="text-xs text-red-500 -mt-3">{errors.measureConfirmed}</p>}
                     </>
                   )}
                 </div>
