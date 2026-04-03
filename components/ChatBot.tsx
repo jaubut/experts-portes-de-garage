@@ -72,7 +72,7 @@ export default function ChatBot() {
             type="button"
             onClick={() => setBubble(false)}
             aria-label="Fermer"
-            className="absolute top-2.5 right-2.5 text-gray-300 hover:text-gray-500 transition-colors"
+            className="absolute top-2.5 right-2.5 text-brand hover:text-brand-dark transition-colors"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
