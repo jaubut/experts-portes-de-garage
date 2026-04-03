@@ -311,7 +311,11 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       if (!form.ville.trim()) errs.ville = "Ce champ est requis";
     } else if (step === 4) {
       if (!form.nom.trim()) errs.nom = "Ce champ est requis";
-      if (!form.telephone.trim()) errs.telephone = "Ce champ est requis";
+      if (!form.telephone.trim()) {
+        errs.telephone = "Ce champ est requis";
+      } else if (!/^[\d\s\-().+]{10,}$/.test(form.telephone.trim()) || form.telephone.replace(/\D/g, "").length < 10) {
+        errs.telephone = "Entrez un numéro de téléphone valide (ex: 450-558-5788)";
+      }
       if (!form.courriel.trim()) { errs.courriel = "Ce champ est requis"; }
       else if (!/\S+@\S+\.\S+/.test(form.courriel)) { errs.courriel = "Adresse courriel invalide"; }
     } else if (step === 5) {
