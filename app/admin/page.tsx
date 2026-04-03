@@ -417,11 +417,17 @@ function EventCard({ event, onStatusChange, onDelete, updating, countdown }: {
       )}
 
       {/* Détails coupe-froid */}
-      {(info["Joints"] || info["Couleur"] || info["Estimation"]) && (
+      {(info["Joints"] || info["Couleur"] || info["Estimation"] || info["Soumission"]) && (
         <div className="bg-white/5 rounded-lg px-3 py-2.5 flex flex-col gap-1.5 text-xs">
           {info["Joints"] && <p className="text-white/60"><span className="text-white/40">Joints :</span> {info["Joints"]}</p>}
           {info["Couleur"] && <p className="text-white/60"><span className="text-white/40">Couleur :</span> {info["Couleur"]}</p>}
-          {info["Estimation"] && <p className="text-brand font-bold"><span className="text-white/40 font-normal">Estimation :</span> {info["Estimation"]}</p>}
+          {info["Estimation"] && <p className="text-white/60"><span className="text-white/40">Avant taxes :</span> {info["Estimation"]}</p>}
+          {info["Estimation TTC"] && <p className="text-brand font-bold"><span className="text-white/40 font-normal">Total TTC :</span> {info["Estimation TTC"]}</p>}
+          {info["Soumission"] && (
+            <p className="text-yellow-400 font-bold mt-0.5">
+              <span className="text-white/40 font-normal">N° soumission :</span> {info["Soumission"]}
+            </p>
+          )}
         </div>
       )}
 

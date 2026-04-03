@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendBookingEmails, sendQuoteEmail, createCalendarEvent } from "@/lib/notifications";
-import { generateQuotePdf } from "@/lib/quote-pdf";
+import { generateQuotePdf, generateQuoteNum } from "@/lib/quote-pdf";
 import type { WeatherSealBookingPayload } from "@/lib/notifications";
 
 export async function POST(req: Request) {
@@ -11,6 +11,8 @@ export async function POST(req: Request) {
     if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal || !date || !timeSlot || !seals) {
       return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
     }
+
+    const quoteNum = wantQuote ? generateQuoteNum() : undefined;
 
     const payload: WeatherSealBookingPayload = {
       serviceType: "Remplacement de coupe-froid",
@@ -27,6 +29,7 @@ export async function POST(req: Request) {
       notes: notes || "",
       measurements: measurements || {},
       color: color || "",
+      quoteNum,
     };
 
     let eventId: string | undefined;
@@ -34,9 +37,9 @@ export async function POST(req: Request) {
       try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking-coupe-froid] calendar error:", err); }
     }
     await sendBookingEmails(payload, eventId);
-    if (wantQuote) {
+    if (wantQuote && quoteNum) {
       try {
-        const pdfBuffer = await generateQuotePdf(payload);
+        const pdfBuffer = await generateQuotePdf(payload, quoteNum);
         await sendQuoteEmail(payload, pdfBuffer);
       } catch (err) { console.error("[booking-coupe-froid] quote pdf error:", err); }
     }

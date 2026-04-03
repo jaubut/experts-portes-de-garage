@@ -229,10 +229,14 @@ function QuoteDocument({ data, quoteNum, today }: { data: WeatherSealBookingPayl
   );
 }
 
-export async function generateQuotePdf(data: WeatherSealBookingPayload): Promise<Buffer> {
+export function generateQuoteNum(): string {
   const today = new Date().toISOString().split("T")[0];
   const rand = String(Math.floor(1000 + Math.random() * 9000));
-  const quoteNum = `EPG-${today.replace(/-/g, "")}-${rand}`;
+  return `EPG-${today.replace(/-/g, "")}-${rand}`;
+}
+
+export async function generateQuotePdf(data: WeatherSealBookingPayload, quoteNum: string): Promise<Buffer> {
+  const today = new Date().toISOString().split("T")[0];
   const buf = await renderToBuffer(<QuoteDocument data={data} quoteNum={quoteNum} today={today} />);
   return Buffer.from(buf);
 }

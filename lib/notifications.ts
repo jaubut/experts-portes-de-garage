@@ -26,6 +26,7 @@ export interface WeatherSealBookingPayload extends BaseBookingPayload {
   notes: string;
   measurements: Record<string, string>;
   color: string;
+  quoteNum?: string;
 }
 
 export type BookingPayload = GeneralBookingPayload | WeatherSealBookingPayload;
@@ -348,7 +349,11 @@ function buildEventDescription(data: BookingPayload): string {
       measurableSeals.forEach((s) => lines.push(`  ${SEAL_LABELS[s]}: ${ws.measurements[s]} pi`));
     }
     const total = calcTotal(ws.seals, ws.measurements);
-    if (total > 0) lines.push(`Estimation: ${total.toFixed(2)}$`);
+    if (total > 0) {
+      lines.push(`Estimation: ${total.toFixed(2)}$`);
+      lines.push(`Estimation TTC: ${(total * 1.14975).toFixed(2)}$ (taxes incluses)`);
+    }
+    if (ws.quoteNum) lines.push(`Soumission: ${ws.quoteNum}`);
     if (ws.notes) lines.push(`Notes: ${ws.notes}`);
   }
 
