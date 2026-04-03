@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
     }
 
-    const quoteNum = wantQuote ? generateQuoteNum() : undefined;
+    const quoteNum = generateQuoteNum();
 
     const payload: WeatherSealBookingPayload = {
       serviceType: "Remplacement de coupe-froid",
