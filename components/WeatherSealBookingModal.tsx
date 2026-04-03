@@ -435,6 +435,27 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {/* ── Step 1 — Seal selection ── */}
               {step === 1 && (
                 <div className="flex flex-col gap-5">
+                  {/* Intro: 3 types of seals with images */}
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Les 3 types de coupe-froid</p>
+                    <div className="grid grid-cols-3 gap-2 mb-5">
+                      {[
+                        { img: "/images/coupe-froid/joint_de_bas_de_portes_de_garage.jpg", label: "Joint de bas", desc: "Bande de caoutchouc qui touche le sol" },
+                        { img: "/images/coupe-froid/coupe_froid_de_cote.jpg", label: "Joints latéraux", desc: "Bandes sur les côtés et en haut" },
+                        { img: "/images/coupe-froid/reteneur_du_bas_porte_de_garage.jpg", label: "Reteneur du bas", desc: "Pièce en aluminium au bas de la porte" },
+                      ].map((item) => (
+                        <div key={item.label} className="flex flex-col rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+                          <div className="relative w-full aspect-[4/3] bg-gray-100">
+                            <Image src={item.img} alt={item.label} fill className="object-cover" sizes="120px" />
+                          </div>
+                          <div className="px-2 py-2">
+                            <p className="text-[11px] font-bold text-gray-800 leading-tight">{item.label}</p>
+                            <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{item.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-700 mb-1">Quel(s) joint(s) souhaitez-vous remplacer?</p>
                     <p className="text-xs text-gray-400 mb-3">Sélectionnez tout ce qui s&apos;applique</p>
