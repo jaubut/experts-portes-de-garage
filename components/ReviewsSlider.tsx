@@ -105,7 +105,7 @@ export default function ReviewsSlider() {
 
         <div className="flex flex-col gap-3 w-full max-w-xs">
           <a
-            href="https://www.google.com/search?q=Experts+Portes+de+Garage+Granby"
+            href="https://share.google/cHYazBuCaEQWOsKhq"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-brand text-white font-bold px-6 py-3 rounded-lg text-center hover:bg-brand-dark transition-colors"
