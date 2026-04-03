@@ -42,10 +42,10 @@ const EMPTY_FORM: FormData = {
 };
 
 const SEAL_OPTIONS = [
-  { id: "bas",      label: "Joint de bas de porte" },
-  { id: "lateraux", label: "Joints latéraux et de tête" },
-  { id: "reteneur", label: "Reteneur du bas" },
-  { id: "inconnu",  label: "Je ne sais pas / Inspection complète" },
+  { id: "bas",      label: "Joint de bas de porte",            desc: "La bande de caoutchouc au bas de votre porte qui touche le sol — empêche l'air, l'eau et les insectes d'entrer." },
+  { id: "lateraux", label: "Joints latéraux et de tête",       desc: "Les bandes sur les côtés et en haut du cadre de porte — scellent les espaces entre la porte et le garage." },
+  { id: "reteneur", label: "Reteneur du bas",                  desc: "La pièce en aluminium fixée au bas de la porte qui retient le joint en caoutchouc en place." },
+  { id: "inconnu",  label: "Je ne sais pas / Inspection complète", desc: "Notre technicien inspecte tout et vous recommande ce qui doit être remplacé — sans frais cachés." },
 ];
 
 const CONDITION_OPTIONS = [
@@ -444,11 +444,14 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                         const checked = form.seals.includes(opt.id);
                         return (
                           <button key={opt.id} type="button" onClick={() => toggleSeal(opt.id)}
-                            className={`flex items-center gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all ${checked ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
-                            <div className={`w-5 h-5 rounded flex items-center justify-center shrink-0 transition-colors ${checked ? "bg-brand" : "border-2 border-gray-300"}`}>
+                            className={`flex items-start gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all ${checked ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
+                            <div className={`w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors ${checked ? "bg-brand" : "border-2 border-gray-300"}`}>
                               {checked && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                             </div>
-                            <span className={`text-sm font-medium ${checked ? "text-brand" : "text-gray-700"}`}>{opt.label}</span>
+                            <div>
+                              <p className={`text-sm font-semibold ${checked ? "text-brand" : "text-gray-700"}`}>{opt.label}</p>
+                              <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{opt.desc}</p>
+                            </div>
                           </button>
                         );
                       })}
