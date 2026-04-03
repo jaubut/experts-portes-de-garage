@@ -281,20 +281,39 @@ export default function AdminPage() {
 
         {/* Emails tab */}
         {tab === "emails" && (
-          <section>
-            <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">50 derniers courriels envoyés</h2>
+          <>
             {loadingEmails && <p className="text-white/40 text-sm py-4">Chargement...</p>}
             {!loadingEmails && emails.length === 0 && <p className="text-white/20 text-sm py-4">Aucun courriel trouvé</p>}
-            <div className="flex flex-col gap-2">
-              {emails.map((email) => (
-                <div key={email.id} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex flex-col gap-1">
-                  <p className="text-white text-sm font-semibold leading-tight">{email.subject}</p>
-                  <p className="text-white/40 text-xs">À : {Array.isArray(email.to) ? email.to.join(", ") : email.to}</p>
-                  <p className="text-white/30 text-xs">{new Date(email.created_at).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}</p>
+            {!loadingEmails && emails.length > 0 && (() => {
+              const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL ?? "info@expertsportesdegarage.ca";
+              const toOwner = emails.filter(e => (Array.isArray(e.to) ? e.to : [e.to]).some((t: string) => t.includes("expertsportesdegarage")));
+              const toClients = emails.filter(e => !(Array.isArray(e.to) ? e.to : [e.to]).some((t: string) => t.includes("expertsportesdegarage")));
+              const EmailList = ({ list }: { list: EmailRecord[] }) => (
+                <div className="flex flex-col gap-2">
+                  {list.length === 0 && <p className="text-white/20 text-sm py-2">Aucun</p>}
+                  {list.map((email) => (
+                    <div key={email.id} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex flex-col gap-1">
+                      <p className="text-white text-sm font-semibold leading-tight">{email.subject}</p>
+                      <p className="text-white/40 text-xs">À : {Array.isArray(email.to) ? email.to.join(", ") : email.to}</p>
+                      <p className="text-white/30 text-xs">{new Date(email.created_at).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+              );
+              return (
+                <>
+                  <section>
+                    <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Reçus par toi ({toOwner.length})</h2>
+                    <EmailList list={toOwner} />
+                  </section>
+                  <section>
+                    <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Envoyés aux clients ({toClients.length})</h2>
+                    <EmailList list={toClients} />
+                  </section>
+                </>
+              );
+            })()}
+          </>
         )}
       </div>
     </div>
