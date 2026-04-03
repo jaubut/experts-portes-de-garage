@@ -376,7 +376,7 @@ function EventCard({ event, onStatusChange, onDelete, updating, countdown }: {
           <p className="text-white/40 text-sm mt-0.5">{formatDate(event.start)}</p>
         </div>
         <span className={`text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${status.color}`}>
-          {status.label}
+          {event.status === "termine-pending" ? `Terminé dans ${countdown}s...` : status.label}
         </span>
       </div>
 
