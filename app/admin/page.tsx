@@ -39,6 +39,14 @@ interface Event {
   status: string;
 }
 
+interface EmailRecord {
+  id: string;
+  to: string[];
+  from: string;
+  subject: string;
+  created_at: string;
+}
+
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
@@ -47,6 +55,9 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<string | null>(null);
+  const [tab, setTab] = useState<"reservations" | "emails">("reservations");
+  const [emails, setEmails] = useState<EmailRecord[]>([]);
+  const [loadingEmails, setLoadingEmails] = useState(false);
 
   const fetchEvents = useCallback(async (pwd: string) => {
     setLoading(true);
@@ -102,6 +113,17 @@ export default function AdminPage() {
     setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status } : e));
     setUpdating(null);
   };
+
+  const fetchEmails = useCallback(async (pwd: string) => {
+    setLoadingEmails(true);
+    try {
+      const res = await fetch("/api/admin/emails", { headers: { "x-admin-password": pwd } });
+      const data = await res.json();
+      setEmails(data.emails ?? []);
+    } catch { /* ignore */ } finally {
+      setLoadingEmails(false);
+    }
+  }, []);
 
   // Auto-refresh every 60s
   useEffect(() => {
@@ -179,6 +201,18 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="border-b border-white/10 px-6 flex gap-6">
+        <button type="button" onClick={() => setTab("reservations")}
+          className={`py-3 text-sm font-bold border-b-2 transition-colors ${tab === "reservations" ? "border-brand text-white" : "border-transparent text-white/40 hover:text-white"}`}>
+          Réservations
+        </button>
+        <button type="button" onClick={() => { setTab("emails"); if (emails.length === 0) fetchEmails(password); }}
+          className={`py-3 text-sm font-bold border-b-2 transition-colors ${tab === "emails" ? "border-brand text-white" : "border-transparent text-white/40 hover:text-white"}`}>
+          Courriels
+        </button>
+      </div>
+
       <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-8">
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -210,37 +244,57 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {loading && <p className="text-white/40 text-center py-10">Chargement...</p>}
-
-        {/* Today */}
-        {!loading && (
+        {/* Reservations tab */}
+        {tab === "reservations" && (
           <>
-            <section>
-              <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Aujourd&apos;hui</h2>
-              {filtered(todayEvents).length === 0 ? (
-                <p className="text-white/20 text-sm py-4">Aucune réservation aujourd&apos;hui</p>
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {filtered(todayEvents).map((e) => (
-                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
-                  ))}
-                </div>
-              )}
-            </section>
-
-            <section>
-              <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">À venir — 30 jours</h2>
-              {filtered(upcomingEvents).length === 0 ? (
-                <p className="text-white/20 text-sm py-4">Aucune réservation à venir</p>
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {filtered(upcomingEvents).map((e) => (
-                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
-                  ))}
-                </div>
-              )}
-            </section>
+            {loading && <p className="text-white/40 text-center py-10">Chargement...</p>}
+            {!loading && (
+              <>
+                <section>
+                  <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Aujourd&apos;hui</h2>
+                  {filtered(todayEvents).length === 0 ? (
+                    <p className="text-white/20 text-sm py-4">Aucune réservation aujourd&apos;hui</p>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {filtered(todayEvents).map((e) => (
+                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
+                      ))}
+                    </div>
+                  )}
+                </section>
+                <section>
+                  <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">À venir — 30 jours</h2>
+                  {filtered(upcomingEvents).length === 0 ? (
+                    <p className="text-white/20 text-sm py-4">Aucune réservation à venir</p>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {filtered(upcomingEvents).map((e) => (
+                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
+                      ))}
+                    </div>
+                  )}
+                </section>
+              </>
+            )}
           </>
+        )}
+
+        {/* Emails tab */}
+        {tab === "emails" && (
+          <section>
+            <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">50 derniers courriels envoyés</h2>
+            {loadingEmails && <p className="text-white/40 text-sm py-4">Chargement...</p>}
+            {!loadingEmails && emails.length === 0 && <p className="text-white/20 text-sm py-4">Aucun courriel trouvé</p>}
+            <div className="flex flex-col gap-2">
+              {emails.map((email) => (
+                <div key={email.id} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex flex-col gap-1">
+                  <p className="text-white text-sm font-semibold leading-tight">{email.subject}</p>
+                  <p className="text-white/40 text-xs">À : {Array.isArray(email.to) ? email.to.join(", ") : email.to}</p>
+                  <p className="text-white/30 text-xs">{new Date(email.created_at).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </div>
