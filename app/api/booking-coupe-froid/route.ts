@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { nom, telephone, courriel, adresse, ville, codePostal, date, timeSlot, seals, condition, notes, measurements, color } = body;
 
-    if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal || !date || !timeSlot || !seals || !condition) {
+    if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal || !date || !timeSlot || !seals) {
       return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
     }
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       date,
       timeSlot,
       seals,
-      condition,
+      condition: condition || "",
       notes: notes || "",
       measurements: measurements || {},
       color: color || "",
