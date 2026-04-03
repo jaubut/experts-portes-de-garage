@@ -175,7 +175,7 @@ export default function AdminPage() {
   const upcomingEvents = events.filter((e) => !e.start.startsWith(today));
 
   const filtered = (list: Event[]) =>
-    filter === "all" ? list : list.filter((e) => e.status === filter);
+    filter === "all" ? list : list.filter((e) => e.status === filter || e.status === "termine-pending");
 
   if (!authed) {
     return (
