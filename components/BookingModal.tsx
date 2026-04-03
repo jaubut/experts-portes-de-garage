@@ -229,6 +229,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const telephoneRef = useRef<HTMLInputElement>(null);
+  const courrielRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -549,8 +551,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   <Field label="Prénom et Nom" error={errors.nom}>
                     <input
                       type="text"
+                      enterKeyHint="next"
                       value={form.nom}
                       onChange={(e) => update("nom", e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); telephoneRef.current?.focus(); } }}
                       placeholder="Jean Tremblay"
                       autoComplete="name"
                       className={inputCls(!!errors.nom)}
@@ -558,9 +562,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   </Field>
                   <Field label="Numéro de téléphone" error={errors.telephone}>
                     <input
+                      ref={telephoneRef}
                       type="tel"
+                      enterKeyHint="next"
                       value={form.telephone}
                       onChange={(e) => update("telephone", e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); courrielRef.current?.focus(); } }}
                       placeholder="450-558-5788"
                       autoComplete="tel"
                       className={inputCls(!!errors.telephone)}
@@ -568,7 +575,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   </Field>
                   <Field label="Adresse courriel" error={errors.courriel}>
                     <input
+                      ref={courrielRef}
                       type="email"
+                      enterKeyHint="done"
                       value={form.courriel}
                       onChange={(e) => update("courriel", e.target.value)}
                       placeholder="jean@exemple.com"

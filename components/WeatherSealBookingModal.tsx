@@ -197,6 +197,8 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const [loadingSlots, setLoadingSlots] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const measureRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const wsTelephoneRef = useRef<HTMLInputElement>(null);
+  const wsCourrielRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -614,13 +616,13 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {step === 4 && (
                 <div className="flex flex-col gap-4">
                   <Field label="Prénom et Nom" error={errors.nom}>
-                    <input type="text" value={form.nom} onChange={(e) => update("nom", e.target.value)} placeholder="Jean Tremblay" autoComplete="name" className={inputCls(!!errors.nom)} />
+                    <input type="text" enterKeyHint="next" value={form.nom} onChange={(e) => update("nom", e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); wsTelephoneRef.current?.focus(); } }} placeholder="Jean Tremblay" autoComplete="name" className={inputCls(!!errors.nom)} />
                   </Field>
                   <Field label="Numéro de téléphone" error={errors.telephone}>
-                    <input type="tel" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} placeholder="450-558-5788" autoComplete="tel" className={inputCls(!!errors.telephone)} />
+                    <input ref={wsTelephoneRef} type="tel" enterKeyHint="next" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); wsCourrielRef.current?.focus(); } }} placeholder="450-558-5788" autoComplete="tel" className={inputCls(!!errors.telephone)} />
                   </Field>
                   <Field label="Adresse courriel" error={errors.courriel}>
-                    <input type="email" value={form.courriel} onChange={(e) => update("courriel", e.target.value)} placeholder="jean@exemple.com" autoComplete="email" className={inputCls(!!errors.courriel)} />
+                    <input ref={wsCourrielRef} type="email" enterKeyHint="done" value={form.courriel} onChange={(e) => update("courriel", e.target.value)} placeholder="jean@exemple.com" autoComplete="email" className={inputCls(!!errors.courriel)} />
                   </Field>
                 </div>
               )}
