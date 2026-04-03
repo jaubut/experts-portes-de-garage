@@ -164,7 +164,7 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
     </div>`;
 }
 
-export function buildClientEmailHtml(data: BookingPayload, eventId?: string, withQuote?: boolean): string {
+export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdfAttached?: boolean): string {
   const prenom = data.nom.trim().split(/\s+/)[0];
   const dateFormatted = formatDateFr(data.date);
   const secret = process.env.ADMIN_PASSWORD ?? "";
@@ -186,14 +186,21 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, wit
     </div>` : "";
 
   let priceSection = "";
-  if (withQuote && data.serviceType === "Remplacement de coupe-froid") {
+  if (data.serviceType === "Remplacement de coupe-froid") {
     const ws = data as WeatherSealBookingPayload;
+    const hasCustomColor = ws.seals.includes("lateraux") && ws.color && ws.color !== "noir" && ws.color !== "blanc";
     const measurableSeals = ws.seals.filter((id) => id !== "inconnu" && ws.measurements[id]);
     const subtotal = calcTotal(ws.seals, ws.measurements);
     const tps = subtotal * 0.05;
     const tvq = subtotal * 0.09975;
     const total = subtotal + tps + tvq;
-    if (subtotal > 0) {
+    if (hasCustomColor) {
+      priceSection = `
+        <div style="margin: 24px 0; background: #f9fafb; border-radius: 8px; padding: 16px 20px;">
+          <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">💰 Estimation</p>
+          <p style="margin: 0; font-size: 14px; color: #6b7280;">Le prix des joints latéraux dépend de la couleur choisie — notre technicien vous confirmera le montant exact lors du rendez-vous.</p>
+        </div>`;
+    } else if (subtotal > 0) {
       const rows = measurableSeals.map((id) => {
         const ft = parseFloat(ws.measurements[id] || "0") || 0;
         const lineTotal = ft * (PRICE_PER_FOOT[id] || 0);
@@ -226,11 +233,12 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, wit
             </tr>
           </table>
         </div>
+        ${pdfAttached ? `
         <div style="background: #f9fafb; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
           <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #1a1a1a;">💳 Payer en avance par virement Interac</p>
           <p style="margin: 0 0 4px; font-size: 14px; color: #1a1a1a;">Envoyez <strong>${total.toFixed(2)} $</strong> à : <strong style="color: #DC2626;">${EMAIL}</strong></p>
           <p style="margin: 0; font-size: 12px; color: #9ca3af;">Votre numéro de soumission se trouve sur le PDF ci-joint.</p>
-        </div>`;
+        </div>` : ""}`;
     }
   }
 
@@ -362,12 +370,11 @@ export async function sendQuoteEmail(data: WeatherSealBookingPayload, pdfBuffer:
 export async function sendBookingEmails(data: BookingPayload, eventId?: string, pdfBuffer?: Buffer): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
-  const withQuote = !!pdfBuffer;
   const clientEmail: Parameters<typeof resend.emails.send>[0] = {
     from,
     to: [data.courriel],
     subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, votre rendez-vous du ${formatDateFr(data.date)} — Experts Portes de Garage`,
-    html: buildClientEmailHtml(data, eventId, withQuote),
+    html: buildClientEmailHtml(data, eventId, !!pdfBuffer),
   };
   if (pdfBuffer) {
     clientEmail.attachments = [{

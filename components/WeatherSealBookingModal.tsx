@@ -303,6 +303,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const measurableSeals = form.seals.filter(id => id !== "inconnu");
   const needsColor = form.seals.some(id => COLOR_SEALS.includes(id));
   const onlyInconnu = form.seals.length > 0 && form.seals.every(id => id === "inconnu");
+  const hasCustomColor = needsColor && form.color !== "" && form.color !== "noir" && form.color !== "blanc";
   const total = calcTotal(form.seals, form.measurements);
 
   const validate = (): boolean => {
@@ -400,7 +401,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               <p className="text-gray-600 leading-relaxed mb-2">
                 Merci {prenom}! Nous vous contacterons pour confirmer votre rendez-vous.
               </p>
-              {total > 0 && (
+              {total > 0 && !hasCustomColor && (
                 <p className="text-brand font-bold text-lg mb-6">Estimation: {(total * 1.14975).toFixed(2)} $ <span className="text-sm font-normal text-gray-400">(taxes incluses)</span></p>
               )}
               <button onClick={onClose} className="bg-brand text-white font-bold px-10 py-3 rounded-lg hover:bg-brand-dark transition-colors">
@@ -579,8 +580,16 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                         </div>
                       )}
 
+                      {/* Custom color — price unknown */}
+                      {hasCustomColor && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+                          <p className="font-semibold mb-0.5">Prix à confirmer</p>
+                          <p className="text-xs text-amber-700 leading-relaxed">Le prix des joints latéraux dépend de la couleur — notre technicien vous confirmera le montant exact lors du rendez-vous.</p>
+                        </div>
+                      )}
+
                       {/* Live total */}
-                      {total > 0 && (
+                      {total > 0 && !hasCustomColor && (
                         <div className="bg-[#1a1a1a] rounded-xl p-4">
                           <div className="flex flex-col gap-1.5 mb-3">
                             <div className="flex items-center justify-between">
@@ -668,10 +677,10 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               {/* ── Step 5 — Date / Time ── */}
               {step === 5 && (
                 <div className="flex flex-col gap-5">
-                  {total > 0 && (
+                  {total > 0 && !hasCustomColor && (
                     <div className="bg-brand/5 border border-brand/20 rounded-xl px-4 py-3 flex items-center justify-between">
                       <p className="text-sm text-gray-600 font-medium">Votre estimation</p>
-                      <p className="text-brand font-bold text-lg">{total.toFixed(2)}$</p>
+                      <p className="text-brand font-bold text-lg">{(total * 1.14975).toFixed(2)} $ <span className="text-xs font-normal text-gray-400">taxes incl.</span></p>
                     </div>
                   )}
                   <div>
@@ -716,7 +725,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                   </div>
 
                   {/* Quote option */}
-                  {total > 0 && (
+                  {total > 0 && !hasCustomColor && (
                     <button type="button" onClick={() => setForm(f => ({ ...f, wantQuote: !f.wantQuote }))}
                       className={`flex items-start gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all w-full ${form.wantQuote ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
                       <div className={`w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors ${form.wantQuote ? "bg-brand" : "border-2 border-gray-300"}`}>
