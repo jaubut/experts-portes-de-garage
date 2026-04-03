@@ -82,6 +82,16 @@ export default function AdminPage() {
     setLoading(false);
   };
 
+  const deleteEvent = async (eventId: string) => {
+    if (!confirm("Supprimer cette réservation du calendrier?")) return;
+    await fetch("/api/admin/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-password": password },
+      body: JSON.stringify({ eventId }),
+    });
+    setEvents((prev) => prev.filter((e) => e.id !== eventId));
+  };
+
   const updateStatus = async (eventId: string, status: string) => {
     setUpdating(eventId);
     await fetch("/api/admin/status", {
@@ -212,7 +222,7 @@ export default function AdminPage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   {filtered(todayEvents).map((e) => (
-                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} updating={updating} />
+                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
                   ))}
                 </div>
               )}
@@ -225,7 +235,7 @@ export default function AdminPage() {
               ) : (
                 <div className="flex flex-col gap-3">
                   {filtered(upcomingEvents).map((e) => (
-                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} updating={updating} />
+                    <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} />
                   ))}
                 </div>
               )}
@@ -237,9 +247,10 @@ export default function AdminPage() {
   );
 }
 
-function EventCard({ event, onStatusChange, updating }: {
+function EventCard({ event, onStatusChange, onDelete, updating }: {
   event: Event;
   onStatusChange: (id: string, status: string) => void;
+  onDelete: (id: string) => void;
   updating: string | null;
 }) {
   const info = parseDescription(event.description);
@@ -295,21 +306,34 @@ function EventCard({ event, onStatusChange, updating }: {
       )}
 
       {/* Status buttons */}
-      <div className="flex gap-2 flex-wrap pt-1">
-        {Object.entries(STATUS_LABELS).map(([key, val]) => (
-          <button
-            key={key}
-            disabled={isUpdating || event.status === key}
-            onClick={() => onStatusChange(event.id, key)}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 ${
-              event.status === key
-                ? `${val.color} opacity-100`
-                : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-            }`}
-          >
-            {isUpdating && event.status !== key ? "..." : val.label}
-          </button>
-        ))}
+      <div className="flex gap-2 flex-wrap pt-1 items-center justify-between">
+        <div className="flex gap-2 flex-wrap">
+          {Object.entries(STATUS_LABELS).map(([key, val]) => (
+            <button
+              type="button"
+              key={key}
+              disabled={isUpdating || event.status === key}
+              onClick={() => onStatusChange(event.id, key)}
+              className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 ${
+                event.status === key
+                  ? `${val.color} opacity-100`
+                  : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              {isUpdating && event.status !== key ? "..." : val.label}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => onDelete(event.id)}
+          className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors flex items-center gap-1"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Effacer
+        </button>
       </div>
     </div>
   );
