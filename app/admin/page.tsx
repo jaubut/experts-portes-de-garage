@@ -416,6 +416,25 @@ function EventCard({ event, onStatusChange, onDelete, updating, countdown }: {
         </div>
       )}
 
+      {/* Détails coupe-froid */}
+      {(info["Joints"] || info["Couleur"] || info["Estimation"]) && (
+        <div className="bg-white/5 rounded-lg px-3 py-2.5 flex flex-col gap-1.5 text-xs">
+          {info["Joints"] && <p className="text-white/60"><span className="text-white/40">Joints :</span> {info["Joints"]}</p>}
+          {info["Couleur"] && <p className="text-white/60"><span className="text-white/40">Couleur :</span> {info["Couleur"]}</p>}
+          {info["Estimation"] && <p className="text-brand font-bold"><span className="text-white/40 font-normal">Estimation :</span> {info["Estimation"]}</p>}
+        </div>
+      )}
+
+      {/* Mesures */}
+      {info["Mesures:"] && (
+        <div className="bg-white/5 rounded-lg px-3 py-2.5 text-xs text-white/60">
+          <p className="text-white/40 mb-1">Mesures</p>
+          {event.description.split("\n")
+            .filter(l => l.startsWith("  "))
+            .map((l, i) => <p key={i}>{l.trim()}</p>)}
+        </div>
+      )}
+
       {/* Status buttons */}
       <div className="flex gap-2 flex-wrap pt-1 items-center justify-between">
         <div className="flex gap-2 flex-wrap">
