@@ -22,7 +22,7 @@ const sealTypes = [
     label: "Reteneur du bas",
     desc: "Rail en aluminium ou PVC qui retient le caoutchouc d'étanchéité en forme de U au bas de la porte. Le reteneur du bas guide et maintient le caoutchouc en place pour une étanchéité optimale et durable.",
     detail: "Rail en aluminium ou PVC qui retient le caoutchouc d'étanchéité en forme de U au bas de la porte. Le reteneur du bas guide et maintient le caoutchouc en place pour une étanchéité optimale et durable.",
-    image: "/images/reteneur_du_bas_v2.png",
+    image: "/images/reteneur_du_bas _v3.png",
   },
 ];
 
