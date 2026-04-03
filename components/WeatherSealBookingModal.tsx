@@ -281,9 +281,19 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
     setErrors(e => ({ ...e, seals: "" }));
   };
 
+  const measureRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
   const updateMeasurement = (id: string, value: string) => {
     setForm(f => ({ ...f, measurements: { ...f.measurements, [id]: value } }));
     setErrors(e => ({ ...e, [`measure_${id}`]: "" }));
+  };
+
+  const focusNextMeasure = (currentId: string) => {
+    const measurable = form.seals.filter(s => s !== "inconnu");
+    const idx = measurable.indexOf(currentId);
+    if (idx !== -1 && idx < measurable.length - 1) {
+      measureRefs.current[measurable[idx + 1]]?.focus();
+    }
   };
 
   // Seals that need measurements (not "inconnu")
@@ -472,11 +482,15 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                               <div className="flex items-center gap-3">
                                 <div className="relative flex-1">
                                   <input
+                                    ref={(el) => { measureRefs.current[id] = el; }}
                                     type="number"
+                                    inputMode="decimal"
+                                    enterKeyHint="next"
                                     min="0"
                                     step="0.5"
                                     value={form.measurements[id] || ""}
                                     onChange={(e) => updateMeasurement(id, e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); focusNextMeasure(id); } }}
                                     placeholder="ex: 7"
                                     className={`w-full border rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 transition-colors pr-14 ${errors[`measure_${id}`] ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-brand/20 focus:border-brand"}`}
                                   />
