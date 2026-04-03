@@ -44,7 +44,7 @@ const EMPTY_FORM: FormData = {
 const SEAL_OPTIONS = [
   { id: "bas",      label: "Joint de bas de porte",            desc: "La bande de caoutchouc au bas de votre porte qui touche le sol — empêche l'air, l'eau et les insectes d'entrer." },
   { id: "lateraux", label: "Joints latéraux et de tête",       desc: "Les bandes sur les côtés et en haut du cadre de porte — scellent les espaces entre la porte et le garage." },
-  { id: "reteneur", label: "Reteneur du bas",                  desc: "La pièce en aluminium fixée au bas de la porte qui retient le joint en caoutchouc en place." },
+  { id: "reteneur", label: "Reteneur du bas",                  desc: "La pièce en aluminium ou en plastique fixée au bas de la porte qui retient le joint en caoutchouc en place." },
   { id: "inconnu",  label: "Je ne sais pas / Inspection complète", desc: "Notre technicien inspecte tout et vous recommande ce qui doit être remplacé — sans frais cachés." },
 ];
 
@@ -442,7 +442,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                       {[
                         { img: "/images/coupe-froid/joint_de_bas_de_portes_de_garage.jpg", label: "Joint de bas", desc: "Bande de caoutchouc qui touche le sol" },
                         { img: "/images/coupe-froid/coupe_froid_de_cote.jpg", label: "Joints latéraux", desc: "Bandes sur les côtés et en haut" },
-                        { img: "/images/coupe-froid/reteneur_du_bas_porte_de_garage.jpg", label: "Reteneur du bas", desc: "Pièce en aluminium au bas de la porte" },
+                        { img: "/images/coupe-froid/reteneur_du_bas_porte_de_garage.jpg", label: "Reteneur du bas", desc: "Pièce en aluminium ou plastique au bas de la porte" },
                       ].map((item) => (
                         <div key={item.label} className="flex flex-col rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
                           <div className="relative w-full aspect-[4/3] bg-gray-100">
