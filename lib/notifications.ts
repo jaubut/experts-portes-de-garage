@@ -250,7 +250,7 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdf
       </div>
       <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
         <p style="font-size: 15px; line-height: 1.7; color: #1a1a1a;">
-          Vous vous êtes engagé à recevoir un technicien d'<strong>Experts Portes de Garage</strong> à votre domicile.
+          Vous avez réservé une visite d'installation avec <strong>Experts Portes de Garage</strong>. Notre technicien se présentera chez vous avec les matériaux et le contrat — tout sera réglé sur place.
           Des centaines de clients nous font confiance chaque année — nous avons hâte de vous offrir le même service de qualité.
         </p>
 

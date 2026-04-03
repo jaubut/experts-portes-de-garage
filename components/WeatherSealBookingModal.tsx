@@ -384,7 +384,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         </div>
         <div className="bg-brand-dark px-6 py-2.5">
           <p className="text-white/90 text-sm text-center font-medium">
-            Inspection + lubrification offertes — Valeur de 125$
+            Visite d&apos;installation — contrat signé sur place
           </p>
         </div>
 
@@ -399,7 +399,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
               </div>
               <h3 className="font-heading text-2xl text-brand uppercase mb-3">Demande envoyée!</h3>
               <p className="text-gray-600 leading-relaxed mb-2">
-                Merci {prenom}! Nous vous contacterons pour confirmer votre rendez-vous.
+                Merci {prenom}! Nous vous contacterons pour confirmer la date d&apos;installation. Notre technicien se présentera avec les matériaux et le contrat.
               </p>
               {total > 0 && !hasCustomColor && (
                 <p className="text-brand font-bold text-lg mb-6">Estimation: {(total * 1.14975).toFixed(2)} $ <span className="text-sm font-normal text-gray-400">(taxes incluses)</span></p>
@@ -732,8 +732,8 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                         {form.wantQuote && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                       </div>
                       <div>
-                        <p className={`text-sm font-semibold ${form.wantQuote ? "text-brand" : "text-gray-700"}`}>Recevoir une soumission PDF par courriel</p>
-                        <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">Je veux payer en avance — vous recevrez un PDF avec le total ({(total * 1.14975).toFixed(2)} $ taxes incluses) et les instructions de paiement Interac.</p>
+                        <p className={`text-sm font-semibold ${form.wantQuote ? "text-brand" : "text-gray-700"}`}>Je suis prêt à commander — recevoir ma soumission PDF</p>
+                        <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">Vous recevrez une soumission PDF ({(total * 1.14975).toFixed(2)} $ taxes incluses) pour approuver et payer par Interac avant la visite d&apos;installation.</p>
                       </div>
                     </button>
                   )}
