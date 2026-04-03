@@ -399,7 +399,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                 Merci {prenom}! Nous vous contacterons pour confirmer votre rendez-vous.
               </p>
               {total > 0 && (
-                <p className="text-brand font-bold text-lg mb-6">Estimation: {total.toFixed(2)} $</p>
+                <p className="text-brand font-bold text-lg mb-6">Estimation: {(total * 1.14975).toFixed(2)} $ <span className="text-sm font-normal text-gray-400">(taxes incluses)</span></p>
               )}
               <button onClick={onClose} className="bg-brand text-white font-bold px-10 py-3 rounded-lg hover:bg-brand-dark transition-colors">
                 Fermer
@@ -579,14 +579,26 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
 
                       {/* Live total */}
                       {total > 0 && (
-                        <div className="bg-[#1a1a1a] rounded-xl p-4 flex items-center justify-between">
-                          <div>
-                            <p className="text-white/70 text-xs font-medium uppercase tracking-wide">Estimation totale</p>
-                            <p className="text-white text-xs mt-0.5">Fournitures + installation incluses</p>
+                        <div className="bg-[#1a1a1a] rounded-xl p-4">
+                          <div className="flex flex-col gap-1.5 mb-3">
+                            <div className="flex items-center justify-between">
+                              <p className="text-white/60 text-xs">Sous-total</p>
+                              <p className="text-white/80 text-xs font-medium">{total.toFixed(2)} $</p>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <p className="text-white/60 text-xs">TPS (5%)</p>
+                              <p className="text-white/80 text-xs font-medium">{(total * 0.05).toFixed(2)} $</p>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <p className="text-white/60 text-xs">TVQ (9,975%)</p>
+                              <p className="text-white/80 text-xs font-medium">{(total * 0.09975).toFixed(2)} $</p>
+                            </div>
+                            <div className="border-t border-white/10 mt-1 pt-2 flex items-center justify-between">
+                              <p className="text-white/70 text-xs font-semibold uppercase tracking-wide">Estimation totale (taxes incluses)</p>
+                              <p className="text-brand font-heading text-2xl font-bold">{(total * 1.14975).toFixed(2)} $</p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-brand font-heading text-3xl font-bold">{total.toFixed(2)}$</p>
-                          </div>
+                          <p className="text-white/40 text-[10px]">Fournitures + installation incluses</p>
                         </div>
                       )}
                     </>
