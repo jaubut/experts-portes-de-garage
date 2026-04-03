@@ -196,6 +196,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const measureRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -280,8 +281,6 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
     });
     setErrors(e => ({ ...e, seals: "" }));
   };
-
-  const measureRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const updateMeasurement = (id: string, value: string) => {
     setForm(f => ({ ...f, measurements: { ...f.measurements, [id]: value } }));
