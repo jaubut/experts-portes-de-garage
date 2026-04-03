@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Header from "./Header";
 
-const HIDDEN_ON = ["/remplacement-coupe-froid-porte-de-garage"];
+const HIDDEN_ON = ["/remplacement-coupe-froid-porte-de-garage", "/admin"];
 
 export default function ConditionalHeader() {
   const pathname = usePathname();
