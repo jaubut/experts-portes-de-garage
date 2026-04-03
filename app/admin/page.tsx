@@ -105,10 +105,12 @@ export default function AdminPage() {
 
   const updateStatus = async (eventId: string, status: string) => {
     setUpdating(eventId);
+    const event = events.find((e) => e.id === eventId);
+    const info = event ? parseDescription(event.description) : {};
     await fetch("/api/admin/status", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ eventId, status }),
+      body: JSON.stringify({ eventId, status, nom: info["Client"] ?? "", courriel: info["Courriel"] ?? "" }),
     });
     setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status } : e));
     setUpdating(null);

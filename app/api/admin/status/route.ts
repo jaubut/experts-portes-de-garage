@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
+import { sendReviewEmail } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const { eventId, status } = await req.json();
+  const { eventId, status, nom, courriel } = await req.json();
 
   if (!eventId || !status) {
     return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
@@ -33,6 +34,11 @@ export async function POST(req: NextRequest) {
       },
     },
   });
+
+  // Send review email when job is marked as completed
+  if (status === "termine" && nom && courriel) {
+    sendReviewEmail(nom, courriel).catch((err) => console.error("[status] review email error:", err));
+  }
 
   return NextResponse.json({ success: true });
 }
