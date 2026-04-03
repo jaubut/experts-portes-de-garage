@@ -113,7 +113,7 @@ export default function ReviewsSlider() {
             Voir nos avis Google
           </a>
           <a
-            href="https://g.page/r/review"
+            href="https://g.page/r/CT-AI6_v4mdPEAI/review"
             target="_blank"
             rel="noopener noreferrer"
             className="border-2 border-brand text-brand font-bold px-6 py-3 rounded-lg text-center hover:bg-brand hover:text-white transition-colors"
