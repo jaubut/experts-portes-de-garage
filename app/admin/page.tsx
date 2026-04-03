@@ -6,6 +6,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   nouveau: { label: "Nouveau", color: "bg-blue-100 text-blue-700" },
   confirme: { label: "Confirmé", color: "bg-green-100 text-green-700" },
   termine: { label: "Terminé", color: "bg-gray-100 text-gray-500" },
+  "termine-pending": { label: "Terminé dans 15s...", color: "bg-yellow-100 text-yellow-700" },
   annule: { label: "Annulé", color: "bg-red-100 text-red-500" },
 };
 
@@ -103,7 +104,35 @@ export default function AdminPage() {
     setEvents((prev) => prev.filter((e) => e.id !== eventId));
   };
 
+  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout> } | null>(null);
+
   const updateStatus = async (eventId: string, status: string) => {
+    // If clicking Terminé, show 15s countdown with cancel option
+    if (status === "termine") {
+      // Cancel any previous pending
+      if (pendingTermine) clearTimeout(pendingTermine.timeoutId);
+      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine-pending" } : e));
+      const timeoutId = setTimeout(async () => {
+        setPendingTermine(null);
+        const event = events.find((e) => e.id === eventId);
+        const info = event ? parseDescription(event.description) : {};
+        setUpdating(eventId);
+        await fetch("/api/admin/status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-admin-password": password },
+          body: JSON.stringify({ eventId, status: "termine", nom: info["Client"] ?? "", courriel: info["Courriel"] ?? "" }),
+        });
+        setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine" } : e));
+        setUpdating(null);
+      }, 15000);
+      setPendingTermine({ eventId, timeoutId });
+      return;
+    }
+    // Cancel pending terminé if changing to something else
+    if (pendingTermine?.eventId === eventId) {
+      clearTimeout(pendingTermine.timeoutId);
+      setPendingTermine(null);
+    }
     setUpdating(eventId);
     const event = events.find((e) => e.id === eventId);
     const info = event ? parseDescription(event.description) : {};
@@ -383,11 +412,13 @@ function EventCard({ event, onStatusChange, onDelete, updating }: {
       {/* Status buttons */}
       <div className="flex gap-2 flex-wrap pt-1 items-center justify-between">
         <div className="flex gap-2 flex-wrap">
-          {Object.entries(STATUS_LABELS).map(([key, val]) => (
+          {Object.entries(STATUS_LABELS)
+            .filter(([key]) => key !== "termine-pending")
+            .map(([key, val]) => (
             <button
               type="button"
               key={key}
-              disabled={isUpdating || event.status === key}
+              disabled={isUpdating || event.status === key || event.status === "termine-pending"}
               onClick={() => onStatusChange(event.id, key)}
               className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 ${
                 event.status === key
@@ -398,6 +429,15 @@ function EventCard({ event, onStatusChange, onDelete, updating }: {
               {isUpdating && event.status !== key ? "..." : val.label}
             </button>
           ))}
+          {event.status === "termine-pending" && (
+            <button
+              type="button"
+              onClick={() => onStatusChange(event.id, "confirme")}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition-colors animate-pulse"
+            >
+              ✕ Annuler (15s)
+            </button>
+          )}
         </div>
         <button
           type="button"
