@@ -294,7 +294,6 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
     const errs: Record<string, string> = {};
     if (step === 1) {
       if (form.seals.length === 0) errs.seals = "Sélectionnez au moins une option";
-      if (!form.condition) errs.condition = "Sélectionnez la situation actuelle";
     } else if (step === 2 && !onlyInconnu) {
       measurableSeals.forEach(id => {
         const ft = parseFloat(form.measurements[id] || "0");
@@ -445,29 +444,6 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                       })}
                     </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-700 mb-1">Quelle est la situation actuelle?</p>
-                    {errors.condition && <p className="text-xs text-red-500 mb-2">{errors.condition}</p>}
-                    <div className="flex flex-col gap-2">
-                      {CONDITION_OPTIONS.map((opt) => {
-                        const selected = form.condition === opt.id;
-                        return (
-                          <button key={opt.id} type="button" onClick={() => update("condition", opt.id)}
-                            className={`flex items-center gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all ${selected ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
-                            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${selected ? "bg-brand" : "border-2 border-gray-300"}`}>
-                              {selected && <div className="w-2 h-2 bg-white rounded-full" />}
-                            </div>
-                            <span className={`text-sm font-medium ${selected ? "text-brand" : "text-gray-700"}`}>{opt.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <Field label="Informations supplémentaires (optionnel)">
-                    <textarea value={form.notes} onChange={(e) => update("notes", e.target.value)}
-                      placeholder="Décrivez votre situation, le type de porte, toute information utile..."
-                      rows={2} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors resize-none" />
-                  </Field>
                 </div>
               )}
 
