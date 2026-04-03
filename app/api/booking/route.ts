@@ -23,10 +23,11 @@ export async function POST(req: Request) {
       timeSlot,
     };
 
-    await sendBookingEmails(payload);
+    let eventId: string | undefined;
     if (process.env.GOOGLE_PRIVATE_KEY) {
-      createCalendarEvent(payload).catch((err) => console.error("[booking] calendar error:", err));
+      try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking] calendar error:", err); }
     }
+    await sendBookingEmails(payload, eventId);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[booking] error:", err);

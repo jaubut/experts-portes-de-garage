@@ -163,23 +163,52 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
     </div>`;
 }
 
-export function buildClientEmailHtml(data: BookingPayload): string {
+export function buildClientEmailHtml(data: BookingPayload, eventId?: string): string {
   const prenom = data.nom.trim().split(/\s+/)[0];
+  const dateFormatted = formatDateFr(data.date);
+  const secret = process.env.ADMIN_PASSWORD ?? "";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://expertsportesdegarage.ca";
+
+  const actionButtons = eventId ? `
+    <div style="margin: 28px 0; text-align: center;">
+      <p style="font-size: 14px; color: #4b5563; margin-bottom: 16px;">Veuillez confirmer ou annuler votre rendez-vous en cliquant ci-dessous :</p>
+      <div style="display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+        <a href="${baseUrl}/api/admin/action?eventId=${eventId}&action=confirme&secret=${encodeURIComponent(secret)}"
+           style="display: inline-block; background: #16a34a; color: #fff; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-size: 15px; letter-spacing: 0.3px;">
+          ✓ Confirmer mon rendez-vous
+        </a>
+        <a href="${baseUrl}/api/admin/action?eventId=${eventId}&action=annule&secret=${encodeURIComponent(secret)}"
+           style="display: inline-block; background: #f3f4f6; color: #6b7280; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-size: 15px;">
+          ✕ Annuler
+        </a>
+      </div>
+    </div>` : "";
+
   return `
     <div style="${baseStyle} max-width: 600px; margin: 0 auto;">
       <div style="background: #DC2626; padding: 24px 28px; border-radius: 8px 8px 0 0;">
         <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">Experts Portes de Garage</p>
-        <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Demande reçue, ${prenom}!</h1>
+        <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Bonjour ${prenom}, votre demande est reçue!</h1>
       </div>
       <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
-        <p style="font-size: 15px; line-height: 1.6;">Merci d'avoir contacté Experts Portes de Garage. Nous avons bien reçu votre demande et vous contacterons rapidement pour confirmer votre rendez-vous.</p>
-        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
-          <p style="margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">Votre rendez-vous demandé</p>
-          <p style="margin: 4px 0; font-size: 14px;"><strong>Date :</strong> ${formatDateFr(data.date)}</p>
-          <p style="margin: 4px 0; font-size: 14px;"><strong>Heure :</strong> ${data.timeSlot}</p>
-          <p style="margin: 4px 0; font-size: 14px;"><strong>Adresse :</strong> ${data.adresse}, ${data.ville}</p>
+        <p style="font-size: 15px; line-height: 1.7; color: #1a1a1a;">
+          Vous vous êtes engagé à recevoir un technicien d'<strong>Experts Portes de Garage</strong> à votre domicile.
+          Des centaines de clients nous font confiance chaque année — nous avons hâte de vous offrir le même service de qualité.
+        </p>
+
+        <div style="background: #fef2f2; border: 2px solid #DC2626; border-radius: 10px; padding: 20px 24px; margin: 20px 0;">
+          <p style="margin: 0 0 12px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">📅 Votre rendez-vous</p>
+          <p style="margin: 6px 0; font-size: 15px;"><strong>Service :</strong> ${data.serviceType}</p>
+          <p style="margin: 6px 0; font-size: 15px;"><strong>Date :</strong> ${dateFormatted}</p>
+          <p style="margin: 6px 0; font-size: 15px;"><strong>Heure :</strong> ${data.timeSlot}</p>
+          <p style="margin: 6px 0; font-size: 15px;"><strong>Adresse :</strong> ${data.adresse}, ${data.ville}</p>
         </div>
-        <p style="font-size: 14px; color: #4b5563;">Des questions? Appelez-nous au <a href="${PHONE_HREF}" style="color: #DC2626; font-weight: 700;">${PHONE_DISPLAY}</a> ou répondez à ce courriel.</p>
+
+        ${actionButtons}
+
+        <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+          Des questions? Appelez-nous au <a href="${PHONE_HREF}" style="color: #DC2626; font-weight: 700;">${PHONE_DISPLAY}</a> ou répondez à ce courriel — nous sommes là pour vous.
+        </p>
         <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 20px 0;">
         <p style="margin: 0; font-size: 12px; color: #9ca3af; text-align: center;">
           Experts Portes de Garage · ${PHONE_DISPLAY} · ${EMAIL}
@@ -190,7 +219,7 @@ export function buildClientEmailHtml(data: BookingPayload): string {
 
 // ── Resend ────────────────────────────────────────────────────────────────
 
-export async function sendBookingEmails(data: BookingPayload): Promise<void> {
+export async function sendBookingEmails(data: BookingPayload, eventId?: string): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
   await Promise.all([
@@ -203,8 +232,8 @@ export async function sendBookingEmails(data: BookingPayload): Promise<void> {
     resend.emails.send({
       from,
       to: [data.courriel],
-      subject: "Votre demande de service a bien été reçue — Experts Portes de Garage",
-      html: buildClientEmailHtml(data),
+      subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, votre rendez-vous du ${formatDateFr(data.date)} — Experts Portes de Garage`,
+      html: buildClientEmailHtml(data, eventId),
     }),
   ]);
 }
@@ -238,7 +267,7 @@ function buildEventDescription(data: BookingPayload): string {
   return lines.join("\n");
 }
 
-export async function createCalendarEvent(data: BookingPayload): Promise<void> {
+export async function createCalendarEvent(data: BookingPayload): Promise<string | undefined> {
   const privateKey = process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, "\n");
   const auth = new google.auth.JWT({
     email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!,
@@ -249,7 +278,7 @@ export async function createCalendarEvent(data: BookingPayload): Promise<void> {
   const calendar = google.calendar({ version: "v3", auth });
   const { startStr, endStr } = parseTimeSlot(data.date, data.timeSlot);
 
-  await calendar.events.insert({
+  const res = await calendar.events.insert({
     calendarId: process.env.GOOGLE_CALENDAR_ID!,
     requestBody: {
       summary: `${data.serviceType} — ${data.nom}`,
@@ -259,4 +288,5 @@ export async function createCalendarEvent(data: BookingPayload): Promise<void> {
       location: `${data.adresse}, ${data.ville}, QC ${data.codePostal}`,
     },
   });
+  return res.data.id ?? undefined;
 }

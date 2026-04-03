@@ -28,10 +28,11 @@ export async function POST(req: Request) {
       color: color || "",
     };
 
-    await sendBookingEmails(payload);
+    let eventId: string | undefined;
     if (process.env.GOOGLE_PRIVATE_KEY) {
-      createCalendarEvent(payload).catch((err) => console.error("[booking-coupe-froid] calendar error:", err));
+      try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking-coupe-froid] calendar error:", err); }
     }
+    await sendBookingEmails(payload, eventId);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[booking-coupe-froid] error:", err);
