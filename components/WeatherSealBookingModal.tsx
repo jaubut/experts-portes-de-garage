@@ -23,6 +23,7 @@ interface FormData {
   courriel: string;
   date: string;
   timeSlot: string;
+  wantQuote: boolean;
 }
 
 const EMPTY_FORM: FormData = {
@@ -39,6 +40,7 @@ const EMPTY_FORM: FormData = {
   courriel: "",
   date: "",
   timeSlot: "",
+  wantQuote: false,
 };
 
 const SEAL_OPTIONS = [
@@ -712,6 +714,20 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                       })}
                     </div>
                   </div>
+
+                  {/* Quote option */}
+                  {total > 0 && (
+                    <button type="button" onClick={() => setForm(f => ({ ...f, wantQuote: !f.wantQuote }))}
+                      className={`flex items-start gap-3 border-2 rounded-xl px-4 py-3 text-left transition-all w-full ${form.wantQuote ? "border-brand bg-brand/5" : "border-gray-200 hover:border-brand/40"}`}>
+                      <div className={`w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors ${form.wantQuote ? "bg-brand" : "border-2 border-gray-300"}`}>
+                        {form.wantQuote && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                      </div>
+                      <div>
+                        <p className={`text-sm font-semibold ${form.wantQuote ? "text-brand" : "text-gray-700"}`}>Recevoir une soumission PDF par courriel</p>
+                        <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">Je veux payer en avance — vous recevrez un PDF avec le total ({(total * 1.14975).toFixed(2)} $ taxes incluses) et les instructions de paiement Interac.</p>
+                      </div>
+                    </button>
+                  )}
                 </div>
               )}
 

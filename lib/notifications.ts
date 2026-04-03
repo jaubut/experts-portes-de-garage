@@ -262,6 +262,51 @@ export async function sendReviewEmail(nom: string, courriel: string): Promise<vo
 
 // ── Resend ────────────────────────────────────────────────────────────────
 
+export async function sendQuoteEmail(data: WeatherSealBookingPayload, pdfBuffer: Buffer): Promise<void> {
+  const resend = new Resend(process.env.RESEND_API_KEY!);
+  const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
+  const prenom = data.nom.trim().split(/\s+/)[0];
+  const total = calcTotal(data.seals, data.measurements) * 1.14975;
+  await resend.emails.send({
+    from,
+    to: [data.courriel],
+    subject: `Votre soumission — Experts Portes de Garage`,
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #1a1a1a; max-width: 600px; margin: 0 auto;">
+        <div style="background: #CC0000; padding: 24px 28px; border-radius: 8px 8px 0 0;">
+          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">Experts Portes de Garage</p>
+          <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Votre soumission, ${prenom}!</h1>
+        </div>
+        <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
+          <p style="font-size: 15px; line-height: 1.7; color: #1a1a1a;">
+            Vous trouverez votre soumission en pièce jointe (PDF). Elle est valide <strong>30 jours</strong>.
+          </p>
+          ${total > 0 ? `
+          <div style="background: #fef2f2; border: 2px solid #CC0000; border-radius: 10px; padding: 16px 20px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0 0 6px; font-size: 13px; color: #CC0000; font-weight: 700; text-transform: uppercase;">Total estimé (taxes incluses)</p>
+            <p style="margin: 0; font-size: 28px; font-weight: 700; color: #CC0000;">${total.toFixed(2)} $</p>
+          </div>` : ""}
+          <div style="background: #f9fafb; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
+            <p style="margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px;">💳 Payer en avance par Interac</p>
+            <p style="margin: 0 0 4px; font-size: 14px;">Envoyez le montant à : <strong style="color: #CC0000;">${EMAIL}</strong></p>
+            <p style="margin: 0; font-size: 13px; color: #6b7280;">Votre numéro de soumission se trouve sur le PDF.</p>
+          </div>
+          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+            Des questions? Appelez-nous au <a href="tel:${PHONE_DISPLAY.replace(/\s/g, "")}" style="color: #CC0000; font-weight: 700;">${PHONE_DISPLAY}</a> — nous sommes là pour vous.
+          </p>
+          <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 20px 0;">
+          <p style="margin: 0; font-size: 12px; color: #9ca3af; text-align: center;">
+            Experts Portes de Garage · ${PHONE_DISPLAY} · ${EMAIL}
+          </p>
+        </div>
+      </div>`,
+    attachments: [{
+      filename: `soumission_coupe_froid_${data.date}.pdf`,
+      content: pdfBuffer,
+    }],
+  });
+}
+
 export async function sendBookingEmails(data: BookingPayload, eventId?: string): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;

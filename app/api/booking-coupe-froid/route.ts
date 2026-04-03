@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { sendBookingEmails, createCalendarEvent } from "@/lib/notifications";
+import { sendBookingEmails, sendQuoteEmail, createCalendarEvent } from "@/lib/notifications";
+import { generateQuotePdf } from "@/lib/quote-pdf";
 import type { WeatherSealBookingPayload } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nom, telephone, courriel, adresse, ville, codePostal, date, timeSlot, seals, condition, notes, measurements, color } = body;
+    const { nom, telephone, courriel, adresse, ville, codePostal, date, timeSlot, seals, condition, notes, measurements, color, wantQuote } = body;
 
     if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal || !date || !timeSlot || !seals) {
       return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
@@ -33,6 +34,12 @@ export async function POST(req: Request) {
       try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking-coupe-froid] calendar error:", err); }
     }
     await sendBookingEmails(payload, eventId);
+    if (wantQuote) {
+      try {
+        const pdfBuffer = await generateQuotePdf(payload);
+        await sendQuoteEmail(payload, pdfBuffer);
+      } catch (err) { console.error("[booking-coupe-froid] quote pdf error:", err); }
+    }
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[booking-coupe-froid] error:", err);
