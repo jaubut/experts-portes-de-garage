@@ -226,6 +226,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -585,7 +587,19 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     {errors.date && <p className="text-xs text-red-500 mb-2">{errors.date}</p>}
                     <Calendar
                       value={form.date}
-                      onChange={(d) => update("date", d)}
+                      onChange={(d) => {
+                        update("date", d);
+                        update("timeSlot", "");
+                        setBookedSlots([]);
+                        if (d) {
+                          setLoadingSlots(true);
+                          fetch(`/api/availability?date=${d}`)
+                            .then((r) => r.json())
+                            .then((data) => setBookedSlots(data.bookedSlots ?? []))
+                            .catch(() => {})
+                            .finally(() => setLoadingSlots(false));
+                        }
+                      }}
                       hasError={!!errors.date}
                     />
                   </div>
@@ -593,20 +607,27 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     <p className="block text-sm font-semibold text-gray-700 mb-2">Plage horaire</p>
                     {errors.timeSlot && <p className="text-xs text-red-500 mb-2">{errors.timeSlot}</p>}
                     <div className="flex flex-col gap-2.5">
-                      {TIME_SLOTS.map((slot) => (
-                        <button
-                          key={slot}
-                          type="button"
-                          onClick={() => update("timeSlot", slot)}
-                          className={`border-2 rounded-xl py-4 px-4 text-base font-bold text-center transition-all w-full ${
-                            form.timeSlot === slot
-                              ? "border-brand bg-brand text-white shadow-md"
-                              : "border-gray-200 text-gray-700 hover:border-brand hover:text-brand"
-                          }`}
-                        >
-                          {slot}
-                        </button>
-                      ))}
+                      {loadingSlots && <p className="text-xs text-gray-400">Vérification des disponibilités...</p>}
+                      {TIME_SLOTS.map((slot) => {
+                        const booked = bookedSlots.includes(slot);
+                        return (
+                          <button
+                            key={slot}
+                            type="button"
+                            disabled={booked}
+                            onClick={() => !booked && update("timeSlot", slot)}
+                            className={`border-2 rounded-xl py-4 px-4 text-base font-bold text-center transition-all w-full ${
+                              booked
+                                ? "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed line-through"
+                                : form.timeSlot === slot
+                                ? "border-brand bg-brand text-white shadow-md"
+                                : "border-gray-200 text-gray-700 hover:border-brand hover:text-brand"
+                            }`}
+                          >
+                            {slot}{booked ? " — Indisponible" : ""}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
