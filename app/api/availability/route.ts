@@ -45,7 +45,8 @@ export async function GET(req: NextRequest) {
       return events.some((event) => {
         const start = event.start?.dateTime;
         if (!start) return false;
-        const hour = new Date(start).getHours();
+        // Parse local hour directly from the string (e.g. "2026-04-05T10:00:00-04:00" → 10)
+        const hour = parseInt(start.split("T")[1].substring(0, 2), 10);
         return hour === slotHour;
       });
     });
