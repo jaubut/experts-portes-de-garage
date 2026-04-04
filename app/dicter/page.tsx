@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 
-const MOT_DE_PASSE = "epg2024";
+const MOT_DE_PASSE = "l1a2m3B5";
 
 type Statut = "idle" | "ecoute" | "traitement" | "revue" | "sauvegarde" | "succes" | "erreur";
 
