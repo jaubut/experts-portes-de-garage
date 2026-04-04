@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import type { GeneralBookingPayload, WeatherSealBookingPayload } from "./notifications";
 
 const PRICE_PER_FOOT: Record<string, number> = {
@@ -24,7 +24,7 @@ async function upsertClient(data: {
   ville: string;
   codePostal: string;
 }): Promise<string> {
-  const { data: client, error } = await supabase
+  const { data: client, error } = await getSupabase()
     .from("clients")
     .upsert(
       {
@@ -50,7 +50,7 @@ export async function saveBookingToDb(
 ): Promise<void> {
   const clientId = await upsertClient(data);
 
-  const { error } = await supabase.from("rendez_vous").insert({
+  const { error } = await getSupabase().from("rendez_vous").insert({
     client_id: clientId,
     service: data.serviceType,
     date: data.date,
@@ -68,7 +68,7 @@ export async function saveWeatherSealBookingToDb(
 ): Promise<void> {
   const clientId = await upsertClient(data);
 
-  const { data: rdv, error: rdvError } = await supabase
+  const { data: rdv, error: rdvError } = await getSupabase()
     .from("rendez_vous")
     .insert({
       client_id: clientId,
@@ -101,7 +101,7 @@ export async function saveWeatherSealBookingToDb(
       total: (parseFloat(data.measurements[id] || "0") || 0) * (PRICE_PER_FOOT[id] || 0),
     }));
 
-    const { error: soumError } = await supabase.from("soumissions").insert({
+    const { error: soumError } = await getSupabase().from("soumissions").insert({
       rendez_vous_id: rdv.id,
       items,
       sous_total,
