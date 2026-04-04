@@ -35,7 +35,7 @@ async function upsertClient(data: {
         ville: data.ville,
         code_postal: data.codePostal,
       },
-      { onConflict: "courriel" }
+      { onConflict: "telephone" }
     )
     .select("id")
     .single();
