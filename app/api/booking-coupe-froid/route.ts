@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sendBookingEmails, createCalendarEvent } from "@/lib/notifications";
 import { generateQuotePdf, generateQuoteNum } from "@/lib/quote-pdf";
 import type { WeatherSealBookingPayload } from "@/lib/notifications";
+import { saveWeatherSealBookingToDb } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
@@ -35,6 +36,9 @@ export async function POST(req: Request) {
     let eventId: string | undefined;
     if (process.env.GOOGLE_PRIVATE_KEY) {
       try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking-coupe-froid] calendar error:", err); }
+    }
+    if (process.env.SUPABASE_URL) {
+      try { await saveWeatherSealBookingToDb(payload, eventId); } catch (err) { console.error("[booking-coupe-froid] supabase error:", err); }
     }
     let pdfBuffer: Buffer | undefined;
     if (wantQuote && quoteNum) {
