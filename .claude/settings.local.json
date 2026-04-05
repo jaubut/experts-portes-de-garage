@@ -6,7 +6,19 @@
       "Bash(npx tsc:*)",
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(node -e \":*)",
-      "Bash(find /c/Users/lambe/OneDrive/Bureau/experts-portes-de-garage -name tailwind.config.* -type f)"
+      "Bash(find /c/Users/lambe/OneDrive/Bureau/experts-portes-de-garage -name tailwind.config.* -type f)",
+      "Bash(winget install:*)",
+      "Bash(mkdir -p \"/c/Users/lambe/Documents/Obsidian/Experts Portes de Garage/00 - Index\")",
+      "Bash(mkdir -p \"/c/Users/lambe/Documents/Obsidian/Experts Portes de Garage/01 - Stratégie\")",
+      "Bash(mkdir -p \"/c/Users/lambe/Documents/Obsidian/Experts Portes de Garage/02 - Stack Technique\")",
+      "Bash(mkdir -p \"/c/Users/lambe/Documents/Obsidian/Experts Portes de Garage/03 - Workflows\")",
+      "Bash(mkdir -p \"/c/Users/lambe/Documents/Obsidian/Experts Portes de Garage/04 - Designs\")",
+      "Bash(start:*)",
+      "Bash(tasklist)",
+      "Bash(npm run:*)",
+      "Bash(powershell:*)",
+      "Bash(rm -f app/apple-touch-icon.png app/favicon-32x32.png app/favicon-16x16.png)",
+      "Bash(ls app/*.png app/*.ico)"
     ]
   }
 }
