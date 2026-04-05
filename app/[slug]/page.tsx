@@ -25,6 +25,10 @@ const CITY_LINKS = [
   { label: "Saint-Jean-sur-Richelieu", slug: "portes-de-garage-saint-jean-sur-richelieu" },
   { label: "Bromont", slug: "portes-de-garage-bromont" },
   { label: "Waterloo", slug: "portes-de-garage-waterloo" },
+  { label: "Châteauguay", slug: "portes-de-garage-chateauguay" },
+  { label: "Beloeil", slug: "portes-de-garage-beloeil" },
+  { label: "Sorel-Tracy", slug: "portes-de-garage-sorel-tracy" },
+  { label: "Sainte-Julie", slug: "portes-de-garage-sainte-julie" },
 ];
 
 export async function generateStaticParams() {

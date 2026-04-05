@@ -187,3 +187,50 @@ export function getPageBySlug(slug: string): PageData | null {
 export function getHomePage(): PageData | null {
   return getPageBySlug("home");
 }
+
+// ─── BLOG ────────────────────────────────────────────────────────────────────
+
+const BLOG_DIR = path.join(process.cwd(), "content/blog");
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  category: string;
+  readTime: string;
+  content: string;
+}
+
+export function getAllBlogSlugs(): string[] {
+  if (!fs.existsSync(BLOG_DIR)) return [];
+  return fs
+    .readdirSync(BLOG_DIR)
+    .filter((f) => f.endsWith(".md"))
+    .map((f) => f.replace(/\.md$/, ""));
+}
+
+export function getAllBlogPosts(): BlogPost[] {
+  return getAllBlogSlugs()
+    .map((slug) => getBlogPostBySlug(slug))
+    .filter((p): p is BlogPost => p !== null)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export function getBlogPostBySlug(slug: string): BlogPost | null {
+  const filePath = path.join(BLOG_DIR, `${slug}.md`);
+  if (!fs.existsSync(filePath)) return null;
+
+  const raw = fs.readFileSync(filePath, "utf-8");
+  const { data, content } = matter(raw);
+
+  return {
+    slug,
+    title: data.title ?? "",
+    date: data.date ?? "",
+    excerpt: data.excerpt ?? "",
+    category: data.category ?? "Conseils",
+    readTime: data.readTime ?? "5 min",
+    content,
+  };
+}
