@@ -73,10 +73,10 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
         "@type": "FAQPage",
         "mainEntity": page.faq.map((item) => ({
           "@type": "Question",
-          "name": item.question,
+          "name": item.q,
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": item.answer,
+            "text": item.a,
           },
         })),
       }
