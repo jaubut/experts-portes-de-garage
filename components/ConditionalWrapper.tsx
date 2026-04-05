@@ -1,8 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import Footer from "./Footer";
-import ChatBot from "./ChatBot";
+
+const ChatBot = dynamic(() => import("./ChatBot"), { ssr: false });
 
 const HIDDEN_ON = ["/admin"];
 

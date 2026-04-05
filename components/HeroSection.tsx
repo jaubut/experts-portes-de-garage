@@ -1,14 +1,7 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import PlanifierButton from "@/components/PlanifierButton";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
 export default function HeroSection() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => { setVisible(true); }, []);
-
   const services = [
     "Ressort cassé ou brisé",
     "Câbles & roulettes",
@@ -33,7 +26,7 @@ export default function HeroSection() {
 
           {/* LEFT — Text */}
           <div
-            className={`flex-1 text-center lg:text-left pb-16 transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+            className="flex-1 text-center lg:text-left pb-16 hero-fade-in"
           >
             {/* Zone label */}
             <div className="inline-flex items-center gap-2 bg-brand/8 border border-brand/20 text-brand rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-6">
@@ -94,7 +87,7 @@ export default function HeroSection() {
 
           {/* RIGHT — Services card */}
           <div
-            className={`w-full lg:w-auto lg:flex-shrink-0 pb-16 transition-all duration-700 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+            className="w-full lg:w-auto lg:flex-shrink-0 pb-16 hero-fade-in-delay"
           >
             <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/80 border border-gray-100 overflow-hidden w-full lg:w-[320px]">
 
