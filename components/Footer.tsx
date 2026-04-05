@@ -14,6 +14,14 @@ const companyLinks = [
   { href: "/carriere", label: "Carrières" },
 ];
 
+const blogLinks = [
+  { href: "/blog/ressort-porte-de-garage-brise", label: "Ressort brisé — quoi faire?" },
+  { href: "/blog/cout-reparation-porte-garage-quebec", label: "Prix des réparations 2026" },
+  { href: "/blog/entretien-porte-garage-hiver-quebec", label: "Entretien hivernal" },
+  { href: "/blog/signes-porte-garage-besoin-entretien", label: "7 signes d'usure urgents" },
+  { href: "/blog", label: "Tous les articles →" },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-[#111111] text-gray-400">
@@ -37,7 +45,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
         {/* Brand */}
         <div className="sm:col-span-2 lg:col-span-1">
           <Link
@@ -65,6 +73,25 @@ export default function Footer() {
           </h3>
           <ul className="flex flex-col gap-2.5">
             {serviceLinks.map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Blogue */}
+        <div>
+          <h3 className="font-heading text-white text-sm uppercase tracking-widest mb-5">
+            Blogue
+          </h3>
+          <ul className="flex flex-col gap-2.5">
+            {blogLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
