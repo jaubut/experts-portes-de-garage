@@ -9,10 +9,23 @@ import PlanifierButton from "@/components/PlanifierButton";
 import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import InspectionBanner from "@/components/InspectionBanner";
-import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
+import { PHONE_DISPLAY, PHONE_HREF, BUSINESS_NAME, EMAIL } from "@/lib/config";
 
+const BASE_URL = "https://www.expertsportesdegarage.ca";
 const HERO_BG = "/images/maison_garage_v1.png";
 const LOGO_SRC = "/images/logo_experts.png";
+
+const CITY_LINKS = [
+  { label: "Granby", slug: "portes-de-garage-granby" },
+  { label: "Sherbrooke", slug: "portes-de-garage-sherbrooke" },
+  { label: "Saint-Hyacinthe", slug: "portes-de-garage-saint-hyacinthe" },
+  { label: "Longueuil", slug: "portes-de-garage-longueuil" },
+  { label: "Brossard", slug: "portes-de-garage-brossard" },
+  { label: "Magog", slug: "portes-de-garage-magog" },
+  { label: "Saint-Jean-sur-Richelieu", slug: "portes-de-garage-saint-jean-sur-richelieu" },
+  { label: "Bromont", slug: "portes-de-garage-bromont" },
+  { label: "Waterloo", slug: "portes-de-garage-waterloo" },
+];
 
 export async function generateStaticParams() {
   return getAllPageSlugs().map((slug) => ({ slug }));
@@ -27,6 +40,24 @@ export async function generateMetadata(
   return {
     title: `${page.title} — Experts Portes de Garage`,
     description: page.excerpt,
+    alternates: {
+      canonical: `${BASE_URL}/${slug}`,
+    },
+    openGraph: {
+      title: `${page.title} — Experts Portes de Garage`,
+      description: page.excerpt ?? undefined,
+      url: `${BASE_URL}/${slug}`,
+      locale: "fr_CA",
+      type: "website",
+      images: [
+        {
+          url: "/images/maison_garage_v1.webp",
+          width: 1200,
+          height: 630,
+          alt: page.title,
+        },
+      ],
+    },
   };
 }
 
@@ -35,8 +66,79 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
   const page = getPageBySlug(slug);
   if (!page) notFound();
 
+  // Schema FAQPage pour rich snippets Google
+  const faqSchema = page.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": page.faq.map((item) => ({
+          "@type": "Question",
+          "name": item.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.answer,
+          },
+        })),
+      }
+    : null;
+
+  // Schema LocalBusiness avec breadcrumb
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": BUSINESS_NAME,
+    "telephone": PHONE_DISPLAY,
+    "email": EMAIL,
+    "url": `${BASE_URL}/${slug}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "QC",
+      "addressCountry": "CA",
+    },
+    "openingHours": "Mo-Su 00:00-23:59",
+    "priceRange": "$$",
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": BASE_URL,
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": page.title,
+        "item": `${BASE_URL}/${slug}`,
+      },
+    ],
+  };
+
+  const isCityPage = slug.startsWith("portes-de-garage-");
+  const otherCities = CITY_LINKS.filter((c) => c.slug !== slug);
+
   return (
     <>
+      {/* ── JSON-LD SCHEMAS ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+
       {/* ── 1. HERO ── */}
       <section
         className="relative bg-cover bg-center"
@@ -202,6 +304,27 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
         </section>
       )}
 
+      {/* ── 6. LIENS INTERNES VILLES (pages villes seulement) ── */}
+      {isCityPage && otherCities.length > 0 && (
+        <section className="bg-muted py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <h2 className="font-heading text-xl text-brand text-center uppercase mb-6">
+              Nous desservons aussi
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {otherCities.map((city) => (
+                <Link
+                  key={city.slug}
+                  href={`/${city.slug}`}
+                  className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 hover:border-brand hover:text-brand transition-colors shadow-sm"
+                >
+                  Porte de garage {city.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }
