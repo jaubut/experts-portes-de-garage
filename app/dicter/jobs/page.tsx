@@ -90,22 +90,6 @@ function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: numb
   return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
 }
 
-function plusProcheDAbord<T extends { lat: number; lon: number }>(points: T[]): T[] {
-  if (points.length <= 2) return points;
-  const restants = [...points];
-  const resultat = [restants.splice(0, 1)[0]];
-  while (restants.length > 0) {
-    const dernier = resultat[resultat.length - 1];
-    let idx = 0;
-    let minDist = Infinity;
-    for (let i = 0; i < restants.length; i++) {
-      const d = distanceKm(dernier, restants[i]);
-      if (d < minDist) { minDist = d; idx = i; }
-    }
-    resultat.push(restants.splice(idx, 1)[0]);
-  }
-  return resultat;
-}
 
 function nowDateStr() {
   return new Date().toISOString().split("T")[0];
@@ -289,25 +273,69 @@ export default function JobsPage() {
 
     setOptimisant(true);
     try {
-      // Géocoder une par une (Nominatim = max 1 req/sec)
+      // 1. Récupérer la position GPS actuelle (optionnel)
+      let positionActuelle: { lat: number; lon: number } | null = null;
+      try {
+        positionActuelle = await new Promise((resolve) => {
+          if (!navigator.geolocation) { resolve(null); return; }
+          navigator.geolocation.getCurrentPosition(
+            pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+            () => resolve(null),
+            { timeout: 5000, maximumAge: 60000 }
+          );
+        });
+      } catch { /* GPS non disponible, pas grave */ }
+
+      // 2. Géocoder une par une (Nominatim = max 1 req/sec)
       const coordonnees: Array<{ lat: number; lon: number } | null> = [];
       for (const j of jobsSelectionnes) {
         coordonnees.push(await geocoderAdresse(j.adresse, j.ville));
         if (jobsSelectionnes.length > 1) await new Promise(r => setTimeout(r, 1100));
       }
 
-      // Attacher les coordonnées aux jobs (garder les jobs sans coords à la fin)
+      // 3. Attacher les coordonnées aux jobs
       const avecCoords = jobsSelectionnes
         .map((j, i) => ({ ...j, ...(coordonnees[i] ?? { lat: 0, lon: 0 }) }))
         .filter(j => j.lat !== 0);
       const sansCoords = jobsSelectionnes.filter((_, i) => !coordonnees[i]);
 
-      // Optimiser l'ordre (nearest neighbor)
-      const optimises = plusProcheDAbord(avecCoords);
+      // 4. Optimiser depuis la position actuelle (ou depuis le premier job)
+      const pointDepart = positionActuelle ?? (avecCoords[0] ?? null);
+      let optimises: typeof avecCoords;
+      if (pointDepart && avecCoords.length > 1) {
+        // Nearest neighbor en partant de la position actuelle
+        const restants = [...avecCoords];
+        optimises = [];
+        let courant = pointDepart;
+        while (restants.length > 0) {
+          let idx = 0;
+          let minDist = Infinity;
+          for (let i = 0; i < restants.length; i++) {
+            const d = distanceKm(courant, restants[i]);
+            if (d < minDist) { minDist = d; idx = i; }
+          }
+          const suivant = restants.splice(idx, 1)[0];
+          optimises.push(suivant);
+          courant = suivant;
+        }
+      } else {
+        optimises = avecCoords;
+      }
+
       const tousEnOrdre = [...optimises, ...sansCoords];
 
-      const adresses = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
-      const url = itineraireUrl(adresses);
+      // 5. Construire l'URL Maps — position GPS en premier si disponible
+      const stops = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
+      let url: string;
+      if (positionActuelle) {
+        const depart = `${positionActuelle.lat},${positionActuelle.lon}`;
+        url = stops.length === 1
+          ? `https://www.google.com/maps/dir/${depart}/${stops[0]}`
+          : `https://www.google.com/maps/dir/${depart}/${stops.join("/")}`;
+      } else {
+        url = itineraireUrl(stops) ?? "";
+      }
+
       if (url) window.open(url, "_blank");
     } finally {
       setOptimisant(false);
