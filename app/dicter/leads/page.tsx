@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 const MOT_DE_PASSE = "l1a2m3B5";
@@ -46,10 +46,82 @@ const STATUT_NEXT: Record<StatutLead, StatutLead> = {
 
 const PIPELINE_ORDER: StatutLead[] = ["nouveau", "a_rappeler", "job_planifie", "complete", "sans_suite"];
 
+type Suggestion = { adresse: string; ville: string; label: string };
+
 function formatDate(iso: string) {
   const d = new Date(iso);
   return d.toLocaleDateString("fr-CA", { day: "numeric", month: "short" });
 }
+
+function AdresseInput({ value, onChange, onSelect, placeholder = "Adresse" }: {
+  value: string;
+  onChange: (v: string) => void;
+  onSelect: (s: Suggestion) => void;
+  placeholder?: string;
+}) {
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function handleChange(q: string) {
+    onChange(q);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (q.length < 4) { setSuggestions([]); setOpen(false); return; }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ", Quebec, Canada")}&format=json&addressdetails=1&limit=6&countrycodes=ca`,
+          { headers: { "Accept-Language": "fr" } }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data: any[] = await res.json();
+        const results = data
+          .filter(r => r.address?.road)
+          .map(r => {
+            const num = r.address.house_number ?? "";
+            const rue = r.address.road ?? "";
+            const ville = r.address.city ?? r.address.town ?? r.address.village ?? r.address.municipality ?? "";
+            return { adresse: `${num} ${rue}`.trim(), ville, label: [num, rue, ville].filter(Boolean).join(", ") };
+          })
+          .filter(r => r.adresse && r.ville);
+        setSuggestions(results);
+        setOpen(results.length > 0);
+      } catch { /* ignore */ }
+    }, 400);
+  }
+
+  return (
+    <div className="relative">
+      <input
+        value={value}
+        onChange={e => handleChange(e.target.value)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onFocus={() => suggestions.length > 0 && setOpen(true)}
+        placeholder={placeholder}
+        autoComplete="off"
+        className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600"
+      />
+      {open && (
+        <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+          {suggestions.map((s, i) => (
+            <li key={i}>
+              <button
+                type="button"
+                onMouseDown={() => { onSelect(s); setOpen(false); }}
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0"
+              >
+                <span className="font-medium">{s.adresse}</span>
+                {s.ville && <span className="text-gray-400 ml-1">— {s.ville}</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", probleme: "", courriel: "", notes: "" };
 
 export default function LeadsPage() {
   const router = useRouter();
@@ -59,9 +131,16 @@ export default function LeadsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtreStatut, setFiltreStatut] = useState<StatutLead | "">("");
+
+  // Ajout
+  const [showAjout, setShowAjout] = useState(false);
+  const [ajoutForm, setAjoutForm] = useState(FORM_VIDE);
+  const [savingAjout, setSavingAjout] = useState(false);
+
+  // Édition
   const [editOuvert, setEditOuvert] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Partial<Client>>({});
-  const [saving, setSaving] = useState(false);
+  const [editForm, setEditForm] = useState<typeof FORM_VIDE>(FORM_VIDE);
+  const [savingEdit, setSavingEdit] = useState(false);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -82,12 +161,30 @@ export default function LeadsPage() {
 
   function soumettreMdp(e: React.FormEvent) {
     e.preventDefault();
-    if (mdp === MOT_DE_PASSE) {
-      sessionStorage.setItem("dicter_auth", mdp);
-      setAuth(true);
-    } else {
-      setMdpErreur(true);
-    }
+    if (mdp === MOT_DE_PASSE) { sessionStorage.setItem("dicter_auth", mdp); setAuth(true); }
+    else setMdpErreur(true);
+  }
+
+  async function ajouterLead(e: React.FormEvent) {
+    e.preventDefault();
+    setSavingAjout(true);
+    await fetch("/api/client-rapide", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nom: ajoutForm.nom,
+        telephone: ajoutForm.telephone,
+        adresse: ajoutForm.adresse || undefined,
+        ville: ajoutForm.ville,
+        probleme: ajoutForm.probleme || "Non précisé",
+        courriel: ajoutForm.courriel || undefined,
+        notes: ajoutForm.notes || undefined,
+      }),
+    });
+    setAjoutForm(FORM_VIDE);
+    setShowAjout(false);
+    await fetchClients();
+    setSavingAjout(false);
   }
 
   async function changerStatut(client: Client, newStatut: StatutLead) {
@@ -104,23 +201,23 @@ export default function LeadsPage() {
     setEditForm({
       nom: client.nom,
       telephone: client.telephone,
-      courriel: client.courriel ?? "",
       adresse: client.adresse ?? "",
       ville: client.ville,
       probleme: client.probleme,
+      courriel: client.courriel ?? "",
       notes: client.notes ?? "",
     });
   }
 
   async function sauvegarderEdit(client: Client) {
-    setSaving(true);
+    setSavingEdit(true);
     const payload = {
       nom: editForm.nom,
       telephone: editForm.telephone,
-      courriel: editForm.courriel || null,
       adresse: editForm.adresse || null,
       ville: editForm.ville,
       probleme: editForm.probleme,
+      courriel: editForm.courriel || null,
       notes: editForm.notes || null,
     };
     await fetch(`/api/clients/${client.id}`, {
@@ -130,7 +227,7 @@ export default function LeadsPage() {
     });
     setClients((prev) => prev.map((c) => c.id === client.id ? { ...c, ...payload } as Client : c));
     setEditOuvert(null);
-    setSaving(false);
+    setSavingEdit(false);
   }
 
   async function supprimerClient(id: string) {
@@ -175,25 +272,69 @@ export default function LeadsPage() {
 
   const urgents = clients.filter((c) => c.statut === "nouveau" || c.statut === "a_rappeler").length;
 
+  const champClient = (
+    key: keyof typeof FORM_VIDE,
+    label: string,
+    form: typeof FORM_VIDE,
+    setForm: React.Dispatch<React.SetStateAction<typeof FORM_VIDE>>,
+    opts?: { wide?: boolean; required?: boolean }
+  ) => {
+    if (key === "adresse") {
+      return (
+        <div key={key} className={opts?.wide ? "md:col-span-2" : ""}>
+          <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{label}</label>
+          <AdresseInput
+            value={form.adresse}
+            onChange={v => setForm(f => ({ ...f, adresse: v }))}
+            onSelect={s => setForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }))}
+          />
+        </div>
+      );
+    }
+    return (
+      <div key={key} className={opts?.wide ? "md:col-span-2" : ""}>
+        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">
+          {label}{opts?.required && " *"}
+        </label>
+        <input
+          value={form[key]}
+          onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+          required={opts?.required}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600"
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="flex-1 bg-[#f5f5f5] flex flex-col">
 
-      {/* Filtres pipeline — tabs */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2.5 overflow-x-auto shrink-0">
-        <div className="flex gap-2 min-w-max md:max-w-7xl md:mx-auto">
+      {/* Barre d'actions */}
+      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-4 py-2.5 shrink-0">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <p className="text-white/50 text-xs">
+            {urgents > 0 ? `${urgents} à contacter` : `${clients.length} clients`}
+          </p>
           <button
-            onClick={() => setFiltreStatut("")}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
-              !filtreStatut ? "bg-[#1a1a1a] text-white border-[#1a1a1a]" : "border-gray-200 text-gray-500 hover:border-gray-400"
-            }`}
+            onClick={() => { setShowAjout(!showAjout); setEditOuvert(null); }}
+            className="bg-red-600 text-white font-bold px-4 py-1.5 rounded-lg text-sm hover:bg-red-700 transition-colors"
+          >
+            + Ajouter
+          </button>
+        </div>
+      </div>
+
+      {/* Filtres pipeline */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2.5 overflow-x-auto shrink-0">
+        <div className="flex gap-2 min-w-max max-w-3xl mx-auto">
+          <button onClick={() => setFiltreStatut("")}
+            className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${!filtreStatut ? "bg-[#1a1a1a] text-white border-[#1a1a1a]" : "border-gray-200 text-gray-500 hover:border-gray-400"}`}
           >
             Actifs ({clients.filter(c => c.statut !== "complete" && c.statut !== "sans_suite").length})
           </button>
           {PIPELINE_ORDER.map((s) => (
             <button key={s} onClick={() => setFiltreStatut(filtreStatut === s ? "" : s)}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
-                filtreStatut === s ? STATUT_COLORS[s] : "border-gray-200 text-gray-500 hover:border-gray-400"
-              }`}
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${filtreStatut === s ? STATUT_COLORS[s] : "border-gray-200 text-gray-500 hover:border-gray-400"}`}
             >
               {STATUT_LABELS[s]} ({counts[s] ?? 0})
             </button>
@@ -202,6 +343,31 @@ export default function LeadsPage() {
       </div>
 
       <div className="flex-1 max-w-3xl mx-auto w-full px-4 py-4 space-y-3">
+
+        {/* Formulaire ajout */}
+        {showAjout && (
+          <form onSubmit={ajouterLead} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-3">
+            <h2 className="font-bold text-[#1a1a1a]">Nouveau client</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {champClient("nom", "Nom", ajoutForm, setAjoutForm, { required: true })}
+              {champClient("telephone", "Téléphone", ajoutForm, setAjoutForm, { required: true })}
+              {champClient("adresse", "Adresse", ajoutForm, setAjoutForm)}
+              {champClient("ville", "Ville", ajoutForm, setAjoutForm, { required: true })}
+              {champClient("probleme", "Problème", ajoutForm, setAjoutForm, { wide: true })}
+              {champClient("courriel", "Courriel", ajoutForm, setAjoutForm)}
+              <div className="md:col-span-2">
+                <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
+                <textarea value={ajoutForm.notes} onChange={e => setAjoutForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none" />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button type="submit" disabled={savingAjout} className="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 transition-colors disabled:opacity-50">
+                {savingAjout ? "Sauvegarde..." : "Sauvegarder"}
+              </button>
+              <button type="button" onClick={() => setShowAjout(false)} className="text-gray-400 text-sm hover:text-gray-600 px-3">Annuler</button>
+            </div>
+          </form>
+        )}
 
         {/* Bannière urgente */}
         {!filtreStatut && urgents > 0 && (
@@ -216,19 +382,16 @@ export default function LeadsPage() {
           <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">
             <p className="text-3xl mb-3">✅</p>
             <p className="font-semibold">Aucun lead actif</p>
-            <p className="text-sm mt-1">Tout est traité</p>
+            <p className="text-sm mt-1">Clique sur &quot;+ Ajouter&quot; pour en créer un</p>
           </div>
         ) : (
           clientsFiltres.map((client) => (
-            <div key={client.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${
-              client.statut === "complete" || client.statut === "sans_suite" ? "opacity-40" : ""
-            }`}>
+            <div key={client.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${client.statut === "complete" || client.statut === "sans_suite" ? "opacity-40" : ""}`}>
 
               {editOuvert !== client.id ? (
                 <>
-                  {/* Carte principale */}
                   <div className="p-4">
-                    {/* Ligne 1 — nom + statut + date */}
+                    {/* Nom + statut */}
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="font-bold text-[#1a1a1a] text-base truncate">{client.nom}</span>
@@ -237,104 +400,81 @@ export default function LeadsPage() {
                       <button
                         onClick={() => changerStatut(client, STATUT_NEXT[client.statut])}
                         className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 ${STATUT_COLORS[client.statut]}`}
-                        title="Tap pour avancer le statut"
+                        title="Tap pour avancer"
                       >
                         {STATUT_LABELS[client.statut]}
                       </button>
                     </div>
 
-                    {/* Ligne 2 — téléphone (gros, tappable) */}
+                    {/* Téléphone — gros bouton tappable */}
                     <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-3 py-2.5 mb-2 group">
-                      <svg className="w-4 h-4 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
-                      </svg>
+                      <svg className="w-4 h-4 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
                       <span className="text-red-700 font-bold text-sm">{client.telephone}</span>
                       <span className="text-red-400 text-xs ml-auto group-hover:text-red-600">Appeler →</span>
                     </a>
 
-                    {/* Ligne 3 — ville + problème */}
-                    <p className="text-sm text-gray-600 mb-0.5">
-                      📍 {client.adresse ? `${client.adresse}, ` : ""}{client.ville}
-                    </p>
-                    <p className="text-sm text-gray-500 italic">{client.probleme}</p>
-                    {client.notes && (
-                      <p className="text-xs text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 italic">{client.notes}</p>
-                    )}
+                    <p className="text-sm text-gray-600">📍 {client.adresse ? `${client.adresse}, ` : ""}{client.ville}</p>
+                    <p className="text-sm text-gray-500 italic mt-0.5">{client.probleme}</p>
+                    {client.notes && <p className="text-xs text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 italic">{client.notes}</p>}
                   </div>
 
-                  {/* Barre d'actions */}
+                  {/* Actions */}
                   <div className="border-t border-gray-100 grid grid-cols-3 divide-x divide-gray-100">
-                    <button
-                      onClick={() => ouvrirEdit(client)}
-                      className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
+                    <button onClick={() => ouvrirEdit(client)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 transition-colors">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                       Modifier
                     </button>
-                    <button
-                      onClick={() => transfererVersJob(client)}
-                      className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
+                    <button onClick={() => transfererVersJob(client)} className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                       Créer job
                     </button>
-                    <button
-                      onClick={() => supprimerClient(client.id)}
-                      className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                    <button onClick={() => supprimerClient(client.id)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       Supprimer
                     </button>
                   </div>
                 </>
               ) : (
-                /* Formulaire d'édition */
+                /* Formulaire édition */
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-[#1a1a1a]">Modifier — {client.nom}</h3>
-                    <button onClick={() => setEditOuvert(null)} className="text-gray-400 text-sm hover:text-gray-600">✕ Annuler</button>
+                    <button onClick={() => setEditOuvert(null)} className="text-gray-400 text-sm hover:text-gray-600">✕</button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {[
-                      { key: "nom", label: "Nom", type: "text" },
-                      { key: "telephone", label: "Téléphone", type: "tel" },
-                      { key: "adresse", label: "Adresse", type: "text" },
-                      { key: "ville", label: "Ville", type: "text" },
-                      { key: "probleme", label: "Problème", type: "text", wide: true },
-                      { key: "courriel", label: "Courriel", type: "email" },
-                    ].map(({ key, label, type, wide }) => (
-                      <div key={key} className={wide ? "md:col-span-2" : ""}>
-                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{label}</label>
-                        <input
-                          type={type}
-                          value={(editForm as Record<string, string>)[key] ?? ""}
-                          onChange={e => setEditForm(f => ({...f, [key]: e.target.value}))}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600"
-                        />
-                      </div>
-                    ))}
+                    {(["nom", "telephone", "adresse", "ville", "probleme", "courriel"] as (keyof typeof FORM_VIDE)[]).map((key) => {
+                      const labels: Record<string, string> = { nom: "Nom", telephone: "Téléphone", adresse: "Adresse", ville: "Ville", probleme: "Problème", courriel: "Courriel" };
+                      const wide = key === "probleme";
+                      if (key === "adresse") {
+                        return (
+                          <div key={key} className={wide ? "md:col-span-2" : ""}>
+                            <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{labels[key]}</label>
+                            <AdresseInput
+                              value={editForm.adresse}
+                              onChange={v => setEditForm(f => ({ ...f, adresse: v }))}
+                              onSelect={s => setEditForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }))}
+                            />
+                          </div>
+                        );
+                      }
+                      return (
+                        <div key={key} className={wide ? "md:col-span-2" : ""}>
+                          <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{labels[key]}</label>
+                          <input
+                            value={editForm[key] ?? ""}
+                            onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))}
+                            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600"
+                          />
+                        </div>
+                      );
+                    })}
                     <div className="md:col-span-2">
                       <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
-                      <textarea
-                        value={editForm.notes ?? ""}
-                        onChange={e => setEditForm(f => ({...f, notes: e.target.value}))}
-                        rows={2}
-                        className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none"
-                      />
+                      <textarea value={editForm.notes ?? ""} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none" />
                     </div>
                   </div>
-                  <button
-                    onClick={() => sauvegarderEdit(client)}
-                    disabled={saving}
-                    className="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 transition-colors disabled:opacity-50"
-                  >
-                    {saving ? "Sauvegarde..." : "Sauvegarder les modifications"}
+                  <button onClick={() => sauvegarderEdit(client)} disabled={savingEdit} className="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 transition-colors disabled:opacity-50">
+                    {savingEdit ? "Sauvegarde..." : "Sauvegarder"}
                   </button>
                 </div>
               )}

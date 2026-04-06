@@ -4,17 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "/dicter", label: "Dicter", icon: "🎙️", exact: true },
-  { href: "/dicter/leads", label: "Leads", icon: "👤", exact: false },
-  { href: "/dicter/jobs", label: "Jobs", icon: "📋", exact: false },
+  { href: "/dicter/leads", label: "Leads", icon: "👤" },
+  { href: "/dicter/jobs", label: "Jobs", icon: "📋" },
 ];
 
 export default function DicterNav() {
   const pathname = usePathname();
-
-  function isActive(href: string, exact: boolean) {
-    return exact ? pathname === href : pathname.startsWith(href);
-  }
 
   return (
     <>
@@ -27,7 +22,7 @@ export default function DicterNav() {
               key={item.href}
               href={item.href}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive(item.href, item.exact)
+                pathname.startsWith(item.href)
                   ? "bg-white/10 text-white"
                   : "text-white/50 hover:text-white hover:bg-white/5"
               }`}
@@ -47,7 +42,7 @@ export default function DicterNav() {
               key={item.href}
               href={item.href}
               className={`flex-1 flex flex-col items-center justify-center py-3 gap-0.5 text-xs font-medium transition-colors ${
-                isActive(item.href, item.exact)
+                pathname.startsWith(item.href)
                   ? "text-white"
                   : "text-white/40 hover:text-white/70"
               }`}
