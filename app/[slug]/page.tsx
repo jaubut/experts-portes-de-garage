@@ -161,10 +161,12 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
       )}
 
       {/* ── 1. HERO ── */}
-      <section
-        className="relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
-      >
+      <section className="relative bg-cover bg-center overflow-hidden">
+        {isCityPage && cityImage ? (
+          <Image src={cityImage} alt={page.title} fill className="object-cover" priority />
+        ) : (
+          <Image src={HERO_BG} alt={page.title} fill className="object-cover" priority />
+        )}
         <div className="absolute inset-0 bg-black/65" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-14 md:pt-20 pb-10">
@@ -225,22 +227,6 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
 
       {/* ── 2. INSPECTION BANNER ── */}
       <InspectionBanner />
-
-      {/* ── IMAGE VILLE ── */}
-      {isCityPage && cityImage && (
-        <div className="bg-white pt-10 pb-0">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src={cityImage}
-                alt={`Porte de garage ${page.title}`}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── 3. MAIN CONTENT ── */}
       <div className="bg-white pt-10">
