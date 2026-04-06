@@ -31,11 +31,11 @@ const STATUT_LABELS: Record<StatutLead, string> = {
 };
 
 const STATUT_COLORS: Record<StatutLead, string> = {
-  nouveau: "bg-blue-100 text-blue-700 border-blue-200",
-  a_rappeler: "bg-orange-100 text-orange-700 border-orange-200",
-  job_planifie: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  complete: "bg-green-100 text-green-700 border-green-200",
-  sans_suite: "bg-gray-100 text-gray-500 border-gray-200",
+  nouveau: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  a_rappeler: "bg-orange-500/15 text-orange-400 border-orange-500/30",
+  job_planifie: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  complete: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  sans_suite: "bg-white/[0.06] text-white/30 border-white/10",
 };
 
 const STATUT_NEXT: Record<StatutLead, StatutLead> = {
@@ -94,11 +94,11 @@ function AdresseInput({ value, onChange, onSelect, placeholder = "Adresse" }: {
 
   return (
     <div className="relative">
-      <input value={value} onChange={e => handleChange(e.target.value)} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => suggestions.length > 0 && setOpen(true)} placeholder={placeholder} autoComplete="off" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+      <input value={value} onChange={e => handleChange(e.target.value)} onBlur={() => setTimeout(() => setOpen(false), 150)} onFocus={() => suggestions.length > 0 && setOpen(true)} placeholder={placeholder} autoComplete="off" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
       {open && (
-        <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
           {suggestions.map((s, i) => (
-            <li key={i}><button type="button" onMouseDown={() => { onSelect(s); setOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0"><span className="font-medium">{s.adresse}</span>{s.ville && <span className="text-gray-400 ml-1">— {s.ville}</span>}</button></li>
+            <li key={i}><button type="button" onMouseDown={() => { onSelect(s); setOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-500/10 hover:text-red-400 transition-colors border-b border-white/[0.04] last:border-0"><span className="font-medium">{s.adresse}</span>{s.ville && <span className="text-gray-400 ml-1">— {s.ville}</span>}</button></li>
           ))}
         </ul>
       )}
@@ -213,13 +213,13 @@ export default function LeadsPage() {
 
   if (!auth) {
     return (
-      <div className="flex-1 bg-[#1a1a1a] flex items-center justify-center px-4">
-        <form onSubmit={soumettreMdp} className="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl">
-          <p className="text-gray-400 text-sm text-center mb-2 uppercase tracking-widest">Experts Portes de Garage</p>
-          <h1 className="text-2xl font-bold text-[#1a1a1a] mb-6 text-center">Espace admin</h1>
-          <input type="password" value={mdp} onChange={e => { setMdp(e.target.value); setMdpErreur(false); }} placeholder="Mot de passe" autoFocus className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-red-600" />
-          {mdpErreur && <p className="text-red-500 text-xs mb-3">Mot de passe incorrect</p>}
-          <button type="submit" className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-colors">Entrer</button>
+      <div className="flex-1 bg-[#0b0b10] flex items-center justify-center px-4">
+        <form onSubmit={soumettreMdp} className="bg-[#13131a] border border-white/[0.06] rounded-2xl p-8 w-full max-w-sm shadow-2xl">
+          <p className="text-white/25 text-xs text-center mb-2 uppercase tracking-[0.15em]">Experts Portes de Garage</p>
+          <h1 className="text-xl font-bold text-white mb-6 text-center">Espace admin</h1>
+          <input type="password" value={mdp} onChange={e => { setMdp(e.target.value); setMdpErreur(false); }} placeholder="Mot de passe" autoFocus className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-white/20 text-sm mb-3 focus:outline-none focus:border-red-500/50 transition-all" />
+          {mdpErreur && <p className="text-red-400 text-xs mb-3">Mot de passe incorrect</p>}
+          <button type="submit" className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-3.5 rounded-xl hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-500/20">Entrer</button>
         </form>
       </div>
     );
@@ -245,10 +245,10 @@ export default function LeadsPage() {
   const urgents = clients.filter(c => c.statut === "nouveau" || c.statut === "a_rappeler").length;
 
   return (
-    <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+    <div className="flex-1 bg-[#0b0b10] flex flex-col">
 
       {/* Barre d'actions */}
-      <div className="bg-[#1a1a1a]/90 border-b border-white/10 px-4 py-2.5 shrink-0">
+      <div className="bg-[#0b0b10]/95 backdrop-blur-sm border-b border-white/10 px-4 py-2.5 shrink-0">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <p className="text-white/50 text-xs">
             {rappelsDus.length > 0
@@ -263,7 +263,7 @@ export default function LeadsPage() {
       </div>
 
       {/* Filtres pipeline */}
-      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-4 py-2.5 overflow-x-auto shrink-0">
+      <div className="bg-white/[0.02] border-b border-white/10 px-4 py-2.5 overflow-x-auto shrink-0">
         <div className="flex gap-2 min-w-max max-w-3xl mx-auto">
           <button onClick={() => setFiltreStatut("")}
             className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all whitespace-nowrap ${!filtreStatut ? "bg-red-600 text-white" : "bg-white/10 text-white/60 hover:bg-white/20 hover:text-white"}`}>
@@ -288,45 +288,45 @@ export default function LeadsPage() {
 
         {/* Formulaire ajout */}
         {showAjout && (
-          <form onSubmit={ajouterLead} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-3">
-            <h2 className="font-bold text-[#1a1a1a]">Nouveau client</h2>
+          <form onSubmit={ajouterLead} className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-5 space-y-3">
+            <h2 className="font-bold text-white">Nouveau client</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {(["nom", "telephone", "adresse", "ville", "probleme", "courriel"] as (keyof typeof FORM_VIDE)[]).map(key => {
                 const labels: Record<string, string> = { nom: "Nom *", telephone: "Téléphone *", adresse: "Adresse", ville: "Ville *", probleme: "Problème", courriel: "Courriel" };
                 const wide = key === "probleme";
                 if (key === "adresse") return (
                   <div key={key}>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Adresse</label>
+                    <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Adresse</label>
                     <AdresseInput value={ajoutForm.adresse} onChange={v => setAjoutForm(f => ({ ...f, adresse: v }))} onSelect={s => setAjoutForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }))} />
                   </div>
                 );
                 return (
                   <div key={key} className={wide ? "md:col-span-2" : ""}>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{labels[key]}</label>
-                    <input value={ajoutForm[key]} onChange={e => setAjoutForm(f => ({ ...f, [key]: e.target.value }))} required={["nom", "telephone", "ville"].includes(key)} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                    <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">{labels[key]}</label>
+                    <input value={ajoutForm[key]} onChange={e => setAjoutForm(f => ({ ...f, [key]: e.target.value }))} required={["nom", "telephone", "ville"].includes(key)} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                   </div>
                 );
               })}
               <div>
-                <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
-                <textarea value={ajoutForm.notes} onChange={e => setAjoutForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Notes</label>
+                <textarea value={ajoutForm.notes} onChange={e => setAjoutForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 resize-none transition-all" />
               </div>
               <div>
-                <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
-                <input type="number" min="0" step="0.01" value={ajoutForm.montant_estime} onChange={e => setAjoutForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
+                <input type="number" min="0" step="0.01" value={ajoutForm.montant_estime} onChange={e => setAjoutForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
               </div>
             </div>
             <div className="flex gap-3">
               <button type="submit" disabled={savingAjout} className="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">{savingAjout ? "Sauvegarde..." : "Sauvegarder"}</button>
-              <button type="button" onClick={() => setShowAjout(false)} className="text-gray-400 text-sm hover:text-gray-600 px-3 transition-colors">Annuler</button>
+              <button type="button" onClick={() => setShowAjout(false)} className="text-white/30 text-sm hover:text-white/60 px-3 transition-colors">Annuler</button>
             </div>
           </form>
         )}
 
         {loading ? (
-          <div className="text-center text-gray-400 py-16">Chargement...</div>
+          <div className="text-center text-white/30 py-16">Chargement...</div>
         ) : clientsFiltres.length === 0 ? (
-          <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">
+          <div className="text-center text-white/30 py-16 bg-white/[0.03] rounded-2xl border border-white/[0.06]">
             <p className="text-3xl mb-3">✅</p>
             <p className="font-semibold">Aucun lead actif</p>
             <p className="text-sm mt-1">Clique sur &quot;+ Ajouter&quot; pour en créer un</p>
@@ -337,38 +337,38 @@ export default function LeadsPage() {
             const enRetard = rappelInfo?.urgent ?? false;
 
             return (
-              <div key={client.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all duration-150 hover:shadow-md ${client.statut === "complete" || client.statut === "sans_suite" ? "opacity-40" : ""} ${enRetard ? "border-orange-300 ring-1 ring-orange-200" : "border-gray-200"}`}>
+              <div key={client.id} className={`bg-white/[0.03] rounded-2xl border shadow-sm overflow-hidden transition-all duration-150 hover:shadow-md ${client.statut === "complete" || client.statut === "sans_suite" ? "opacity-40" : ""} ${enRetard ? "border-orange-500/30 ring-1 ring-orange-500/20" : "border-white/[0.06]"}`}>
 
                 {editOuvert !== client.id ? (
                   <>
                     <div className="p-4">
                       {/* Rappel en retard banner */}
                       {enRetard && (
-                        <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-lg px-3 py-1.5 mb-3 text-xs font-semibold text-orange-700">
+                        <div className="flex items-center gap-2 bg-orange-500/10 border border-orange-500/25 rounded-lg px-3 py-1.5 mb-3 text-xs font-semibold text-orange-400">
                           🔔 {rappelInfo!.label}
                         </div>
                       )}
 
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="font-bold text-[#1a1a1a] text-base truncate">{client.nom}</span>
-                          {client.montant_estime != null && <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full shrink-0">{client.montant_estime.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span>}
-                          <span className="text-xs text-gray-300 shrink-0">{formatDate(client.created_at)}</span>
+                          <span className="font-bold text-white text-base truncate">{client.nom}</span>
+                          {client.montant_estime != null && <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{client.montant_estime.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span>}
+                          <span className="text-xs text-white/20 shrink-0">{formatDate(client.created_at)}</span>
                         </div>
                         <button onClick={() => changerStatut(client, STATUT_NEXT[client.statut])} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
                           {STATUT_LABELS[client.statut]}
                         </button>
                       </div>
 
-                      <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-3 py-2.5 mb-2 group hover:bg-red-100 transition-colors">
+                      <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2.5 mb-2 group hover:bg-red-100 transition-colors">
                         <svg className="w-4 h-4 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
-                        <span className="text-red-700 font-bold text-sm">{client.telephone}</span>
-                        <span className="text-red-400 text-xs ml-auto group-hover:text-red-600 transition-colors">Appeler →</span>
+                        <span className="text-red-300 font-bold text-sm">{client.telephone}</span>
+                        <span className="text-red-400/50 text-xs ml-auto group-hover:text-red-300 transition-colors">Appeler →</span>
                       </a>
 
-                      <p className="text-sm text-gray-600">📍 {client.adresse ? `${client.adresse}, ` : ""}{client.ville}</p>
-                      <p className="text-sm text-gray-500 italic mt-0.5">{client.probleme}</p>
-                      {client.notes && <p className="text-xs text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 italic">{client.notes}</p>}
+                      <p className="text-sm text-white/50">📍 {client.adresse ? `${client.adresse}, ` : ""}{client.ville}</p>
+                      <p className="text-sm text-white/35 italic mt-0.5">{client.probleme}</p>
+                      {client.notes && <p className="text-xs text-white/25 mt-1.5 bg-white/[0.03] rounded-lg px-2.5 py-1.5 italic">{client.notes}</p>}
 
                       {/* Historique jobs */}
                       {(() => {
@@ -378,20 +378,20 @@ export default function LeadsPage() {
                         const fmtMontant = (n: number) => n.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
                         return (
                           <div className="mt-2">
-                            <button type="button" onClick={() => setHistoriqueOuvert(historiqueOuvert === client.id ? null : client.id)} className="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1">
+                            <button type="button" onClick={() => setHistoriqueOuvert(historiqueOuvert === client.id ? null : client.id)} className="text-xs text-blue-400 font-semibold hover:underline flex items-center gap-1">
                               {clientJobs.length} job{clientJobs.length > 1 ? "s" : ""} {totalRevenu > 0 && `· ${fmtMontant(totalRevenu)}`}
                               <svg className={`w-3 h-3 transition-transform ${historiqueOuvert === client.id ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                             </button>
                             {historiqueOuvert === client.id && (
-                              <div className="mt-1.5 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 space-y-1.5">
+                              <div className="mt-1.5 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 space-y-1.5">
                                 {clientJobs.map(j => (
                                   <div key={j.id} className="flex items-center justify-between text-xs">
                                     <div className="flex items-center gap-2">
                                       <span className={`w-2 h-2 rounded-full ${j.statut === "complete" ? "bg-green-500" : j.statut === "en_cours" ? "bg-yellow-500" : "bg-red-500"}`} />
-                                      <span className="text-gray-600">{new Date(j.date + "T12:00:00").toLocaleDateString("fr-CA", { day: "numeric", month: "short", year: "numeric" })}</span>
-                                      {j.notes && <span className="text-gray-400 italic truncate max-w-[150px]">{j.notes}</span>}
+                                      <span className="text-white/40">{new Date(j.date + "T12:00:00").toLocaleDateString("fr-CA", { day: "numeric", month: "short", year: "numeric" })}</span>
+                                      {j.notes && <span className="text-white/25 italic truncate max-w-[150px]">{j.notes}</span>}
                                     </div>
-                                    {j.montant != null && <span className="font-bold text-green-700">{fmtMontant(j.montant)}</span>}
+                                    {j.montant != null && <span className="font-bold text-emerald-400">{fmtMontant(j.montant)}</span>}
                                   </div>
                                 ))}
                               </div>
@@ -402,38 +402,38 @@ export default function LeadsPage() {
 
                       {/* Rappel — date non urgente */}
                       {client.date_rappel && !enRetard && (
-                        <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
-                          📅 Rappel prévu : <span className="font-medium text-gray-500">{formatRappel(client.date_rappel).label}</span>
-                          <button onClick={() => setRappelOuvert(client.id)} className="ml-1 text-gray-300 hover:text-red-400 transition-colors">✎</button>
+                        <p className="text-xs text-white/25 mt-2 flex items-center gap-1">
+                          📅 Rappel prévu : <span className="font-medium text-white/40">{formatRappel(client.date_rappel).label}</span>
+                          <button onClick={() => setRappelOuvert(client.id)} className="ml-1 text-white/20 hover:text-red-400 transition-colors">✎</button>
                         </p>
                       )}
 
                       {/* Formulaire rappel inline */}
                       {rappelOuvert === client.id && (
-                        <div className="mt-2 flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-xl px-3 py-2">
+                        <div className="mt-2 flex items-center gap-2 bg-orange-500/10 border border-orange-500/25 rounded-xl px-3 py-2">
                           <span className="text-xs text-orange-700 font-semibold shrink-0">📅 Rappeler le</span>
                           <input type="date" defaultValue={client.date_rappel ?? ""} min={today}
                             onChange={e => { if (e.target.value) sauvegarderRappel(client.id, e.target.value); }}
-                            className="flex-1 bg-transparent text-sm text-orange-800 focus:outline-none" autoFocus />
-                          <button onClick={() => sauvegarderRappel(client.id, "")} className="text-xs text-gray-400 hover:text-red-500 transition-colors">Effacer</button>
-                          <button onClick={() => setRappelOuvert(null)} className="text-gray-400 hover:text-gray-600 transition-colors">✕</button>
+                            className="flex-1 bg-transparent text-sm text-orange-300 focus:outline-none" autoFocus />
+                          <button onClick={() => sauvegarderRappel(client.id, "")} className="text-xs text-white/30 hover:text-red-400 transition-colors">Effacer</button>
+                          <button onClick={() => setRappelOuvert(null)} className="text-white/30 hover:text-white/60 transition-colors">✕</button>
                         </div>
                       )}
                     </div>
 
-                    <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100">
-                      <button onClick={() => ouvrirEdit(client)} className="flex items-center justify-center gap-1 py-3 text-xs text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                    <div className="border-t border-white/[0.06] grid grid-cols-4 divide-x divide-white/[0.06]">
+                      <button onClick={() => ouvrirEdit(client)} className="flex items-center justify-center gap-1 py-3 text-xs text-white/40 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors">
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         Modifier
                       </button>
-                      <button onClick={() => setRappelOuvert(rappelOuvert === client.id ? null : client.id)} className={`flex items-center justify-center gap-1 py-3 text-xs transition-colors ${client.date_rappel ? "text-orange-500 hover:bg-orange-50" : "text-gray-500 hover:bg-gray-50"} active:bg-gray-100`}>
+                      <button onClick={() => setRappelOuvert(rappelOuvert === client.id ? null : client.id)} className={`flex items-center justify-center gap-1 py-3 text-xs transition-colors ${client.date_rappel ? "text-orange-400 hover:bg-orange-500/10" : "text-gray-500 hover:bg-gray-50"} active:bg-gray-100`}>
                         📅 Rappel
                       </button>
-                      <button onClick={() => transfererVersJob(client)} className="flex items-center justify-center gap-1 py-3 text-xs font-semibold text-green-700 hover:bg-green-50 active:bg-green-100 transition-colors">
+                      <button onClick={() => transfererVersJob(client)} className="flex items-center justify-center gap-1 py-3 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/20 transition-colors">
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         Créer job
                       </button>
-                      <button onClick={() => supprimerClient(client.id)} className="flex items-center justify-center gap-1 py-3 text-xs text-gray-400 hover:bg-red-50 hover:text-red-500 active:bg-red-100 transition-colors">
+                      <button onClick={() => supprimerClient(client.id)} className="flex items-center justify-center gap-1 py-3 text-xs text-white/20 hover:bg-red-500/10 hover:text-red-400 active:bg-red-500/20 transition-colors">
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         Supprimer
                       </button>
@@ -442,8 +442,8 @@ export default function LeadsPage() {
                 ) : (
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-bold text-[#1a1a1a]">Modifier — {client.nom}</h3>
-                      <button onClick={() => setEditOuvert(null)} className="text-gray-400 hover:text-gray-600 text-lg transition-colors">✕</button>
+                      <h3 className="font-bold text-white">Modifier — {client.nom}</h3>
+                      <button onClick={() => setEditOuvert(null)} className="text-white/30 hover:text-white/60 text-lg transition-colors">✕</button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {(["nom", "telephone", "adresse", "ville", "probleme", "courriel"] as (keyof typeof FORM_VIDE)[]).map(key => {
@@ -451,24 +451,24 @@ export default function LeadsPage() {
                         const wide = key === "probleme";
                         if (key === "adresse") return (
                           <div key={key}>
-                            <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Adresse</label>
+                            <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Adresse</label>
                             <AdresseInput value={editForm.adresse} onChange={v => setEditForm(f => ({ ...f, adresse: v }))} onSelect={s => setEditForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }))} />
                           </div>
                         );
                         return (
                           <div key={key} className={wide ? "md:col-span-2" : ""}>
-                            <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">{labels[key]}</label>
-                            <input value={editForm[key] ?? ""} onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                            <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">{labels[key]}</label>
+                            <input value={editForm[key] ?? ""} onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                           </div>
                         );
                       })}
                       <div>
-                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
-                        <textarea value={editForm.notes ?? ""} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                        <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Notes</label>
+                        <textarea value={editForm.notes ?? ""} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 resize-none transition-all" />
                       </div>
                       <div>
-                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
-                        <input type="number" min="0" step="0.01" value={editForm.montant_estime} onChange={e => setEditForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                        <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
+                        <input type="number" min="0" step="0.01" value={editForm.montant_estime} onChange={e => setEditForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                       </div>
                     </div>
                     <button onClick={() => sauvegarderEdit(client)} disabled={savingEdit} className="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">

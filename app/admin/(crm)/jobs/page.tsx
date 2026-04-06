@@ -26,9 +26,9 @@ const STATUT_LABELS: Record<Statut, string> = {
 };
 
 const STATUT_COLORS: Record<Statut, string> = {
-  a_faire: "bg-red-100 text-red-700 border-red-200",
-  en_cours: "bg-yellow-100 text-yellow-700 border-yellow-200",
-  complete: "bg-green-100 text-green-700 border-green-200",
+  a_faire: "bg-red-500/15 text-red-400 border-red-500/30",
+  en_cours: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  complete: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
 };
 
 const STATUT_NEXT: Record<Statut, Statut> = {
@@ -185,14 +185,14 @@ function AdresseAutocomplete({ value, onChange, onSelect, placeholder = "Adresse
         placeholder={placeholder}
         required={required}
         autoComplete="off"
-        className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors"
+        className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all"
       />
       {open && (
-        <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
+        <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
           {sugg.map((s, i) => (
             <li key={i}>
               <button type="button" onMouseDown={() => { onSelect(s.adresse, s.ville); setOpen(false); }}
-                className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0">
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-500/10 hover:text-red-400 transition-colors border-b border-white/[0.04] last:border-0">
                 <span className="font-medium">{s.adresse}</span>
                 {s.ville && <span className="text-gray-400 ml-1">— {s.ville}</span>}
               </button>
@@ -421,13 +421,13 @@ export default function JobsPage() {
 
   if (!auth) {
     return (
-      <div className="flex-1 bg-[#1a1a1a] flex items-center justify-center px-4">
-        <form onSubmit={soumettreMdp} className="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl">
-          <p className="text-gray-400 text-sm text-center mb-2 uppercase tracking-widest">Experts Portes de Garage</p>
-          <h1 className="text-2xl font-bold text-[#1a1a1a] mb-6 text-center">Espace admin</h1>
-          <input type="password" value={mdp} onChange={e => { setMdp(e.target.value); setMdpErreur(false); }} placeholder="Mot de passe" autoFocus className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm mb-3 focus:outline-none focus:border-red-600" />
-          {mdpErreur && <p className="text-red-500 text-xs mb-3">Mot de passe incorrect</p>}
-          <button type="submit" className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition-colors">Entrer</button>
+      <div className="flex-1 bg-[#0b0b10] flex items-center justify-center px-4">
+        <form onSubmit={soumettreMdp} className="bg-[#13131a] border border-white/[0.06] rounded-2xl p-8 w-full max-w-sm shadow-2xl">
+          <p className="text-white/25 text-xs text-center mb-2 uppercase tracking-[0.15em]">Experts Portes de Garage</p>
+          <h1 className="text-xl font-bold text-white mb-6 text-center">Espace admin</h1>
+          <input type="password" value={mdp} onChange={e => { setMdp(e.target.value); setMdpErreur(false); }} placeholder="Mot de passe" autoFocus className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-white/20 text-sm mb-3 focus:outline-none focus:border-red-500/50 transition-all" />
+          {mdpErreur && <p className="text-red-400 text-xs mb-3">Mot de passe incorrect</p>}
+          <button type="submit" className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-3.5 rounded-xl hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-500/20">Entrer</button>
         </form>
       </div>
     );
@@ -456,36 +456,36 @@ export default function JobsPage() {
   const aujourdhui = nowDateStr();
 
   const formulaire = (
-    <form onSubmit={ajouterJob} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-3">
-      <h2 className="font-bold text-[#1a1a1a] text-sm uppercase tracking-wide">Nouveau job</h2>
-      <input required value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} placeholder="Nom du client *" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+    <form onSubmit={ajouterJob} className="bg-white/[0.03] rounded-2xl p-5 border border-white/[0.06] space-y-3">
+      <h2 className="font-bold text-white text-sm uppercase tracking-wide">Nouveau job</h2>
+      <input required value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))} placeholder="Nom du client *" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
       <div className="grid grid-cols-2 gap-2">
-        <input required value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))} placeholder="Téléphone *" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
-        <input required value={form.ville} onChange={e => setForm(f => ({ ...f, ville: e.target.value }))} placeholder="Ville *" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+        <input required value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))} placeholder="Téléphone *" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+        <input required value={form.ville} onChange={e => setForm(f => ({ ...f, ville: e.target.value }))} placeholder="Ville *" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
       </div>
       <AdresseAutocomplete value={form.adresse} onChange={v => setForm(f => ({ ...f, adresse: v }))} onSelect={(a, v) => setForm(f => ({ ...f, adresse: a, ville: v }))} placeholder="Adresse *" required />
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <label className="text-xs text-gray-400 block mb-1">Date *</label>
-          <input required type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+          <label className="text-xs text-white/30 block mb-1">Date *</label>
+          <input required type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
         </div>
         <div>
-          <label className="text-xs text-gray-400 block mb-1">Heure</label>
-          <input type="time" value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+          <label className="text-xs text-white/30 block mb-1">Heure</label>
+          <input type="time" value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes (optionnel)" rows={2} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+        <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes (optionnel)" rows={2} className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 resize-none transition-all" />
         <div>
-          <label className="text-xs text-gray-400 block mb-1">Montant ($)</label>
-          <input type="number" min="0" step="0.01" value={form.montant} onChange={e => setForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+          <label className="text-xs text-white/30 block mb-1">Montant ($)</label>
+          <input type="number" min="0" step="0.01" value={form.montant} onChange={e => setForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
         </div>
       </div>
       <div className="flex gap-3">
         <button type="submit" disabled={saving} className="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
           {saving ? "Sauvegarde..." : "Sauvegarder"}
         </button>
-        <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 text-sm hover:text-gray-600 px-2 transition-colors">Annuler</button>
+        <button type="button" onClick={() => setShowForm(false)} className="text-white/30 text-sm hover:text-white/60 px-2 transition-colors">Annuler</button>
       </div>
     </form>
   );
@@ -493,7 +493,7 @@ export default function JobsPage() {
   // ─── MODE ITINÉRAIRE ────────────────────────────────────────────────────────
   if (modeItineraire) {
     return (
-      <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+      <div className="flex-1 bg-[#0b0b10] flex flex-col">
         <div className="bg-[#1a1a1a] border-b border-white/10 px-4 py-3 shrink-0">
           <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
             <button onClick={() => setModeItineraire(false)} className="text-white/60 hover:text-white text-sm flex items-center gap-1 transition-colors">← Retour</button>
@@ -507,10 +507,10 @@ export default function JobsPage() {
         </div>
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-4 space-y-4">
-          <p className="text-xs text-gray-400 text-center">Coche les jobs à inclure, puis clique «&nbsp;Maps&nbsp;»</p>
+          <p className="text-xs text-white/30 text-center">Coche les jobs à inclure, puis clique «&nbsp;Maps&nbsp;»</p>
 
           {/* Destination finale */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+          <div className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-4">
             <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Terminer à (optionnel)</label>
             <div className="relative">
               <input
@@ -521,17 +521,17 @@ export default function JobsPage() {
                 onFocus={() => suggestionsDestination.length > 0 && setShowSuggestionsDestination(true)}
                 placeholder="ex: Ange-Gardien, maison, bureau..."
                 autoComplete="off"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all"
               />
               {destinationChoisie && (
                 <button type="button" onClick={() => { setDestination(""); setDestinationChoisie(null); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg transition-colors">×</button>
               )}
               {showSuggestionsDestination && (
-                <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
                   {suggestionsDestination.map((s, i) => (
                     <li key={i}>
                       <button type="button" onMouseDown={() => { setDestination(s.label); setDestinationChoisie({ adresse: s.adresse, ville: s.ville, lat: s.lat, lon: s.lon }); setShowSuggestionsDestination(false); }}
-                        className="w-full text-left px-4 py-3 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0">
+                        className="w-full text-left px-4 py-3 text-sm hover:bg-red-500/10 hover:text-red-400 transition-colors border-b border-white/[0.04] last:border-0">
                         📍 {s.label}
                       </button>
                     </li>
@@ -539,40 +539,40 @@ export default function JobsPage() {
                 </ul>
               )}
             </div>
-            {destinationChoisie && <p className="text-xs text-green-600 mt-1.5 font-medium">✓ Destination confirmée — {destinationChoisie.adresse}, {destinationChoisie.ville}</p>}
+            {destinationChoisie && <p className="text-xs text-emerald-400 mt-1.5 font-medium">✓ Destination confirmée — {destinationChoisie.adresse}, {destinationChoisie.ville}</p>}
           </div>
 
           {villesItineraire.length === 0 ? (
-            <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">Aucun job à faire</div>
+            <div className="text-center text-white/30 py-16 bg-white/[0.03] rounded-2xl border border-white/[0.06]">Aucun job à faire</div>
           ) : (
             villesItineraire.map(ville => {
               const villeJobs = parVille[ville];
               const tousCoches = villeJobs.every(j => selectionIds.has(j.id));
               const aucunCoche = villeJobs.every(j => !selectionIds.has(j.id));
               return (
-                <div key={ville} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                  <button onClick={() => toggleVille(villeJobs)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <div key={ville} className="bg-white/[0.03] rounded-2xl border border-white/[0.06] overflow-hidden">
+                  <button onClick={() => toggleVille(villeJobs)} className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.06] hover:bg-white/[0.04] transition-colors">
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${tousCoches ? "bg-red-600 border-red-600" : aucunCoche ? "border-gray-300" : "bg-red-100 border-red-400"}`}>
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${tousCoches ? "bg-red-600 border-red-600" : aucunCoche ? "border-white/20" : "bg-red-100 border-red-400"}`}>
                         {!aucunCoche && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>{tousCoches ? <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /> : <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />}</svg>}
                       </div>
-                      <span className="font-bold text-[#1a1a1a]">{ville}</span>
+                      <span className="font-bold text-white">{ville}</span>
                     </div>
                     <span className="text-sm text-gray-400">{villeJobs.filter(j => selectionIds.has(j.id)).length}/{villeJobs.length}</span>
                   </button>
                   {villeJobs.map(job => (
                     <button key={job.id} onClick={() => toggleSelection(job.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 active:bg-gray-100 transition-colors text-left ${selectionIds.has(job.id) ? "bg-red-50/50" : ""}`}>
-                      <div className={`w-5 h-5 rounded border-2 shrink-0 flex items-center justify-center transition-all ${selectionIds.has(job.id) ? "bg-red-600 border-red-600" : "border-gray-300"}`}>
+                      className={`w-full flex items-center gap-3 px-4 py-3 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors text-left ${selectionIds.has(job.id) ? "bg-red-500/5" : ""}`}>
+                      <div className={`w-5 h-5 rounded border-2 shrink-0 flex items-center justify-center transition-all ${selectionIds.has(job.id) ? "bg-red-600 border-red-600" : "border-white/20"}`}>
                         {selectionIds.has(job.id) && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-[#1a1a1a]">{job.nom}</p>
-                        <p className="text-xs text-gray-400 truncate">{job.adresse}</p>
+                        <p className="text-sm font-semibold text-white/90">{job.nom}</p>
+                        <p className="text-xs text-white/30 truncate">{job.adresse}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="text-xs text-gray-400">{formatDate(job.date)}</p>
-                        {job.heure && <p className="text-xs font-medium text-gray-500">{job.heure.slice(0, 5)}</p>}
+                        <p className="text-xs text-white/30">{formatDate(job.date)}</p>
+                        {job.heure && <p className="text-xs font-medium text-white/50">{job.heure.slice(0, 5)}</p>}
                       </div>
                     </button>
                   ))}
@@ -594,10 +594,10 @@ export default function JobsPage() {
 
   // ─── MODE NORMAL ────────────────────────────────────────────────────────────
   return (
-    <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+    <div className="flex-1 bg-[#0b0b10] flex flex-col">
 
       {/* Barre d'actions */}
-      <div className="bg-[#1a1a1a]/90 border-b border-white/10 px-4 py-2.5 shrink-0">
+      <div className="bg-[#0b0b10]/95 backdrop-blur-sm border-b border-white/10 px-4 py-2.5 shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <p className="text-white/50 text-xs">
             {jobs.filter(j => j.statut === "a_faire").length} à faire ·{" "}
@@ -620,7 +620,7 @@ export default function JobsPage() {
 
       {/* Barre revenus */}
       {(revenuMois > 0 || revenuSemaine > 0) && (
-        <div className="bg-[#111] border-b border-white/5 px-4 py-2 shrink-0">
+        <div className="bg-[#0b0b10] border-b border-white/5 px-4 py-2 shrink-0">
           <div className="max-w-7xl mx-auto flex items-center gap-6">
             <div className="flex items-center gap-2">
               <span className="text-white/40 text-xs">Cette semaine</span>
@@ -636,7 +636,7 @@ export default function JobsPage() {
       )}
 
       {/* Filtres rapides — date aujourd'hui + villes */}
-      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-4 py-2.5 overflow-x-auto shrink-0 hidden md:block">
+      <div className="bg-white/[0.02] border-b border-white/10 px-4 py-2.5 overflow-x-auto shrink-0 hidden md:block">
         <div className="flex gap-2 min-w-max max-w-7xl mx-auto">
           <button onClick={() => { setFiltreDate(""); setFiltreVille(""); }}
             className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${!filtreDate && !filtreVille ? "bg-red-600 text-white" : "bg-white/10 text-white/60 hover:bg-white/20 hover:text-white"}`}>
@@ -666,7 +666,7 @@ export default function JobsPage() {
             <option value="">Toutes les villes</option>
             {villes.map(v => <option key={v} value={v}>{v}</option>)}
           </select>
-          {(filtreDate || filtreVille) && <button onClick={() => { setFiltreDate(""); setFiltreVille(""); }} className="text-red-600 text-sm font-bold px-2">✕</button>}
+          {(filtreDate || filtreVille) && <button onClick={() => { setFiltreDate(""); setFiltreVille(""); }} className="text-red-400 text-sm font-bold px-2">✕</button>}
         </div>
       )}
 
@@ -676,21 +676,21 @@ export default function JobsPage() {
         {/* Sidebar desktop */}
         <aside className="hidden md:block md:w-72 lg:w-80 shrink-0 space-y-4 md:sticky md:top-6 md:self-start">
           {showForm && formulaire}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-3">
-            <h2 className="font-bold text-[#1a1a1a] text-sm uppercase tracking-wide">Filtres</h2>
+          <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/[0.06] space-y-3">
+            <h2 className="font-bold text-white text-sm uppercase tracking-wide">Filtres</h2>
             <div>
-              <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Date</label>
-              <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+              <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Date</label>
+              <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all" />
             </div>
             <div>
-              <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Ville</label>
-              <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600 transition-colors">
+              <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Ville</label>
+              <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all">
                 <option value="">Toutes les villes</option>
                 {villes.map(v => <option key={v} value={v}>{v}</option>)}
               </select>
             </div>
             {(filtreDate || filtreVille) && (
-              <button onClick={() => { setFiltreDate(""); setFiltreVille(""); }} className="text-red-600 text-sm font-semibold hover:underline transition-colors">Effacer les filtres</button>
+              <button onClick={() => { setFiltreDate(""); setFiltreVille(""); }} className="text-red-400 text-sm font-semibold hover:underline transition-colors">Effacer les filtres</button>
             )}
           </div>
         </aside>
@@ -698,16 +698,16 @@ export default function JobsPage() {
         {/* Liste des jobs */}
         <main className="flex-1 space-y-5">
           {loading ? (
-            <div className="text-center text-gray-400 py-16">Chargement...</div>
+            <div className="text-center text-white/30 py-16">Chargement...</div>
           ) : dates.length === 0 ? (
-            <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">
+            <div className="text-center text-white/30 py-16 bg-white/[0.03] rounded-2xl border border-white/[0.06]">
               <p className="text-lg mb-2">Aucun job</p>
               <p className="text-sm">Clique sur &quot;+ Ajouter&quot; pour créer un job</p>
             </div>
           ) : (
             dates.map(date => (
               <div key={date}>
-                <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 px-1">{formatDate(date)}</h2>
+                <h2 className="text-xs font-bold text-white/25 uppercase tracking-widest mb-2 px-1">{formatDate(date)}</h2>
                 <div className="space-y-2">
                   {grouped[date].map(job => (
                     <div key={job.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all duration-150 hover:shadow-md ${job.statut === "complete" ? "opacity-40" : ""}`}>
@@ -716,30 +716,30 @@ export default function JobsPage() {
                         /* Formulaire édition */
                         <div className="p-4 space-y-3">
                           <div className="flex items-center justify-between mb-1">
-                            <h3 className="font-bold text-[#1a1a1a] text-sm">Modifier — {job.nom}</h3>
-                            <button onClick={() => setEditJobId(null)} className="text-gray-400 hover:text-gray-600 text-lg transition-colors">✕</button>
+                            <h3 className="font-bold text-white text-sm">Modifier — {job.nom}</h3>
+                            <button onClick={() => setEditJobId(null)} className="text-white/30 hover:text-white/60 text-lg transition-colors">✕</button>
                           </div>
-                          <input value={editJobForm.nom} onChange={e => setEditJobForm(f => ({ ...f, nom: e.target.value }))} placeholder="Nom" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                          <input value={editJobForm.nom} onChange={e => setEditJobForm(f => ({ ...f, nom: e.target.value }))} placeholder="Nom" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                           <div className="grid grid-cols-2 gap-2">
-                            <input value={editJobForm.telephone} onChange={e => setEditJobForm(f => ({ ...f, telephone: e.target.value }))} placeholder="Téléphone" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
-                            <input value={editJobForm.ville} onChange={e => setEditJobForm(f => ({ ...f, ville: e.target.value }))} placeholder="Ville" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                            <input value={editJobForm.telephone} onChange={e => setEditJobForm(f => ({ ...f, telephone: e.target.value }))} placeholder="Téléphone" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+                            <input value={editJobForm.ville} onChange={e => setEditJobForm(f => ({ ...f, ville: e.target.value }))} placeholder="Ville" className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                           </div>
                           <AdresseAutocomplete value={editJobForm.adresse} onChange={v => setEditJobForm(f => ({ ...f, adresse: v }))} onSelect={(a, v) => setEditJobForm(f => ({ ...f, adresse: a, ville: v }))} placeholder="Adresse" />
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="text-xs text-gray-400 block mb-1">Date</label>
-                              <input type="date" value={editJobForm.date} onChange={e => setEditJobForm(f => ({ ...f, date: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                              <label className="text-xs text-white/30 block mb-1">Date</label>
+                              <input type="date" value={editJobForm.date} onChange={e => setEditJobForm(f => ({ ...f, date: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                             <div>
-                              <label className="text-xs text-gray-400 block mb-1">Heure</label>
-                              <input type="time" value={editJobForm.heure} onChange={e => setEditJobForm(f => ({ ...f, heure: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                              <label className="text-xs text-white/30 block mb-1">Heure</label>
+                              <input type="time" value={editJobForm.heure} onChange={e => setEditJobForm(f => ({ ...f, heure: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
-                            <textarea value={editJobForm.notes} onChange={e => setEditJobForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes" rows={2} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                            <textarea value={editJobForm.notes} onChange={e => setEditJobForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes" rows={2} className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 resize-none transition-all" />
                             <div>
-                              <label className="text-xs text-gray-400 block mb-1">Montant ($)</label>
-                              <input type="number" min="0" step="0.01" value={editJobForm.montant} onChange={e => setEditJobForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                              <label className="text-xs text-white/30 block mb-1">Montant ($)</label>
+                              <input type="number" min="0" step="0.01" value={editJobForm.montant} onChange={e => setEditJobForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                           </div>
                           <button onClick={() => sauvegarderEditJob(job)} disabled={savingEdit} className="w-full bg-red-600 text-white font-bold py-2.5 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
@@ -751,51 +751,51 @@ export default function JobsPage() {
                           <div className="p-4">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 min-w-0">
-                                <span className="font-bold text-[#1a1a1a]">{job.nom}</span>
-                                {job.heure && <span className="text-gray-400 text-sm font-medium shrink-0">{job.heure.slice(0, 5)}</span>}
-                                {job.montant && <span className="text-green-600 text-xs font-bold bg-green-50 border border-green-100 px-2 py-0.5 rounded-full shrink-0">{formatMontant(job.montant)}</span>}
+                                <span className="font-bold text-white">{job.nom}</span>
+                                {job.heure && <span className="text-white/40 text-sm font-medium shrink-0">{job.heure.slice(0, 5)}</span>}
+                                {job.montant && <span className="text-emerald-400 text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{formatMontant(job.montant)}</span>}
                               </div>
                               <button onClick={() => changerStatut(job)} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
                                 {STATUT_LABELS[job.statut]}
                               </button>
                             </div>
                             <a href={mapsUrl(job.adresse, job.ville)} target="_blank" rel="noopener noreferrer"
-                              className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-3 py-2 mb-2 group hover:bg-red-100 transition-colors">
-                              <span className="text-red-600 text-sm">📍</span>
-                              <span className="text-red-700 text-sm font-medium">{job.adresse}, {job.ville}</span>
-                              <span className="text-red-400 text-xs ml-auto group-hover:text-red-600 transition-colors">Maps →</span>
+                              className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mb-2 group hover:bg-red-500/15 transition-colors">
+                              <span className="text-red-400 text-sm">📍</span>
+                              <span className="text-red-300 text-sm font-medium">{job.adresse}, {job.ville}</span>
+                              <span className="text-red-400/50 text-xs ml-auto group-hover:text-red-300 transition-colors">Maps →</span>
                             </a>
-                            {job.notes && <p className="text-xs text-gray-400 italic bg-gray-50 rounded-lg px-2.5 py-1.5">{job.notes}</p>}
+                            {job.notes && <p className="text-xs text-white/30 italic bg-white/[0.03] rounded-lg px-2.5 py-1.5">{job.notes}</p>}
                           </div>
                           {job.statut === "complete" && (
-                            <div className="border-t border-gray-100 px-4 py-2.5">
+                            <div className="border-t border-white/[0.06] px-4 py-2.5">
                               <button
                                 type="button"
                                 onClick={() => copierLienAvis(job.id)}
                                 className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] ${
                                   lienCopie === job.id
-                                    ? "bg-green-50 text-green-700 border border-green-200"
-                                    : "bg-yellow-50 text-yellow-800 border border-yellow-200 hover:bg-yellow-100"
+                                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                    : "bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25"
                                 }`}
                               >
                                 {lienCopie === job.id ? "Lien copié!" : "Copier lien avis Google"}
                               </button>
                             </div>
                           )}
-                          <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100">
-                            <a href={`tel:${job.telephone}`} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                          <div className="border-t border-white/[0.06] grid grid-cols-4 divide-x divide-white/[0.06]">
+                            <a href={`tel:${job.telephone}`} className="flex items-center justify-center gap-1.5 py-3 text-sm text-white/40 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
                               Appeler
                             </a>
-                            <button onClick={() => ouvrirEditJob(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                            <button onClick={() => ouvrirEditJob(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-white/40 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                               Modifier
                             </button>
-                            <button onClick={() => changerStatut(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-green-700 hover:bg-green-50 active:bg-green-100 transition-colors">
+                            <button onClick={() => changerStatut(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/20 transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                               Avancer
                             </button>
-                            <button onClick={() => supprimerJob(job.id)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-400 hover:bg-red-50 hover:text-red-500 active:bg-red-100 transition-colors">
+                            <button onClick={() => supprimerJob(job.id)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-white/20 hover:bg-red-500/10 hover:text-red-400 active:bg-red-500/20 transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                               Supprimer
                             </button>
