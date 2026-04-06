@@ -16,6 +16,7 @@ interface Job {
   heure: string | null;
   statut: Statut;
   notes: string | null;
+  montant: number | null;
 }
 
 const STATUT_LABELS: Record<Statut, string> = {
@@ -135,7 +136,7 @@ function deuxOpt<T extends { lat: number; lon: number }>(route: T[], depart: { l
 function nowDateStr() { return new Date().toISOString().split("T")[0]; }
 function nowHeureStr() { return new Date().toTimeString().slice(0, 5); }
 
-const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "" };
+const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "", montant: "" };
 
 // Composant autocomplete réutilisable
 function AdresseAutocomplete({ value, onChange, onSelect, placeholder = "Adresse", required = false }: {
@@ -270,7 +271,8 @@ export default function JobsPage() {
   async function ajouterJob(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    await fetch("/api/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    const payload = { ...form, montant: form.montant ? parseFloat(form.montant) : null };
+    await fetch("/api/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     setForm(FORM_VIDE);
     setShowForm(false);
     await fetchJobs();
@@ -296,7 +298,7 @@ export default function JobsPage() {
 
   async function sauvegarderEditJob(job: Job) {
     setSavingEdit(true);
-    const payload = { nom: editJobForm.nom, telephone: editJobForm.telephone, adresse: editJobForm.adresse, ville: editJobForm.ville, date: editJobForm.date, heure: editJobForm.heure || null, notes: editJobForm.notes || null };
+    const payload = { nom: editJobForm.nom, telephone: editJobForm.telephone, adresse: editJobForm.adresse, ville: editJobForm.ville, date: editJobForm.date, heure: editJobForm.heure || null, notes: editJobForm.notes || null, montant: editJobForm.montant ? parseFloat(editJobForm.montant) : null };
     await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     setJobs(prev => prev.map(j => j.id === job.id ? { ...j, ...payload } as Job : j));
     setEditJobId(null);
@@ -422,6 +424,13 @@ export default function JobsPage() {
     );
   }
 
+  // Calcul revenus
+  const debutMois = new Date(); debutMois.setDate(1); const moisStr = debutMois.toISOString().split("T")[0];
+  const debutSemaine = new Date(); debutSemaine.setDate(debutSemaine.getDate() - debutSemaine.getDay()); const semStr = debutSemaine.toISOString().split("T")[0];
+  const revenuMois = jobs.filter(j => j.statut === "complete" && j.montant && j.date >= moisStr).reduce((s, j) => s + (j.montant ?? 0), 0);
+  const revenuSemaine = jobs.filter(j => j.statut === "complete" && j.montant && j.date >= semStr).reduce((s, j) => s + (j.montant ?? 0), 0);
+  const formatMontant = (n: number) => n.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
+
   const jobsFiltres = jobs.filter(j => {
     if (filtreVille && !j.ville.toLowerCase().includes(filtreVille.toLowerCase())) return false;
     if (filtreDate && j.date !== filtreDate) return false;
@@ -456,7 +465,13 @@ export default function JobsPage() {
           <input type="time" value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
         </div>
       </div>
-      <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes (optionnel)" rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+      <div className="grid grid-cols-2 gap-2">
+        <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes (optionnel)" rows={2} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+        <div>
+          <label className="text-xs text-gray-400 block mb-1">Montant ($)</label>
+          <input type="number" min="0" step="0.01" value={form.montant} onChange={e => setForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+        </div>
+      </div>
       <div className="flex gap-3">
         <button type="submit" disabled={saving} className="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
           {saving ? "Sauvegarde..." : "Sauvegarder"}
@@ -594,6 +609,23 @@ export default function JobsPage() {
         </div>
       </div>
 
+      {/* Barre revenus */}
+      {(revenuMois > 0 || revenuSemaine > 0) && (
+        <div className="bg-[#111] border-b border-white/5 px-4 py-2 shrink-0">
+          <div className="max-w-7xl mx-auto flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-white/40 text-xs">Cette semaine</span>
+              <span className="text-green-400 font-bold text-sm">{formatMontant(revenuSemaine)}</span>
+            </div>
+            <div className="w-px h-4 bg-white/10" />
+            <div className="flex items-center gap-2">
+              <span className="text-white/40 text-xs">Ce mois</span>
+              <span className="text-green-400 font-bold text-sm">{formatMontant(revenuMois)}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Filtres rapides — date aujourd'hui + villes */}
       <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-4 py-2.5 overflow-x-auto shrink-0 hidden md:block">
         <div className="flex gap-2 min-w-max max-w-7xl mx-auto">
@@ -694,7 +726,13 @@ export default function JobsPage() {
                               <input type="time" value={editJobForm.heure} onChange={e => setEditJobForm(f => ({ ...f, heure: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
                             </div>
                           </div>
-                          <textarea value={editJobForm.notes} onChange={e => setEditJobForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes" rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                          <div className="grid grid-cols-2 gap-2">
+                            <textarea value={editJobForm.notes} onChange={e => setEditJobForm(f => ({ ...f, notes: e.target.value }))} placeholder="Notes" rows={2} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                            <div>
+                              <label className="text-xs text-gray-400 block mb-1">Montant ($)</label>
+                              <input type="number" min="0" step="0.01" value={editJobForm.montant} onChange={e => setEditJobForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
+                            </div>
+                          </div>
                           <button onClick={() => sauvegarderEditJob(job)} disabled={savingEdit} className="w-full bg-red-600 text-white font-bold py-2.5 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
                             {savingEdit ? "Sauvegarde..." : "Sauvegarder"}
                           </button>
@@ -706,6 +744,7 @@ export default function JobsPage() {
                               <div className="flex items-center gap-2 min-w-0">
                                 <span className="font-bold text-[#1a1a1a]">{job.nom}</span>
                                 {job.heure && <span className="text-gray-400 text-sm font-medium shrink-0">{job.heure.slice(0, 5)}</span>}
+                                {job.montant && <span className="text-green-600 text-xs font-bold bg-green-50 border border-green-100 px-2 py-0.5 rounded-full shrink-0">{formatMontant(job.montant)}</span>}
                               </div>
                               <button onClick={() => changerStatut(job)} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
                                 {STATUT_LABELS[job.statut]}
