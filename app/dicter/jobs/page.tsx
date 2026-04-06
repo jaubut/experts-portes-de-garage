@@ -67,6 +67,46 @@ function groupByVille(jobs: Job[]) {
   }, {});
 }
 
+async function geocoderAdresse(adresse: string, ville: string): Promise<{ lat: number; lon: number } | null> {
+  try {
+    const q = encodeURIComponent(`${adresse}, ${ville}, Quebec, Canada`);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ca`,
+      { headers: { "Accept-Language": "fr" } }
+    );
+    const data = await res.json();
+    if (!data.length) return null;
+    return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  } catch { return null; }
+}
+
+function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }) {
+  const R = 6371;
+  const dLat = (b.lat - a.lat) * Math.PI / 180;
+  const dLon = (b.lon - a.lon) * Math.PI / 180;
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+}
+
+function plusProcheDAbord<T extends { lat: number; lon: number }>(points: T[]): T[] {
+  if (points.length <= 2) return points;
+  const restants = [...points];
+  const resultat = [restants.splice(0, 1)[0]];
+  while (restants.length > 0) {
+    const dernier = resultat[resultat.length - 1];
+    let idx = 0;
+    let minDist = Infinity;
+    for (let i = 0; i < restants.length; i++) {
+      const d = distanceKm(dernier, restants[i]);
+      if (d < minDist) { minDist = d; idx = i; }
+    }
+    resultat.push(restants.splice(idx, 1)[0]);
+  }
+  return resultat;
+}
+
 function nowDateStr() {
   return new Date().toISOString().split("T")[0];
 }
@@ -96,6 +136,7 @@ export default function JobsPage() {
   // Mode itinéraire
   const [modeItineraire, setModeItineraire] = useState(false);
   const [selectionIds, setSelectionIds] = useState<Set<string>>(new Set());
+  const [optimisant, setOptimisant] = useState(false);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -242,11 +283,33 @@ export default function JobsPage() {
     setModeItineraire(true);
   }
 
-  function genererItineraire() {
+  async function genererItineraire() {
     const jobsSelectionnes = jobs.filter(j => selectionIds.has(j.id));
-    const adresses = jobsSelectionnes.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
-    const url = itineraireUrl(adresses);
-    if (url) window.open(url, "_blank");
+    if (jobsSelectionnes.length === 0) return;
+
+    setOptimisant(true);
+    try {
+      // Géocoder toutes les adresses en parallèle
+      const coordonnees = await Promise.all(
+        jobsSelectionnes.map(j => geocoderAdresse(j.adresse, j.ville))
+      );
+
+      // Attacher les coordonnées aux jobs (garder les jobs sans coords à la fin)
+      const avecCoords = jobsSelectionnes
+        .map((j, i) => ({ ...j, ...(coordonnees[i] ?? { lat: 0, lon: 0 }) }))
+        .filter(j => j.lat !== 0);
+      const sansCoords = jobsSelectionnes.filter((_, i) => !coordonnees[i]);
+
+      // Optimiser l'ordre (nearest neighbor)
+      const optimises = plusProcheDAbord(avecCoords);
+      const tousEnOrdre = [...optimises, ...sansCoords];
+
+      const adresses = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
+      const url = itineraireUrl(adresses);
+      if (url) window.open(url, "_blank");
+    } finally {
+      setOptimisant(false);
+    }
   }
 
   if (!auth) {
@@ -365,10 +428,10 @@ export default function JobsPage() {
             </p>
             <button
               onClick={genererItineraire}
-              disabled={nbSelectionnes === 0}
+              disabled={nbSelectionnes === 0 || optimisant}
               className="bg-red-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors disabled:opacity-40"
             >
-              🗺️ Ouvrir Maps
+              {optimisant ? "Optimisation..." : "🗺️ Ouvrir Maps"}
             </button>
           </div>
         </div>
@@ -447,9 +510,13 @@ export default function JobsPage() {
           {nbSelectionnes > 0 && (
             <button
               onClick={genererItineraire}
-              className="w-full bg-red-600 text-white font-bold py-4 rounded-2xl text-base hover:bg-red-700 transition-colors shadow"
+              disabled={optimisant}
+              className="w-full bg-red-600 text-white font-bold py-4 rounded-2xl text-base hover:bg-red-700 transition-colors shadow disabled:opacity-60"
             >
-              🗺️ Générer itinéraire — {nbSelectionnes} arrêt{nbSelectionnes > 1 ? "s" : ""}
+              {optimisant
+                ? `⏳ Optimisation en cours... (${nbSelectionnes} adresses)`
+                : `🗺️ Générer itinéraire optimisé — ${nbSelectionnes} arrêt${nbSelectionnes > 1 ? "s" : ""}`
+              }
             </button>
           )}
         </div>
