@@ -155,7 +155,7 @@ export default function LeadsPage() {
   const urgents = clients.filter((c) => c.statut === "nouveau" || c.statut === "a_rappeler").length;
 
   return (
-    <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+    <div className="flex-1 bg-[#f5f5f5] flex flex-col overflow-hidden">
       {/* Sous-header */}
       <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-5 py-3">
         <div className="max-w-7xl mx-auto">
@@ -167,12 +167,37 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-6 md:flex md:gap-6">
+      {/* Filtres pipeline — horizontal scroll sur mobile */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2.5 overflow-x-auto">
+        <div className="flex gap-2 min-w-max md:max-w-7xl md:mx-auto">
+          <button
+            onClick={() => setFiltreStatut("")}
+            className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
+              !filtreStatut ? "bg-[#1a1a1a] text-white border-[#1a1a1a]" : "border-gray-200 text-gray-500 hover:border-gray-400"
+            }`}
+          >
+            Actifs ({clients.filter(c => c.statut !== "complete" && c.statut !== "sans_suite").length})
+          </button>
+          {PIPELINE_ORDER.map((s) => (
+            <button
+              key={s}
+              onClick={() => setFiltreStatut(filtreStatut === s ? "" : s)}
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
+                filtreStatut === s
+                  ? `${STATUT_COLORS[s]} opacity-100`
+                  : `border-gray-200 text-gray-500 hover:border-gray-400`
+              }`}
+            >
+              {STATUT_LABELS[s]} ({counts[s] ?? 0})
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* Sidebar */}
-        <aside className="md:w-64 shrink-0 space-y-4 md:sticky md:top-6 md:self-start">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-4 md:py-6 md:flex md:gap-6">
 
-          {/* Pipeline stats */}
+        {/* Sidebar desktop — pipeline détaillé */}
+        <aside className="hidden md:block md:w-64 shrink-0 space-y-4 md:sticky md:top-6 md:self-start">
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200">
             <h2 className="font-bold text-[#1a1a1a] text-sm uppercase tracking-wide mb-3">Pipeline</h2>
             <div className="space-y-2">
@@ -200,11 +225,10 @@ export default function LeadsPage() {
               </button>
             )}
           </div>
-
         </aside>
 
         {/* Liste clients */}
-        <main className="flex-1 mt-4 md:mt-0 space-y-3">
+        <main className="flex-1 space-y-3">
           {!filtreStatut && urgents > 0 && (
             <div className="bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm text-orange-700 font-semibold">
               {urgents} client{urgents > 1 ? "s" : ""} à contacter aujourd&apos;hui
