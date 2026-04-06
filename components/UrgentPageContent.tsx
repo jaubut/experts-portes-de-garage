@@ -204,9 +204,17 @@ export default function UrgentPageContent() {
       <section className="bg-[#f5f5f5] py-14">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Nos interventions</p>
-          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-10 leading-tight">
+          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-8 leading-tight">
             Problèmes qu&apos;on répare
           </h2>
+          <div className="reveal d2 flex flex-col md:flex-row gap-6 mb-10">
+            <div className="relative flex-1 aspect-[16/9] md:aspect-auto md:h-48 rounded-2xl overflow-hidden shadow-md">
+              <Image src="/images/blog/blog-ressort-brise.webp" alt="Ressort de porte de garage brisé" fill className="object-cover" />
+            </div>
+            <div className="relative flex-1 aspect-[16/9] md:aspect-auto md:h-48 rounded-2xl overflow-hidden shadow-md">
+              <Image src="/images/blog/blog-signes-usure.webp" alt="Signes d'usure porte de garage" fill className="object-cover" />
+            </div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {problems.map((p, i) => (
               <div key={p} className={`reveal-scale ${delays[i]} bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center gap-3 shadow-sm`}>

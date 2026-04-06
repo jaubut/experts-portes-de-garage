@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
+import Image from "next/image";
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 
@@ -128,18 +129,34 @@ export default function AProposPageContent() {
 
       {/* ── 2. NOTRE MISSION ── */}
       <section className="bg-white py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Notre mission</p>
-          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-8 leading-tight">
-            Une équipe qui évolue
-          </h2>
-          <div className="space-y-5 text-gray-600 text-base leading-relaxed">
-            <p className="reveal d2">
-              Nous ne sommes pas une vieille entreprise figée dans ses habitudes. Nous sommes une équipe de <strong className="text-[#1a1a1a]">techniciens qualifiés qui croit en l&apos;innovation et à l&apos;apprentissage constant</strong>. Chaque jour, nous améliorons nos compétences et nos méthodes.
-            </p>
-            <p className="reveal d3">
-              Notre engagement? Vous offrir un service <strong className="text-[#1a1a1a]">rapide, honnête et moderne</strong>. Pas de vieilles recettes, pas de complacence. On apprend, on s&apos;améliore, et on vous le prouve chaque jour.
-            </p>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            {/* Text */}
+            <div className="flex-1">
+              <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2">Notre mission</p>
+              <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase mb-8 leading-tight">
+                Une équipe qui évolue
+              </h2>
+              <div className="space-y-5 text-gray-600 text-base leading-relaxed">
+                <p className="reveal d2">
+                  Nous ne sommes pas une vieille entreprise figée dans ses habitudes. Nous sommes une équipe de <strong className="text-[#1a1a1a]">techniciens qualifiés qui croit en l&apos;innovation et à l&apos;apprentissage constant</strong>. Chaque jour, nous améliorons nos compétences et nos méthodes.
+                </p>
+                <p className="reveal d3">
+                  Notre engagement? Vous offrir un service <strong className="text-[#1a1a1a]">rapide, honnête et moderne</strong>. Pas de vieilles recettes, pas de complacence. On apprend, on s&apos;améliore, et on vous le prouve chaque jour.
+                </p>
+              </div>
+            </div>
+            {/* Image */}
+            <div className="reveal d2 w-full lg:w-[440px] shrink-0">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/blog/technicien-avec-client.webp"
+                  alt="Technicien Experts Portes de Garage avec un client"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import PlanifierButton from "@/components/PlanifierButton";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -282,9 +283,14 @@ export default function InstallationPageContent() {
       <section className="bg-[#f5f5f5] py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Nos options</p>
-          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-12 leading-tight">
+          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-8 leading-tight">
             Types de portes disponibles
           </h2>
+          <div className="reveal d2 relative w-full aspect-[16/6] rounded-2xl overflow-hidden shadow-md mb-10">
+            <Image src="/images/blog/blog-choisir-porte.webp" alt="Types de portes de garage disponibles" fill className="object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <p className="absolute bottom-4 left-6 text-white font-heading text-lg uppercase tracking-wide">Trouvez la porte qui correspond à votre maison</p>
+          </div>
           <div className="reveal-scale d1 max-w-2xl mx-auto bg-brand rounded-2xl p-8 flex flex-col gap-4 shadow-lg shadow-brand/20">
             <span className="text-white/70 text-xs font-bold uppercase tracking-widest">Notre spécialité</span>
             <p className="font-heading text-3xl text-white uppercase">Portes sectionnelles</p>
