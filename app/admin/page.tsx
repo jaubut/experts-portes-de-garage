@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   nouveau: { label: "Nouveau", color: "bg-blue-100 text-blue-700" },
@@ -249,6 +250,12 @@ export default function AdminPage() {
           className={`py-3 text-sm font-bold border-b-2 transition-colors ${tab === "emails" ? "border-brand text-white" : "border-transparent text-white/40 hover:text-white"}`}>
           Courriels
         </button>
+        <Link href="/admin/leads" className="py-3 text-sm font-bold border-b-2 border-transparent text-white/40 hover:text-white transition-colors">
+          👤 Leads
+        </Link>
+        <Link href="/admin/jobs" className="py-3 text-sm font-bold border-b-2 border-transparent text-white/40 hover:text-white transition-colors">
+          📋 Jobs
+        </Link>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-8">

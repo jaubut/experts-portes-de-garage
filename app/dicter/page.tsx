@@ -1,5 +1,2 @@
 import { redirect } from "next/navigation";
-
-export default function DicterPage() {
-  redirect("/dicter/leads");
-}
+export default function DicterPage() { redirect("/admin/leads"); }
