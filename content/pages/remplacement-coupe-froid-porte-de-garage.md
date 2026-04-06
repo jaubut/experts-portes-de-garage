@@ -22,7 +22,7 @@ Voici les signes qui indiquent qu'il est temps de le remplacer :
 
 ## Les types de coupe-froid que nous remplaçons
 
-![Joint bas de porte de garage](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-28-oct.-2025-16_30_47-1024x683.webp)
+![Joint bas de porte de garage](/images/coupe-froid/joint_de_bas_de_portes_de_garage.jpg)
 Nous intervenons sur tous les types de joints d'étanchéité pour portes de garage, qu'il s'agisse d'une porte simple ou double, sectionnelle ou basculante.
 
 **Joint de bas de porte (bas de caisson)** — Le joint caoutchouc fixé au bas du panneau inférieur. Il amortit le contact avec le sol et bloque les infiltrations au niveau du sol. C'est le plus sollicité et le plus souvent à remplacer.
