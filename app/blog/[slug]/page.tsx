@@ -15,6 +15,7 @@ const BLOG_IMAGES: Record<string, string> = {
   "ouvre-porte-garage-reparer-ou-remplacer": "/images/blog/blog-ouvre-porte-reparer.webp",
   "ouvre-porte-garage-wifi-guide": "/images/blog/blog-ouvre-porte-wifi.webp",
   "choisir-porte-garage-quebec": "/images/blog/blog-choisir-porte.webp",
+  "cout-reparation-porte-garage-quebec": "/images/blog/technicien-avec-client.webp",
 };
 
 const BASE_URL = "https://www.expertsportesdegarage.ca";
