@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -63,6 +64,7 @@ function groupByDate(jobs: Job[]) {
 }
 
 export default function JobsPage() {
+  const searchParams = useSearchParams();
   const [auth, setAuth] = useState(false);
   const [mdp, setMdp] = useState("");
   const [mdpErreur, setMdpErreur] = useState(false);
@@ -80,6 +82,23 @@ export default function JobsPage() {
     const saved = sessionStorage.getItem("dicter_auth");
     if (saved === MOT_DE_PASSE) setAuth(true);
   }, []);
+
+  // Pré-remplir depuis Leads
+  useEffect(() => {
+    const prefill = searchParams.get("prefill");
+    if (!prefill) return;
+    try {
+      const params = new URLSearchParams(decodeURIComponent(prefill));
+      setForm((f) => ({
+        ...f,
+        nom: params.get("nom") ?? f.nom,
+        telephone: params.get("telephone") ?? f.telephone,
+        adresse: params.get("adresse") ?? f.adresse,
+        ville: params.get("ville") ?? f.ville,
+      }));
+      setShowForm(true);
+    } catch { /* ignore */ }
+  }, [searchParams]);
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
