@@ -467,11 +467,11 @@ export default function JobsPage() {
       <div className="grid grid-cols-2 gap-2">
         <div>
           <label className="text-xs text-white/30 block mb-1">Date *</label>
-          <input required type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+          <input required type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
         </div>
         <div>
           <label className="text-xs text-white/30 block mb-1">Heure</label>
-          <input type="time" value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+          <input type="time" value={form.heure} onChange={e => setForm(f => ({ ...f, heure: e.target.value }))} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -482,7 +482,7 @@ export default function JobsPage() {
         </div>
       </div>
       <div className="flex gap-3">
-        <button type="submit" disabled={saving} className="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
+        <button type="submit" disabled={saving} className="flex-1 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-2.5 rounded-xl text-sm hover:from-red-500 hover:to-red-400 active:scale-[0.98] transition-all shadow-lg shadow-red-500/20 disabled:opacity-50">
           {saving ? "Sauvegarde..." : "Sauvegarder"}
         </button>
         <button type="button" onClick={() => setShowForm(false)} className="text-white/30 text-sm hover:text-white/60 px-2 transition-colors">Annuler</button>
@@ -661,8 +661,8 @@ export default function JobsPage() {
       {/* Filtres mobile */}
       {showFiltres && (
         <div className="md:hidden bg-white/[0.04] border-b border-white/[0.06] px-4 py-3 flex gap-2">
-          <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600" />
-          <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600">
+          <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="admin-input flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all" />
+          <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="admin-input flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all">
             <option value="">Toutes les villes</option>
             {villes.map(v => <option key={v} value={v}>{v}</option>)}
           </select>
@@ -680,11 +680,11 @@ export default function JobsPage() {
             <h2 className="font-bold text-white text-sm uppercase tracking-wide">Filtres</h2>
             <div>
               <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Date</label>
-              <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all" />
+              <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all" />
             </div>
             <div>
               <label className="text-xs text-white/30 uppercase tracking-wide mb-1 block">Ville</label>
-              <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all">
+              <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500/50 transition-all">
                 <option value="">Toutes les villes</option>
                 {villes.map(v => <option key={v} value={v}>{v}</option>)}
               </select>
@@ -728,11 +728,11 @@ export default function JobsPage() {
                           <div className="grid grid-cols-2 gap-2">
                             <div>
                               <label className="text-xs text-white/30 block mb-1">Date</label>
-                              <input type="date" value={editJobForm.date} onChange={e => setEditJobForm(f => ({ ...f, date: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+                              <input type="date" value={editJobForm.date} onChange={e => setEditJobForm(f => ({ ...f, date: e.target.value }))} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                             <div>
                               <label className="text-xs text-white/30 block mb-1">Heure</label>
-                              <input type="time" value={editJobForm.heure} onChange={e => setEditJobForm(f => ({ ...f, heure: e.target.value }))} className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
+                              <input type="time" value={editJobForm.heure} onChange={e => setEditJobForm(f => ({ ...f, heure: e.target.value }))} className="admin-input w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
@@ -742,7 +742,7 @@ export default function JobsPage() {
                               <input type="number" min="0" step="0.01" value={editJobForm.montant} onChange={e => setEditJobForm(f => ({ ...f, montant: e.target.value }))} placeholder="ex: 150.00" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                             </div>
                           </div>
-                          <button onClick={() => sauvegarderEditJob(job)} disabled={savingEdit} className="w-full bg-red-600 text-white font-bold py-2.5 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
+                          <button onClick={() => sauvegarderEditJob(job)} disabled={savingEdit} className="w-full bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-2.5 rounded-xl text-sm hover:from-red-500 hover:to-red-400 active:scale-[0.98] transition-all shadow-lg shadow-red-500/20 disabled:opacity-50">
                             {savingEdit ? "Sauvegarde..." : "Sauvegarder"}
                           </button>
                         </div>

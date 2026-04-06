@@ -317,7 +317,7 @@ export default function LeadsPage() {
               </div>
             </div>
             <div className="flex gap-3">
-              <button type="submit" disabled={savingAjout} className="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">{savingAjout ? "Sauvegarde..." : "Sauvegarder"}</button>
+              <button type="submit" disabled={savingAjout} className="flex-1 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-3 rounded-xl text-sm hover:from-red-500 hover:to-red-400 active:scale-[0.98] transition-all shadow-lg shadow-red-500/20 disabled:opacity-50">{savingAjout ? "Sauvegarde..." : "Sauvegarder"}</button>
               <button type="button" onClick={() => setShowAjout(false)} className="text-white/30 text-sm hover:text-white/60 px-3 transition-colors">Annuler</button>
             </div>
           </form>
@@ -360,7 +360,7 @@ export default function LeadsPage() {
                         </button>
                       </div>
 
-                      <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2.5 mb-2 group hover:bg-red-100 transition-colors">
+                      <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2.5 mb-2 group hover:bg-red-500/15 transition-colors">
                         <svg className="w-4 h-4 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
                         <span className="text-red-300 font-bold text-sm">{client.telephone}</span>
                         <span className="text-red-400/50 text-xs ml-auto group-hover:text-red-300 transition-colors">Appeler →</span>
@@ -414,7 +414,7 @@ export default function LeadsPage() {
                           <span className="text-xs text-orange-700 font-semibold shrink-0">📅 Rappeler le</span>
                           <input type="date" defaultValue={client.date_rappel ?? ""} min={today}
                             onChange={e => { if (e.target.value) sauvegarderRappel(client.id, e.target.value); }}
-                            className="flex-1 bg-transparent text-sm text-orange-300 focus:outline-none" autoFocus />
+                            className="admin-input flex-1 bg-transparent text-sm text-orange-300 focus:outline-none" autoFocus />
                           <button onClick={() => sauvegarderRappel(client.id, "")} className="text-xs text-white/30 hover:text-red-400 transition-colors">Effacer</button>
                           <button onClick={() => setRappelOuvert(null)} className="text-white/30 hover:text-white/60 transition-colors">✕</button>
                         </div>
@@ -426,7 +426,7 @@ export default function LeadsPage() {
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         Modifier
                       </button>
-                      <button onClick={() => setRappelOuvert(rappelOuvert === client.id ? null : client.id)} className={`flex items-center justify-center gap-1 py-3 text-xs transition-colors ${client.date_rappel ? "text-orange-400 hover:bg-orange-500/10" : "text-gray-500 hover:bg-gray-50"} active:bg-gray-100`}>
+                      <button onClick={() => setRappelOuvert(rappelOuvert === client.id ? null : client.id)} className={`flex items-center justify-center gap-1 py-3 text-xs transition-colors ${client.date_rappel ? "text-orange-400 hover:bg-orange-500/10" : "text-white/30 hover:bg-white/[0.04]"} active:bg-white/[0.08]`}>
                         📅 Rappel
                       </button>
                       <button onClick={() => transfererVersJob(client)} className="flex items-center justify-center gap-1 py-3 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/20 transition-colors">
@@ -471,7 +471,7 @@ export default function LeadsPage() {
                         <input type="number" min="0" step="0.01" value={editForm.montant_estime} onChange={e => setEditForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all" />
                       </div>
                     </div>
-                    <button onClick={() => sauvegarderEdit(client)} disabled={savingEdit} className="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">
+                    <button onClick={() => sauvegarderEdit(client)} disabled={savingEdit} className="w-full mt-4 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-3 rounded-xl text-sm hover:from-red-500 hover:to-red-400 active:scale-[0.98] transition-all shadow-lg shadow-red-500/20 disabled:opacity-50">
                       {savingEdit ? "Sauvegarde..." : "Sauvegarder"}
                     </button>
                   </div>
