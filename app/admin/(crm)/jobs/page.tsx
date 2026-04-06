@@ -280,9 +280,10 @@ export default function JobsPage() {
   }
 
   const [lienCopie, setLienCopie] = useState<string | null>(null);
+  const [statutMenuOuvert, setStatutMenuOuvert] = useState<string | null>(null);
 
-  async function changerStatut(job: Job) {
-    const next = STATUT_NEXT[job.statut];
+  async function changerStatut(job: Job, newStatut?: Statut) {
+    const next = newStatut ?? STATUT_NEXT[job.statut];
     setJobs(prev => prev.map(j => j.id === job.id ? { ...j, statut: next } : j));
     await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: next }) });
   }
@@ -755,9 +756,21 @@ export default function JobsPage() {
                                 {job.heure && <span className="text-white/40 text-sm font-medium shrink-0">{job.heure.slice(0, 5)}</span>}
                                 {job.montant && <span className="text-emerald-400 text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{formatMontant(job.montant)}</span>}
                               </div>
-                              <button onClick={() => changerStatut(job)} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
-                                {STATUT_LABELS[job.statut]}
-                              </button>
+                              <div className="relative shrink-0 ml-2">
+                                <button type="button" onClick={() => setStatutMenuOuvert(statutMenuOuvert === job.id ? null : job.id)} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
+                                  {STATUT_LABELS[job.statut]} ▾
+                                </button>
+                                {statutMenuOuvert === job.id && (
+                                  <div className="absolute right-0 top-full mt-1 z-50 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
+                                    {(["a_faire", "en_cours", "complete"] as Statut[]).filter(s => s !== job.statut).map(s => (
+                                      <button type="button" key={s} onClick={() => { changerStatut(job, s); setStatutMenuOuvert(null); }}
+                                        className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-white/[0.06] transition-colors border-b border-white/[0.04] last:border-0 ${STATUT_COLORS[s].split(" ").find(c => c.startsWith("text-"))}`}>
+                                        {STATUT_LABELS[s]}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                             <a href={mapsUrl(job.adresse, job.ville)} target="_blank" rel="noopener noreferrer"
                               className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mb-2 group hover:bg-red-500/15 transition-colors">

@@ -128,6 +128,9 @@ export default function LeadsPage() {
   // Rappel inline
   const [rappelOuvert, setRappelOuvert] = useState<string | null>(null);
 
+  // Menu statut dropdown
+  const [statutMenuOuvert, setStatutMenuOuvert] = useState<string | null>(null);
+
   // Historique jobs par client
   interface JobRecord { id: string; date: string; statut: string; montant: number | null; notes: string | null; }
   const [jobsParTel, setJobsParTel] = useState<Record<string, JobRecord[]>>({});
@@ -355,9 +358,21 @@ export default function LeadsPage() {
                           {client.montant_estime != null && <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{client.montant_estime.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span>}
                           <span className="text-xs text-white/20 shrink-0">{formatDate(client.created_at)}</span>
                         </div>
-                        <button onClick={() => changerStatut(client, STATUT_NEXT[client.statut])} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
-                          {STATUT_LABELS[client.statut]}
-                        </button>
+                        <div className="relative shrink-0 ml-2">
+                          <button onClick={() => setStatutMenuOuvert(statutMenuOuvert === client.id ? null : client.id)} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
+                            {STATUT_LABELS[client.statut]} ▾
+                          </button>
+                          {statutMenuOuvert === client.id && (
+                            <div className="absolute right-0 top-full mt-1 z-50 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden min-w-[140px]">
+                              {PIPELINE_ORDER.filter(s => s !== client.statut).map(s => (
+                                <button key={s} onClick={() => { changerStatut(client, s); setStatutMenuOuvert(null); }}
+                                  className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-white/[0.06] transition-colors border-b border-white/[0.04] last:border-0 ${STATUT_COLORS[s].split(" ").find(c => c.startsWith("text-"))}`}>
+                                  {STATUT_LABELS[s]}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <a href={`tel:${client.telephone}`} className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2.5 mb-2 group hover:bg-red-500/15 transition-colors">
