@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -76,6 +76,9 @@ export default function JobsPage() {
   const [form, setForm] = useState({
     nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "",
   });
+  const [suggestions, setSuggestions] = useState<Array<{adresse: string; ville: string; label: string}>>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -146,6 +149,43 @@ export default function JobsPage() {
     await fetch(`/api/jobs/${id}`, { method: "DELETE" });
   }
 
+  function rechercherAdresse(query: string) {
+    setForm(f => ({ ...f, adresse: query }));
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (query.length < 4) { setSuggestions([]); setShowSuggestions(false); return; }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ", Quebec, Canada")}&format=json&addressdetails=1&limit=6&countrycodes=ca`,
+          { headers: { "Accept-Language": "fr" } }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data: any[] = await res.json();
+        const results = data
+          .filter(r => r.address?.road)
+          .map(r => {
+            const num = r.address.house_number ?? "";
+            const rue = r.address.road ?? "";
+            const ville = r.address.city ?? r.address.town ?? r.address.village ?? r.address.municipality ?? "";
+            return {
+              adresse: `${num} ${rue}`.trim(),
+              ville,
+              label: [num, rue, ville].filter(Boolean).join(", "),
+            };
+          })
+          .filter(r => r.adresse && r.ville);
+        setSuggestions(results);
+        setShowSuggestions(results.length > 0);
+      } catch { /* ignore network errors */ }
+    }, 400);
+  }
+
+  function choisirSuggestion(s: { adresse: string; ville: string }) {
+    setForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }));
+    setSuggestions([]);
+    setShowSuggestions(false);
+  }
+
   if (!auth) {
     return (
       <div className="flex-1 bg-[#1a1a1a] flex items-center justify-center px-4">
@@ -191,7 +231,34 @@ export default function JobsPage() {
         <input required value={form.telephone} onChange={e => setForm(f => ({...f, telephone: e.target.value}))} placeholder="Téléphone *" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
         <input required value={form.ville} onChange={e => setForm(f => ({...f, ville: e.target.value}))} placeholder="Ville *" className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
       </div>
-      <input required value={form.adresse} onChange={e => setForm(f => ({...f, adresse: e.target.value}))} placeholder="Adresse *" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
+      <div className="relative">
+        <input
+          required
+          value={form.adresse}
+          onChange={e => rechercherAdresse(e.target.value)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+          onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+          placeholder="Adresse *"
+          autoComplete="off"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600"
+        />
+        {showSuggestions && (
+          <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+            {suggestions.map((s, i) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  onMouseDown={() => choisirSuggestion(s)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0"
+                >
+                  <span className="font-medium">{s.adresse}</span>
+                  {s.ville && <span className="text-gray-400 ml-1">— {s.ville}</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-2">
         <input required type="date" value={form.date} onChange={e => setForm(f => ({...f, date: e.target.value}))} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
         <input type="time" value={form.heure} onChange={e => setForm(f => ({...f, heure: e.target.value}))} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
