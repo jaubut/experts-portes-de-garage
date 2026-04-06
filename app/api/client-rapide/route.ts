@@ -4,7 +4,7 @@ import { getSupabase } from "@/lib/supabase";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nom, telephone, courriel, adresse, ville, probleme, notes } = body;
+    const { nom, telephone, courriel, adresse, ville, probleme, notes, montant_estime } = body;
 
     if (!nom || !telephone || !ville || !probleme) {
       return NextResponse.json(
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
           ville,
           probleme,
           notes: notes || null,
+          montant_estime: montant_estime ?? null,
           statut: "nouveau",
         },
         { onConflict: "telephone" }

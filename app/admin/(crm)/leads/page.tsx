@@ -18,6 +18,7 @@ interface Client {
   notes: string | null;
   statut: StatutLead;
   date_rappel: string | null;
+  montant_estime: number | null;
   created_at: string;
 }
 
@@ -105,7 +106,7 @@ function AdresseInput({ value, onChange, onSelect, placeholder = "Adresse" }: {
   );
 }
 
-const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", probleme: "", courriel: "", notes: "" };
+const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", probleme: "", courriel: "", notes: "", montant_estime: "" };
 
 export default function LeadsPage() {
   const router = useRouter();
@@ -127,15 +128,34 @@ export default function LeadsPage() {
   // Rappel inline
   const [rappelOuvert, setRappelOuvert] = useState<string | null>(null);
 
+  // Historique jobs par client
+  interface JobRecord { id: string; date: string; statut: string; montant: number | null; notes: string | null; }
+  const [jobsParTel, setJobsParTel] = useState<Record<string, JobRecord[]>>({});
+  const [historiqueOuvert, setHistoriqueOuvert] = useState<string | null>(null);
+
   useEffect(() => {
     if (sessionStorage.getItem("dicter_auth") === MOT_DE_PASSE) setAuth(true);
   }, []);
 
   const fetchClients = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/clients");
-    const data = await res.json();
-    setClients(Array.isArray(data) ? data : []);
+    const [clientsRes, jobsRes] = await Promise.all([
+      fetch("/api/clients"),
+      fetch("/api/jobs"),
+    ]);
+    const clientsData = await clientsRes.json();
+    const jobsData = await jobsRes.json();
+    setClients(Array.isArray(clientsData) ? clientsData : []);
+    // Grouper les jobs par téléphone
+    const parTel: Record<string, JobRecord[]> = {};
+    if (Array.isArray(jobsData)) {
+      for (const j of jobsData) {
+        if (!j.telephone) continue;
+        if (!parTel[j.telephone]) parTel[j.telephone] = [];
+        parTel[j.telephone].push({ id: j.id, date: j.date, statut: j.statut, montant: j.montant, notes: j.notes });
+      }
+    }
+    setJobsParTel(parTel);
     setLoading(false);
   }, []);
 
@@ -150,7 +170,7 @@ export default function LeadsPage() {
   async function ajouterLead(e: React.FormEvent) {
     e.preventDefault();
     setSavingAjout(true);
-    await fetch("/api/client-rapide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nom: ajoutForm.nom, telephone: ajoutForm.telephone, adresse: ajoutForm.adresse || undefined, ville: ajoutForm.ville, probleme: ajoutForm.probleme || "Non précisé", courriel: ajoutForm.courriel || undefined, notes: ajoutForm.notes || undefined }) });
+    await fetch("/api/client-rapide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nom: ajoutForm.nom, telephone: ajoutForm.telephone, adresse: ajoutForm.adresse || undefined, ville: ajoutForm.ville, probleme: ajoutForm.probleme || "Non précisé", courriel: ajoutForm.courriel || undefined, notes: ajoutForm.notes || undefined, montant_estime: ajoutForm.montant_estime ? parseFloat(ajoutForm.montant_estime) : undefined }) });
     setAjoutForm(FORM_VIDE); setShowAjout(false);
     await fetchClients(); setSavingAjout(false);
   }
@@ -168,12 +188,12 @@ export default function LeadsPage() {
 
   function ouvrirEdit(client: Client) {
     setEditOuvert(client.id);
-    setEditForm({ nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville, probleme: client.probleme, courriel: client.courriel ?? "", notes: client.notes ?? "" });
+    setEditForm({ nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville, probleme: client.probleme, courriel: client.courriel ?? "", notes: client.notes ?? "", montant_estime: client.montant_estime != null ? String(client.montant_estime) : "" });
   }
 
   async function sauvegarderEdit(client: Client) {
     setSavingEdit(true);
-    const payload = { nom: editForm.nom, telephone: editForm.telephone, adresse: editForm.adresse || null, ville: editForm.ville, probleme: editForm.probleme, courriel: editForm.courriel || null, notes: editForm.notes || null };
+    const payload = { nom: editForm.nom, telephone: editForm.telephone, adresse: editForm.adresse || null, ville: editForm.ville, probleme: editForm.probleme, courriel: editForm.courriel || null, notes: editForm.notes || null, montant_estime: editForm.montant_estime ? parseFloat(editForm.montant_estime) : null };
     await fetch(`/api/clients/${client.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     setClients(prev => prev.map(c => c.id === client.id ? { ...c, ...payload } as Client : c));
     setEditOuvert(null); setSavingEdit(false);
@@ -186,7 +206,7 @@ export default function LeadsPage() {
   }
 
   function transfererVersJob(client: Client) {
-    sessionStorage.setItem("job_prefill", JSON.stringify({ nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville }));
+    sessionStorage.setItem("job_prefill", JSON.stringify({ nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville, montant: client.montant_estime != null ? String(client.montant_estime) : "" }));
     changerStatut(client, "job_planifie");
     router.push("/admin/jobs");
   }
@@ -287,9 +307,13 @@ export default function LeadsPage() {
                   </div>
                 );
               })}
-              <div className="md:col-span-2">
+              <div>
                 <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
                 <textarea value={ajoutForm.notes} onChange={e => setAjoutForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
+                <input type="number" min="0" step="0.01" value={ajoutForm.montant_estime} onChange={e => setAjoutForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
               </div>
             </div>
             <div className="flex gap-3">
@@ -328,6 +352,7 @@ export default function LeadsPage() {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="font-bold text-[#1a1a1a] text-base truncate">{client.nom}</span>
+                          {client.montant_estime != null && <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full shrink-0">{client.montant_estime.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span>}
                           <span className="text-xs text-gray-300 shrink-0">{formatDate(client.created_at)}</span>
                         </div>
                         <button onClick={() => changerStatut(client, STATUT_NEXT[client.statut])} className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
@@ -344,6 +369,36 @@ export default function LeadsPage() {
                       <p className="text-sm text-gray-600">📍 {client.adresse ? `${client.adresse}, ` : ""}{client.ville}</p>
                       <p className="text-sm text-gray-500 italic mt-0.5">{client.probleme}</p>
                       {client.notes && <p className="text-xs text-gray-400 mt-1.5 bg-gray-50 rounded-lg px-2.5 py-1.5 italic">{client.notes}</p>}
+
+                      {/* Historique jobs */}
+                      {(() => {
+                        const clientJobs = jobsParTel[client.telephone] ?? [];
+                        if (clientJobs.length === 0) return null;
+                        const totalRevenu = clientJobs.reduce((s, j) => s + (j.montant ?? 0), 0);
+                        const fmtMontant = (n: number) => n.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
+                        return (
+                          <div className="mt-2">
+                            <button type="button" onClick={() => setHistoriqueOuvert(historiqueOuvert === client.id ? null : client.id)} className="text-xs text-blue-600 font-semibold hover:underline flex items-center gap-1">
+                              {clientJobs.length} job{clientJobs.length > 1 ? "s" : ""} {totalRevenu > 0 && `· ${fmtMontant(totalRevenu)}`}
+                              <svg className={`w-3 h-3 transition-transform ${historiqueOuvert === client.id ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            {historiqueOuvert === client.id && (
+                              <div className="mt-1.5 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 space-y-1.5">
+                                {clientJobs.map(j => (
+                                  <div key={j.id} className="flex items-center justify-between text-xs">
+                                    <div className="flex items-center gap-2">
+                                      <span className={`w-2 h-2 rounded-full ${j.statut === "complete" ? "bg-green-500" : j.statut === "en_cours" ? "bg-yellow-500" : "bg-red-500"}`} />
+                                      <span className="text-gray-600">{new Date(j.date + "T12:00:00").toLocaleDateString("fr-CA", { day: "numeric", month: "short", year: "numeric" })}</span>
+                                      {j.notes && <span className="text-gray-400 italic truncate max-w-[150px]">{j.notes}</span>}
+                                    </div>
+                                    {j.montant != null && <span className="font-bold text-green-700">{fmtMontant(j.montant)}</span>}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
 
                       {/* Rappel — date non urgente */}
                       {client.date_rappel && !enRetard && (
@@ -407,9 +462,13 @@ export default function LeadsPage() {
                           </div>
                         );
                       })}
-                      <div className="md:col-span-2">
+                      <div>
                         <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
                         <textarea value={editForm.notes ?? ""} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none transition-colors" />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Valeur estimée ($)</label>
+                        <input type="number" min="0" step="0.01" value={editForm.montant_estime} onChange={e => setEditForm(f => ({ ...f, montant_estime: e.target.value }))} placeholder="ex: 350" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 transition-colors" />
                       </div>
                     </div>
                     <button onClick={() => sauvegarderEdit(client)} disabled={savingEdit} className="w-full mt-4 bg-red-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-red-700 active:scale-[0.98] transition-all disabled:opacity-50">

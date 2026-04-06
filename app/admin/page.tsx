@@ -3,181 +3,52 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
-const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  nouveau: { label: "Nouveau", color: "bg-blue-100 text-blue-700" },
-  confirme: { label: "Confirmé", color: "bg-green-100 text-green-700" },
-  termine: { label: "Terminé", color: "bg-gray-100 text-gray-500" },
-  "termine-pending": { label: "Terminé dans 15s...", color: "bg-yellow-100 text-yellow-700" },
-  annule: { label: "Annulé", color: "bg-red-100 text-red-500" },
-};
+const MOT_DE_PASSE = "l1a2m3B5";
 
-const FR_MONTHS = ["jan", "fév", "mar", "avr", "mai", "jun", "jul", "aoû", "sep", "oct", "nov", "déc"];
-const FR_DAYS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+const FR_MOIS_COURT = ["jan", "fév", "mar", "avr", "mai", "jun", "jul", "aoû", "sep", "oct", "nov", "déc"];
 
-function formatDate(dateStr: string) {
-  const d = new Date(dateStr);
-  return `${FR_DAYS[d.getDay()]} ${d.getDate()} ${FR_MONTHS[d.getMonth()]} · ${d.getHours()}h${String(d.getMinutes()).padStart(2, "0")}`;
-}
-
-function parseDescription(desc: string) {
-  const lines = desc.split("\n");
-  const result: Record<string, string> = {};
-  for (const line of lines) {
-    const idx = line.indexOf(": ");
-    if (idx !== -1) {
-      result[line.substring(0, idx).trim()] = line.substring(idx + 2).trim();
-    }
-  }
-  return result;
-}
-
-interface Event {
-  id: string;
-  summary: string;
-  description: string;
-  start: string;
-  end: string;
-  location: string;
-  status: string;
-}
-
-interface EmailRecord {
-  id: string;
-  to: string[];
-  from: string;
-  subject: string;
-  created_at: string;
+interface Stats {
+  totalLeads: number; leadsActifs: number; leadsConvertis: number; tauxConversion: number;
+  pipelineTotal: number; pipelineActif: number; revenuTotal: number; revenuMoyen: number;
+  jobsAFaire: number; jobsEnCours: number; jobsCompletes: number;
+  revenusMensuels: Record<string, number>; jobsMensuels: Record<string, number>; leadsMensuels: Record<string, number>;
 }
 
 export default function AdminPage() {
-  const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
+  const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState(false);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState("all");
-  const [updating, setUpdating] = useState<string | null>(null);
-  const [tab, setTab] = useState<"reservations" | "emails">("reservations");
-  const [emails, setEmails] = useState<EmailRecord[]>([]);
-  const [loadingEmails, setLoadingEmails] = useState(false);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(false);
 
-  const fetchEvents = useCallback(async (pwd: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/admin/events", {
-        headers: { "x-admin-password": pwd },
-      });
-      if (res.status === 401) { setAuthError(true); setAuthed(false); return; }
-      const data = await res.json();
-      setEvents(data.events ?? []);
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthError(false);
-    setLoading(true);
-    const res = await fetch("/api/admin/events", {
-      headers: { "x-admin-password": password },
-    });
-    if (res.status === 401) {
-      setAuthError(true);
-      setLoading(false);
-      return;
-    }
-    const data = await res.json();
-    setEvents(data.events ?? []);
-    setAuthed(true);
-    setLoading(false);
-  };
-
-  const deleteEvent = async (eventId: string) => {
-    if (!confirm("Supprimer cette réservation du calendrier?")) return;
-    await fetch("/api/admin/delete", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ eventId }),
-    });
-    setEvents((prev) => prev.filter((e) => e.id !== eventId));
-  };
-
-  const [pendingTermine, setPendingTermine] = useState<{ eventId: string; timeoutId: ReturnType<typeof setTimeout>; intervalId: ReturnType<typeof setInterval>; nom: string; courriel: string; previousStatus: string } | null>(null);
-  const [countdown, setCountdown] = useState(15);
-
-  const updateStatus = async (eventId: string, status: string) => {
-    if (status === "termine") {
-      if (pendingTermine) { clearTimeout(pendingTermine.timeoutId); clearInterval(pendingTermine.intervalId); }
-      const event = events.find((e) => e.id === eventId);
-      const info = event ? parseDescription(event.description) : {};
-      const nom = info["Client"] ?? "";
-      const courriel = info["Courriel"] ?? "";
-      const previousStatus = event?.status ?? "nouveau";
-      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine-pending" } : e));
-      setCountdown(15);
-      const intervalId = setInterval(() => setCountdown((c) => c - 1), 1000);
-      const timeoutId = setTimeout(async () => {
-        clearInterval(intervalId);
-        setPendingTermine(null);
-        setUpdating(eventId);
-        await fetch("/api/admin/status", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "x-admin-password": password },
-          body: JSON.stringify({ eventId, status: "termine", nom, courriel }),
-        });
-        setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: "termine" } : e));
-        setUpdating(null);
-      }, 15000);
-      setPendingTermine({ eventId, timeoutId, intervalId, nom, courriel, previousStatus });
-      return;
-    }
-    if (pendingTermine?.eventId === eventId) {
-      clearTimeout(pendingTermine.timeoutId);
-      clearInterval(pendingTermine.intervalId);
-      setPendingTermine(null);
-      setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status: pendingTermine.previousStatus } : e));
-      return;
-    }
-    setUpdating(eventId);
-    const event = events.find((e) => e.id === eventId);
-    const info = event ? parseDescription(event.description) : {};
-    await fetch("/api/admin/status", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ eventId, status, nom: info["Client"] ?? "", courriel: info["Courriel"] ?? "" }),
-    });
-    setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, status } : e));
-    setUpdating(null);
-  };
-
-  const fetchEmails = useCallback(async (pwd: string) => {
-    setLoadingEmails(true);
-    try {
-      const res = await fetch("/api/admin/emails", { headers: { "x-admin-password": pwd } });
-      const data = await res.json();
-      setEmails(data.emails ?? []);
-    } catch { /* ignore */ } finally {
-      setLoadingEmails(false);
-    }
-  }, []);
-
-  // Auto-refresh every 60s
   useEffect(() => {
-    if (!authed) return;
-    const t = setInterval(() => fetchEvents(password), 60000);
-    return () => clearInterval(t);
-  }, [authed, password, fetchEvents]);
+    if (sessionStorage.getItem("dicter_auth") === MOT_DE_PASSE) {
+      setAuthed(true);
+    }
+  }, []);
 
-  // Today's events
-  const today = new Date().toISOString().split("T")[0];
-  const todayEvents = events.filter((e) => e.start.startsWith(today));
-  const upcomingEvents = events.filter((e) => !e.start.startsWith(today));
+  const fetchStats = useCallback(async () => {
+    setLoadingStats(true);
+    try {
+      const res = await fetch("/api/admin/stats");
+      const data = await res.json();
+      setStats(data);
+    } catch { /* ignore */ }
+    finally { setLoadingStats(false); }
+  }, []);
 
-  const filtered = (list: Event[]) =>
-    filter === "all" ? list : list.filter((e) => e.status === filter || e.status === "termine-pending");
+  useEffect(() => { if (authed) fetchStats(); }, [authed, fetchStats]);
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    if (password === MOT_DE_PASSE) {
+      sessionStorage.setItem("dicter_auth", password);
+      setAuthed(true);
+      setAuthError(false);
+    } else {
+      setAuthError(true);
+    }
+  }
 
   if (!authed) {
     return (
@@ -203,15 +74,16 @@ export default function AdminPage() {
           {authError && <p className="text-red-400 text-sm text-center">Mot de passe incorrect</p>}
           <button
             type="submit"
-            disabled={loading}
-            className="bg-brand text-white font-bold py-3 rounded-xl hover:bg-brand-dark transition-colors disabled:opacity-50"
+            className="bg-brand text-white font-bold py-3 rounded-xl hover:bg-brand-dark transition-colors"
           >
-            {loading ? "Connexion..." : "Se connecter"}
+            Se connecter
           </button>
         </form>
       </div>
     );
   }
+
+  const fmt = (n: number) => n.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 });
 
   return (
     <div className="min-h-screen bg-[#111] text-white">
@@ -223,7 +95,7 @@ export default function AdminPage() {
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => fetchEvents(password)}
+            onClick={() => fetchStats()}
             className="text-white/40 hover:text-white transition-colors"
             title="Rafraîchir"
           >
@@ -232,7 +104,7 @@ export default function AdminPage() {
             </svg>
           </button>
           <button
-            onClick={() => { setAuthed(false); setPassword(""); setEvents([]); }}
+            onClick={() => { setAuthed(false); setPassword(""); sessionStorage.removeItem("dicter_auth"); }}
             className="text-white/40 hover:text-red-400 transition-colors text-sm"
           >
             Déconnexion
@@ -240,255 +112,122 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-white/10 px-6 flex gap-6">
-        <button type="button" onClick={() => setTab("reservations")}
-          className={`py-3 text-sm font-bold border-b-2 transition-colors ${tab === "reservations" ? "border-brand text-white" : "border-transparent text-white/40 hover:text-white"}`}>
-          Réservations
-        </button>
-        <button type="button" onClick={() => { setTab("emails"); if (emails.length === 0) fetchEmails(password); }}
-          className={`py-3 text-sm font-bold border-b-2 transition-colors ${tab === "emails" ? "border-brand text-white" : "border-transparent text-white/40 hover:text-white"}`}>
-          Courriels
-        </button>
-        <Link href="/admin/leads" className="py-3 text-sm font-bold border-b-2 border-transparent text-white/40 hover:text-white transition-colors">
-          👤 Leads
-        </Link>
-        <Link href="/admin/jobs" className="py-3 text-sm font-bold border-b-2 border-transparent text-white/40 hover:text-white transition-colors">
-          📋 Jobs
-        </Link>
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-8">
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {[
-            { label: "Aujourd'hui", value: todayEvents.length, color: "text-brand" },
-            { label: "Nouveaux", value: events.filter(e => e.status === "nouveau").length, color: "text-blue-400" },
-            { label: "Confirmés", value: events.filter(e => e.status === "confirme").length, color: "text-green-400" },
-            { label: "Total 30j", value: events.length, color: "text-white" },
-          ].map((s) => (
-            <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-              <p className="text-white/40 text-xs mt-1">{s.label}</p>
-            </div>
-          ))}
-        </div>
+        {loadingStats ? (
+          <p className="text-white/40 text-center py-10">Chargement...</p>
+        ) : stats ? (() => {
+          const mois = Object.keys(stats.revenusMensuels);
+          const maxRevenu = Math.max(...Object.values(stats.revenusMensuels), 1);
 
-        {/* Filter */}
-        <div className="flex gap-2 flex-wrap">
-          {["all", "nouveau", "confirme", "termine", "annule"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
-                filter === f ? "bg-brand text-white" : "bg-white/5 text-white/50 hover:text-white"
-              }`}
-            >
-              {f === "all" ? "Tous" : STATUS_LABELS[f].label}
-            </button>
-          ))}
-        </div>
+          return (
+            <>
+              {/* KPIs */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: "Revenu total", value: fmt(stats.revenuTotal), color: "text-green-400" },
+                  { label: "Revenu moyen / job", value: fmt(stats.revenuMoyen), color: "text-green-400" },
+                  { label: "Taux de conversion", value: `${stats.tauxConversion}%`, color: stats.tauxConversion >= 15 ? "text-green-400" : "text-orange-400" },
+                  { label: "Pipeline actif", value: fmt(stats.pipelineActif), color: "text-blue-400" },
+                ].map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                    <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+                    <p className="text-white/40 text-xs mt-1">{s.label}</p>
+                  </div>
+                ))}
+              </div>
 
-        {/* Reservations tab */}
-        {tab === "reservations" && (
-          <>
-            {loading && <p className="text-white/40 text-center py-10">Chargement...</p>}
-            {!loading && (
-              <>
-                <section>
-                  <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Aujourd&apos;hui</h2>
-                  {filtered(todayEvents).length === 0 ? (
-                    <p className="text-white/20 text-sm py-4">Aucune réservation aujourd&apos;hui</p>
-                  ) : (
-                    <div className="flex flex-col gap-3">
-                      {filtered(todayEvents).map((e) => (
-                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} countdown={countdown} />
-                      ))}
-                    </div>
-                  )}
-                </section>
-                <section>
-                  <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">À venir — 30 jours</h2>
-                  {filtered(upcomingEvents).length === 0 ? (
-                    <p className="text-white/20 text-sm py-4">Aucune réservation à venir</p>
-                  ) : (
-                    <div className="flex flex-col gap-3">
-                      {filtered(upcomingEvents).map((e) => (
-                        <EventCard key={e.id} event={e} onStatusChange={updateStatus} onDelete={deleteEvent} updating={updating} countdown={countdown} />
-                      ))}
-                    </div>
-                  )}
-                </section>
-              </>
-            )}
-          </>
-        )}
+              {/* Activité */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: "Leads actifs", value: stats.leadsActifs, color: "text-blue-400" },
+                  { label: "Leads convertis", value: stats.leadsConvertis, color: "text-green-400" },
+                  { label: "Jobs à faire", value: stats.jobsAFaire, color: "text-red-400" },
+                  { label: "Jobs complétés", value: stats.jobsCompletes, color: "text-green-400" },
+                ].map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                    <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+                    <p className="text-white/40 text-xs mt-1">{s.label}</p>
+                  </div>
+                ))}
+              </div>
 
-        {/* Emails tab */}
-        {tab === "emails" && (
-          <>
-            {loadingEmails && <p className="text-white/40 text-sm py-4">Chargement...</p>}
-            {!loadingEmails && emails.length === 0 && <p className="text-white/20 text-sm py-4">Aucun courriel trouvé</p>}
-            {!loadingEmails && emails.length > 0 && (() => {
-              const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL ?? "info@expertsportesdegarage.ca";
-              const toOwner = emails.filter(e => (Array.isArray(e.to) ? e.to : [e.to]).some((t: string) => t.includes("expertsportesdegarage")));
-              const toClients = emails.filter(e => !(Array.isArray(e.to) ? e.to : [e.to]).some((t: string) => t.includes("expertsportesdegarage")));
-              const EmailList = ({ list }: { list: EmailRecord[] }) => (
-                <div className="flex flex-col gap-2">
-                  {list.length === 0 && <p className="text-white/20 text-sm py-2">Aucun</p>}
-                  {list.map((email) => (
-                    <div key={email.id} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex flex-col gap-1">
-                      <p className="text-white text-sm font-semibold leading-tight">{email.subject}</p>
-                      <p className="text-white/40 text-xs">À : {Array.isArray(email.to) ? email.to.join(", ") : email.to}</p>
-                      <p className="text-white/30 text-xs">{new Date(email.created_at).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}</p>
-                    </div>
-                  ))}
+              {/* Graphique revenus mensuels */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+                <h3 className="text-white font-bold text-sm mb-4">Revenus mensuels</h3>
+                <div className="flex items-end gap-1.5 h-48">
+                  {mois.map(m => {
+                    const val = stats.revenusMensuels[m];
+                    const pct = maxRevenu > 0 ? (val / maxRevenu) * 100 : 0;
+                    const [y, mo] = m.split("-");
+                    const label = FR_MOIS_COURT[parseInt(mo) - 1];
+                    return (
+                      <div key={m} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+                        <div className="relative w-full flex justify-center">
+                          <span className="absolute -top-6 text-[10px] text-green-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                            {val > 0 ? fmt(val) : ""}
+                          </span>
+                          <div
+                            className={`w-full max-w-[40px] rounded-t-md transition-all ${val > 0 ? "bg-green-500/70 group-hover:bg-green-400" : "bg-white/5"}`}
+                            style={{ height: `${Math.max(pct, 2)}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] text-white/40">{label}</span>
+                        <span className="text-[9px] text-white/20">{y.slice(2)}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-              return (
-                <>
-                  <section>
-                    <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Reçus par toi ({toOwner.length})</h2>
-                    <EmailList list={toOwner} />
-                  </section>
-                  <section>
-                    <h2 className="text-white/50 text-xs font-bold uppercase tracking-widest mb-3">Envoyés aux clients ({toClients.length})</h2>
-                    <EmailList list={toClients} />
-                  </section>
-                </>
-              );
-            })()}
-          </>
+              </div>
+
+              {/* Graphique leads vs jobs par mois */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+                <h3 className="text-white font-bold text-sm mb-1">Leads vs Jobs par mois</h3>
+                <div className="flex gap-4 mb-4">
+                  <span className="text-xs text-blue-400 flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-500/70 inline-block" /> Leads</span>
+                  <span className="text-xs text-red-400 flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-red-500/70 inline-block" /> Jobs</span>
+                </div>
+                {(() => {
+                  const maxVal = Math.max(...Object.values(stats.leadsMensuels), ...Object.values(stats.jobsMensuels), 1);
+                  return (
+                    <div className="flex items-end gap-1.5 h-36">
+                      {mois.map(m => {
+                        const leads = stats.leadsMensuels[m];
+                        const jobs = stats.jobsMensuels[m];
+                        const pctL = (leads / maxVal) * 100;
+                        const pctJ = (jobs / maxVal) * 100;
+                        const [, mo] = m.split("-");
+                        const label = FR_MOIS_COURT[parseInt(mo) - 1];
+                        return (
+                          <div key={m} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+                            <div className="flex gap-0.5 items-end h-full w-full justify-center">
+                              <div className="w-1/2 max-w-[18px] bg-blue-500/70 rounded-t-sm transition-all group-hover:bg-blue-400" style={{ height: `${Math.max(pctL, 2)}%` }} title={`${leads} leads`} />
+                              <div className="w-1/2 max-w-[18px] bg-red-500/70 rounded-t-sm transition-all group-hover:bg-red-400" style={{ height: `${Math.max(pctJ, 2)}%` }} title={`${jobs} jobs`} />
+                            </div>
+                            <span className="text-[10px] text-white/40">{label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Actions rapides */}
+              <div className="grid grid-cols-2 gap-3">
+                <Link href="/admin/leads" className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors text-center">
+                  <p className="text-white font-bold">Leads</p>
+                  <p className="text-white/40 text-xs mt-1">{stats.leadsActifs} actifs · {fmt(stats.pipelineActif)} pipeline</p>
+                </Link>
+                <Link href="/admin/jobs" className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors text-center">
+                  <p className="text-white font-bold">Jobs</p>
+                  <p className="text-white/40 text-xs mt-1">{stats.jobsAFaire} à faire · {stats.jobsEnCours} en cours</p>
+                </Link>
+              </div>
+            </>
+          );
+        })() : (
+          <p className="text-white/40 text-center py-10">Erreur de chargement</p>
         )}
-      </div>
-    </div>
-  );
-}
-
-function EventCard({ event, onStatusChange, onDelete, updating, countdown }: {
-  event: Event;
-  onStatusChange: (id: string, status: string) => void;
-  onDelete: (id: string) => void;
-  updating: string | null;
-  countdown: number;
-}) {
-  const info = parseDescription(event.description);
-  const status = STATUS_LABELS[event.status] ?? STATUS_LABELS.nouveau;
-  const isUpdating = updating === event.id;
-
-  return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="font-bold text-white">{event.summary}</p>
-          <p className="text-white/40 text-sm mt-0.5">{formatDate(event.start)}</p>
-        </div>
-        <span className={`text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${status.color}`}>
-          {event.status === "termine-pending" ? `Terminé dans ${countdown}s...` : status.label}
-        </span>
-      </div>
-
-      {event.location && (
-        <a
-          href={`https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-brand hover:underline flex items-center gap-1.5"
-        >
-          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {event.location}
-        </a>
-      )}
-
-      {(info["Téléphone"] || info["Courriel"]) && (
-        <div className="flex flex-wrap gap-3">
-          {info["Téléphone"] && (
-            <a href={`tel:${info["Téléphone"]}`} className="text-sm text-white/70 hover:text-white flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              {info["Téléphone"]}
-            </a>
-          )}
-          {info["Courriel"] && (
-            <a href={`mailto:${info["Courriel"]}`} className="text-sm text-white/70 hover:text-white flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              {info["Courriel"]}
-            </a>
-          )}
-        </div>
-      )}
-
-      {/* Détails coupe-froid */}
-      {(info["Joints"] || info["Couleur"] || info["Estimation"] || info["Soumission"]) && (
-        <div className="bg-white/5 rounded-lg px-3 py-2.5 flex flex-col gap-1.5 text-xs">
-          {info["Joints"] && <p className="text-white/60"><span className="text-white/40">Joints :</span> {info["Joints"]}</p>}
-          {info["Couleur"] && <p className="text-white/60"><span className="text-white/40">Couleur :</span> {info["Couleur"]}</p>}
-          {info["Estimation"] && <p className="text-white/60"><span className="text-white/40">Avant taxes :</span> {info["Estimation"]}</p>}
-          {info["Estimation TTC"] && <p className="text-brand font-bold"><span className="text-white/40 font-normal">Total TTC :</span> {info["Estimation TTC"]}</p>}
-          {info["Soumission"] && (
-            <p className="text-yellow-400 font-bold mt-0.5">
-              <span className="text-white/40 font-normal">N° soumission :</span> {info["Soumission"]}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Mesures */}
-      {info["Mesures:"] && (
-        <div className="bg-white/5 rounded-lg px-3 py-2.5 text-xs text-white/60">
-          <p className="text-white/40 mb-1">Mesures</p>
-          {event.description.split("\n")
-            .filter(l => l.startsWith("  "))
-            .map((l, i) => <p key={i}>{l.trim()}</p>)}
-        </div>
-      )}
-
-      {/* Status buttons */}
-      <div className="flex gap-2 flex-wrap pt-1 items-center justify-between">
-        <div className="flex gap-2 flex-wrap">
-          {Object.entries(STATUS_LABELS)
-            .filter(([key]) => key !== "termine-pending")
-            .map(([key, val]) => (
-            <button
-              type="button"
-              key={key}
-              disabled={isUpdating || event.status === key || event.status === "termine-pending"}
-              onClick={() => onStatusChange(event.id, key)}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 ${
-                event.status === key
-                  ? `${val.color} opacity-100`
-                  : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              {isUpdating && event.status !== key ? "..." : val.label}
-            </button>
-          ))}
-          {event.status === "termine-pending" && (
-            <button
-              type="button"
-              onClick={() => onStatusChange(event.id, "annuler-pending")}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition-colors animate-pulse"
-            >
-              ✕ Annuler ({countdown}s)
-            </button>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={() => onDelete(event.id)}
-          className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors flex items-center gap-1"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          Effacer
-        </button>
       </div>
     </div>
   );

@@ -279,10 +279,19 @@ export default function JobsPage() {
     setSaving(false);
   }
 
+  const [lienCopie, setLienCopie] = useState<string | null>(null);
+
   async function changerStatut(job: Job) {
     const next = STATUT_NEXT[job.statut];
     setJobs(prev => prev.map(j => j.id === job.id ? { ...j, statut: next } : j));
     await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: next }) });
+  }
+
+  async function copierLienAvis(jobId: string) {
+    const url = "https://g.page/r/CT-AI6_v4mdPEAI/review";
+    await navigator.clipboard.writeText(url);
+    setLienCopie(jobId);
+    setTimeout(() => setLienCopie(null), 2000);
   }
 
   async function supprimerJob(id: string) {
@@ -758,6 +767,21 @@ export default function JobsPage() {
                             </a>
                             {job.notes && <p className="text-xs text-gray-400 italic bg-gray-50 rounded-lg px-2.5 py-1.5">{job.notes}</p>}
                           </div>
+                          {job.statut === "complete" && (
+                            <div className="border-t border-gray-100 px-4 py-2.5">
+                              <button
+                                type="button"
+                                onClick={() => copierLienAvis(job.id)}
+                                className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.98] ${
+                                  lienCopie === job.id
+                                    ? "bg-green-50 text-green-700 border border-green-200"
+                                    : "bg-yellow-50 text-yellow-800 border border-yellow-200 hover:bg-yellow-100"
+                                }`}
+                              >
+                                {lienCopie === job.id ? "Lien copié!" : "Copier lien avis Google"}
+                              </button>
+                            </div>
+                          )}
                           <div className="border-t border-gray-100 grid grid-cols-4 divide-x divide-gray-100">
                             <a href={`tel:${job.telephone}`} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 active:bg-gray-100 transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>

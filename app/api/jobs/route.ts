@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       heure: body.heure || null,
       statut: "a_faire",
       notes: body.notes || null,
+      montant: body.montant ?? null,
     })
     .select()
     .single();
