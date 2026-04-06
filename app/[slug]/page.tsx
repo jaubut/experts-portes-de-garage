@@ -15,6 +15,22 @@ const BASE_URL = "https://www.expertsportesdegarage.ca";
 const HERO_BG = "/images/maison_garage_v1.png";
 const LOGO_SRC = "/images/logo_experts.png";
 
+const CITY_IMAGES: Record<string, string> = {
+  "portes-de-garage-granby": "/images/villes/ville-granby.webp",
+  "portes-de-garage-sherbrooke": "/images/villes/ville-sherbrooke.webp",
+  "portes-de-garage-saint-hyacinthe": "/images/villes/ville-saint-hyacinthe.webp",
+  "portes-de-garage-longueuil": "/images/villes/ville-longueuil.webp",
+  "portes-de-garage-brossard": "/images/villes/ville-brossard.webp",
+  "portes-de-garage-magog": "/images/villes/ville-magog.webp",
+  "portes-de-garage-saint-jean-sur-richelieu": "/images/villes/ville-saint-jean-sur-richelieu.webp",
+  "portes-de-garage-bromont": "/images/villes/ville-bromont.webp",
+  "portes-de-garage-waterloo": "/images/villes/ville-waterloo.webp",
+  "portes-de-garage-chateauguay": "/images/villes/ville-chateauguay.webp",
+  "portes-de-garage-beloeil": "/images/villes/ville-beloeil.webp",
+  "portes-de-garage-sorel-tracy": "/images/villes/ville-sorel-tracy.webp",
+  "portes-de-garage-sainte-julie": "/images/villes/ville-sainte-julie.webp",
+};
+
 const CITY_LINKS = [
   { label: "Granby", slug: "portes-de-garage-granby" },
   { label: "Sherbrooke", slug: "portes-de-garage-sherbrooke" },
@@ -124,6 +140,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
 
   const isCityPage = slug.startsWith("portes-de-garage-");
   const otherCities = CITY_LINKS.filter((c) => c.slug !== slug);
+  const cityImage = CITY_IMAGES[slug] ?? null;
 
   return (
     <>
@@ -208,6 +225,22 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
 
       {/* ── 2. INSPECTION BANNER ── */}
       <InspectionBanner />
+
+      {/* ── IMAGE VILLE ── */}
+      {isCityPage && cityImage && (
+        <div className="bg-white pt-10 pb-0">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-md">
+              <Image
+                src={cityImage}
+                alt={`Porte de garage ${page.title}`}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── 3. MAIN CONTENT ── */}
       <div className="bg-white pt-10">

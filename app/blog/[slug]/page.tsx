@@ -3,9 +3,19 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PHONE_DISPLAY, PHONE_HREF, BUSINESS_NAME } from "@/lib/config";
 import PlanifierButton from "@/components/PlanifierButton";
+
+const BLOG_IMAGES: Record<string, string> = {
+  "ressort-porte-garage-brise": "/images/blog/blog-ressort-brise.webp",
+  "entretien-porte-garage-hiver-quebec": "/images/blog/blog-entretien-hiver.webp",
+  "signes-porte-garage-besoin-entretien": "/images/blog/blog-signes-usure.webp",
+  "ouvre-porte-garage-reparer-ou-remplacer": "/images/blog/blog-ouvre-porte-reparer.webp",
+  "ouvre-porte-garage-wifi-guide": "/images/blog/blog-ouvre-porte-wifi.webp",
+  "choisir-porte-garage-quebec": "/images/blog/blog-choisir-porte.webp",
+};
 
 const BASE_URL = "https://www.expertsportesdegarage.ca";
 
@@ -48,6 +58,7 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
   const { slug } = await props.params;
   const post = getBlogPostBySlug(slug);
   if (!post) notFound();
+  const featuredImage = BLOG_IMAGES[slug] ?? null;
 
   const allPosts = getAllBlogPosts().filter((p) => p.slug !== slug).slice(0, 3);
 
@@ -115,6 +126,23 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
           <p className="text-white/65 mt-4 text-base leading-relaxed">{post.excerpt}</p>
         </div>
       </section>
+
+      {/* ── IMAGE VEDETTE ── */}
+      {featuredImage && (
+        <div className="bg-white pt-10 pb-0">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-md">
+              <Image
+                src={featuredImage}
+                alt={post.title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── CONTENT ── */}
       <div className="bg-white py-12">
