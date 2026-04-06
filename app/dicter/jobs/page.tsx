@@ -121,6 +121,11 @@ export default function JobsPage() {
   const [modeItineraire, setModeItineraire] = useState(false);
   const [selectionIds, setSelectionIds] = useState<Set<string>>(new Set());
   const [optimisant, setOptimisant] = useState(false);
+  const [destination, setDestination] = useState("");
+  const [suggestionsDestination, setSuggestionsDestination] = useState<Array<{label: string; adresse: string; ville: string}>>([]);
+  const [showSuggestionsDestination, setShowSuggestionsDestination] = useState(false);
+  const [destinationChoisie, setDestinationChoisie] = useState<{adresse: string; ville: string} | null>(null);
+  const debounceDestRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -257,6 +262,32 @@ export default function JobsPage() {
     });
   }
 
+  function rechercherDestination(query: string) {
+    setDestination(query);
+    setDestinationChoisie(null);
+    if (debounceDestRef.current) clearTimeout(debounceDestRef.current);
+    if (query.length < 3) { setSuggestionsDestination([]); setShowSuggestionsDestination(false); return; }
+    debounceDestRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ", Quebec, Canada")}&format=json&addressdetails=1&limit=5&countrycodes=ca`,
+          { headers: { "Accept-Language": "fr" } }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data: any[] = await res.json();
+        const results = data.map(r => {
+          const num = r.address?.house_number ?? "";
+          const rue = r.address?.road ?? "";
+          const ville = r.address?.city ?? r.address?.town ?? r.address?.village ?? r.address?.municipality ?? r.address?.county ?? "";
+          const adresse = rue ? `${num} ${rue}`.trim() : ville;
+          return { label: r.display_name.split(",").slice(0, 3).join(",").trim(), adresse, ville };
+        }).filter(r => r.ville);
+        setSuggestionsDestination(results);
+        setShowSuggestionsDestination(results.length > 0);
+      } catch { /* ignore */ }
+    }, 400);
+  }
+
   function entrerModeItineraire() {
     // Pré-sélectionner les jobs à faire d'aujourd'hui
     const aujourd_hui = nowDateStr();
@@ -324,14 +355,20 @@ export default function JobsPage() {
 
       const tousEnOrdre = [...optimises, ...sansCoords];
 
-      // 5. Construire l'URL Maps — position GPS en premier si disponible
+      // 5. Construire l'URL Maps
       const stops = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
+
+      // Ajouter destination finale si spécifiée
+      if (destinationChoisie) {
+        stops.push(encodeURIComponent(`${destinationChoisie.adresse}, ${destinationChoisie.ville}, QC`));
+      } else if (destination.trim()) {
+        stops.push(encodeURIComponent(`${destination.trim()}, QC`));
+      }
+
       let url: string;
       if (positionActuelle) {
         const depart = `${positionActuelle.lat},${positionActuelle.lon}`;
-        url = stops.length === 1
-          ? `https://www.google.com/maps/dir/${depart}/${stops[0]}`
-          : `https://www.google.com/maps/dir/${depart}/${stops.join("/")}`;
+        url = `https://www.google.com/maps/dir/${depart}/${stops.join("/")}`;
       } else {
         url = itineraireUrl(stops) ?? "";
       }
@@ -468,6 +505,56 @@ export default function JobsPage() {
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-4 space-y-4">
           <p className="text-xs text-gray-400 text-center">Coche les jobs à inclure dans ton itinéraire, puis clique «&nbsp;Ouvrir Maps&nbsp;»</p>
+
+          {/* Destination finale */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+            <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">
+              Terminer à (optionnel)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={destination}
+                onChange={e => rechercherDestination(e.target.value)}
+                onBlur={() => setTimeout(() => setShowSuggestionsDestination(false), 150)}
+                onFocus={() => suggestionsDestination.length > 0 && setShowSuggestionsDestination(true)}
+                placeholder="ex: Ange-Gardien, maison, bureau..."
+                autoComplete="off"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600"
+              />
+              {destinationChoisie && (
+                <button
+                  type="button"
+                  onClick={() => { setDestination(""); setDestinationChoisie(null); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg leading-none"
+                >
+                  ×
+                </button>
+              )}
+              {showSuggestionsDestination && (
+                <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                  {suggestionsDestination.map((s, i) => (
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onMouseDown={() => {
+                          setDestination(s.label);
+                          setDestinationChoisie({ adresse: s.adresse, ville: s.ville });
+                          setShowSuggestionsDestination(false);
+                        }}
+                        className="w-full text-left px-4 py-3 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0"
+                      >
+                        📍 {s.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {destinationChoisie && (
+              <p className="text-xs text-green-600 mt-1.5 font-medium">✓ Destination confirmée — {destinationChoisie.adresse}, {destinationChoisie.ville}</p>
+            )}
+          </div>
 
           {villesItineraire.length === 0 ? (
             <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">
