@@ -96,8 +96,21 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       {/* ── HERO ── */}
-      <section className="bg-[#1a1a1a] py-14 md:py-18">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        {featuredImage ? (
+          <Image
+            src={featuredImage}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[#1a1a1a]" />
+        )}
+        <div className="absolute inset-0 bg-black/65" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
           <nav className="text-sm text-white/50 mb-5 flex items-center gap-2 flex-wrap">
             <Link href="/" className="hover:text-white transition-colors">Accueil</Link>
             <span>/</span>
@@ -126,23 +139,6 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
           <p className="text-white/65 mt-4 text-base leading-relaxed">{post.excerpt}</p>
         </div>
       </section>
-
-      {/* ── IMAGE VEDETTE ── */}
-      {featuredImage && (
-        <div className="bg-white pt-10 pb-0">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6">
-            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src={featuredImage}
-                alt={post.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── CONTENT ── */}
       <div className="bg-white py-12">
