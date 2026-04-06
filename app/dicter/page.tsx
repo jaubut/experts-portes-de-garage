@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -166,7 +165,7 @@ export default function DicterPage() {
 
       if (result.success) {
         setStatut("succes");
-        setMessage(`Client sauvegardé — ${form.nom || "Inconnu"}${form.ville ? `, ${form.ville}` : ""}`);
+        setMessage(`${form.nom || "Inconnu"}${form.ville ? `, ${form.ville}` : ""}`);
       } else {
         setStatut("erreur");
         setMessage(result.error ?? "Erreur lors de la sauvegarde.");
@@ -198,7 +197,7 @@ export default function DicterPage() {
   // ── Écran connexion ───────────────────────────────────────────────────────
   if (!autentifie) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
+      <div className="flex-1 bg-gray-950 flex items-center justify-center p-6">
         <form onSubmit={soumettreMdp} className="w-full max-w-sm">
           <p className="text-gray-400 text-sm text-center mb-2 uppercase tracking-widest">Experts Portes de Garage</p>
           <h1 className="text-white text-2xl font-bold text-center mb-8">Espace admin</h1>
@@ -225,76 +224,68 @@ export default function DicterPage() {
   if (statut === "revue" || statut === "sauvegarde") {
     const manquants = [...champVide].filter((c) => CHAMPS_REQUIS.includes(c));
     return (
-      <div className="min-h-screen bg-gray-950">
-        <nav className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
-          <p className="text-gray-500 text-xs uppercase tracking-widest">Saisie client</p>
-          <Link href="/dicter/jobs" className="text-gray-500 text-sm hover:text-white transition-colors">
-            📋 Jobs →
-          </Link>
-        </nav>
-        <div className="flex flex-col p-5 max-w-2xl mx-auto pb-10">
-          <h1 className="text-white text-xl font-bold text-center mb-4 mt-4">Vérifier les infos</h1>
+      <div className="flex-1 bg-gray-950 flex flex-col p-5 max-w-2xl mx-auto w-full pb-10">
+        <h1 className="text-white text-xl font-bold text-center mb-4 mt-4">Vérifier les infos</h1>
 
-          {manquants.length > 0 && (
-            <div className="bg-yellow-900/40 border border-yellow-700 rounded-2xl p-3 mb-4">
-              <p className="text-yellow-400 text-sm font-semibold mb-1">Informations manquantes :</p>
-              <p className="text-yellow-300 text-sm">{manquants.map((c) => LABELS[c]).join(", ")}</p>
-              <p className="text-yellow-600 text-xs mt-1">Complète ou laisse vide si tu ne sais pas.</p>
-            </div>
-          )}
-
-          {transcription ? (
-            <div className="bg-gray-800/50 rounded-xl p-3 mb-4">
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Ce que tu as dit</p>
-              <p className="text-gray-400 text-sm italic">{transcription}</p>
-            </div>
-          ) : null}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-            {(Object.keys(LABELS) as (keyof ClientForm)[]).map((champ) => {
-              const requis = CHAMPS_REQUIS.includes(champ);
-              const manque = champVide.has(champ);
-              const isWide = champ === "adresse" || champ === "notes" || champ === "probleme";
-              return (
-                <div key={champ} className={isWide ? "md:col-span-2" : ""}>
-                  <label className="flex items-center gap-2 text-xs uppercase tracking-wider mb-1">
-                    <span className={manque ? "text-yellow-400" : "text-gray-500"}>{LABELS[champ]}</span>
-                    {requis && <span className="text-gray-600 text-xs">(requis)</span>}
-                    {manque && <span className="text-yellow-500 text-xs">← manquant</span>}
-                  </label>
-                  <input
-                    type={champ === "telephone" ? "tel" : "text"}
-                    value={form[champ]}
-                    onChange={(e) => updateChamp(champ, e.target.value)}
-                    placeholder={manque ? `Entre le ${LABELS[champ].toLowerCase()} ou laisse vide` : ""}
-                    className={`w-full bg-gray-800 text-white text-base px-4 py-3 rounded-xl border outline-none ${
-                      manque
-                        ? "border-yellow-600 focus:border-yellow-400"
-                        : "border-gray-700 focus:border-red-600"
-                    }`}
-                  />
-                </div>
-              );
-            })}
+        {manquants.length > 0 && (
+          <div className="bg-yellow-900/40 border border-yellow-700 rounded-2xl p-3 mb-4">
+            <p className="text-yellow-400 text-sm font-semibold mb-1">Informations manquantes :</p>
+            <p className="text-yellow-300 text-sm">{manquants.map((c) => LABELS[c]).join(", ")}</p>
+            <p className="text-yellow-600 text-xs mt-1">Complète ou laisse vide si tu ne sais pas.</p>
           </div>
+        )}
 
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={sauvegarder}
-              disabled={statut === "sauvegarde"}
-              className="flex-1 bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors disabled:opacity-50"
-            >
-              {statut === "sauvegarde" ? "Sauvegarde..." : "Sauvegarder"}
-            </button>
-            <button
-              type="button"
-              onClick={recommencer}
-              className="flex-1 bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
-            >
-              Recommencer
-            </button>
+        {transcription ? (
+          <div className="bg-gray-800/50 rounded-xl p-3 mb-4">
+            <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Ce que tu as dit</p>
+            <p className="text-gray-400 text-sm italic">{transcription}</p>
           </div>
+        ) : null}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+          {(Object.keys(LABELS) as (keyof ClientForm)[]).map((champ) => {
+            const requis = CHAMPS_REQUIS.includes(champ);
+            const manque = champVide.has(champ);
+            const isWide = champ === "adresse" || champ === "notes" || champ === "probleme";
+            return (
+              <div key={champ} className={isWide ? "md:col-span-2" : ""}>
+                <label className="flex items-center gap-2 text-xs uppercase tracking-wider mb-1">
+                  <span className={manque ? "text-yellow-400" : "text-gray-500"}>{LABELS[champ]}</span>
+                  {requis && <span className="text-gray-600 text-xs">(requis)</span>}
+                  {manque && <span className="text-yellow-500 text-xs">← manquant</span>}
+                </label>
+                <input
+                  type={champ === "telephone" ? "tel" : "text"}
+                  value={form[champ]}
+                  onChange={(e) => updateChamp(champ, e.target.value)}
+                  placeholder={manque ? `Entre le ${LABELS[champ].toLowerCase()} ou laisse vide` : ""}
+                  className={`w-full bg-gray-800 text-white text-base px-4 py-3 rounded-xl border outline-none ${
+                    manque
+                      ? "border-yellow-600 focus:border-yellow-400"
+                      : "border-gray-700 focus:border-red-600"
+                  }`}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={sauvegarder}
+            disabled={statut === "sauvegarde"}
+            className="flex-1 bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {statut === "sauvegarde" ? "Sauvegarde..." : "Sauvegarder"}
+          </button>
+          <button
+            type="button"
+            onClick={recommencer}
+            className="flex-1 bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
+          >
+            Recommencer
+          </button>
         </div>
       </div>
     );
@@ -302,135 +293,108 @@ export default function DicterPage() {
 
   // ── Écran principal ───────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
-      {/* Top nav */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-gray-800 shrink-0">
-        <p className="text-gray-500 text-xs uppercase tracking-widest">Experts Portes de Garage</p>
-        <Link href="/dicter/jobs" className="text-gray-400 text-sm hover:text-white transition-colors flex items-center gap-1">
-          📋 Jobs de la semaine →
-        </Link>
-      </nav>
+    <div className="flex-1 bg-gray-950 flex flex-col items-center justify-center p-8">
+      <h1 className="text-white text-2xl font-bold text-center mb-8">Saisie client rapide</h1>
 
-      <div className="flex-1 flex flex-col md:flex-row">
-        {/* Colonne gauche — action principale */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <h1 className="text-white text-2xl font-bold text-center mb-8">Saisie client rapide</h1>
-
-          {statut === "succes" ? (
-            <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-              <div className="bg-green-900/40 border border-green-700 rounded-2xl p-6 text-center w-full">
-                <p className="text-green-400 text-xl font-bold mb-1">Client sauvegardé</p>
-                <p className="text-green-300 text-base">{message.replace("Client sauvegardé — ", "")}</p>
-              </div>
-              <button type="button" onClick={recommencer} className="w-full bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors">
-                Nouveau client
-              </button>
-            </div>
-          ) : statut === "erreur" ? (
-            <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-              <div className="bg-red-900/40 border border-red-700 rounded-2xl p-6 text-center w-full">
-                <p className="text-red-400 text-base font-semibold">{message}</p>
-              </div>
-              <button type="button" onClick={recommencer} className="w-full bg-gray-800 text-white text-lg font-bold py-4 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors">
-                Recommencer
-              </button>
-            </div>
-          ) : modeTexte ? (
-            <div className="flex flex-col gap-4 w-full max-w-sm">
-              <div className="bg-gray-800 rounded-2xl p-4">
-                <p className="text-gray-400 text-sm mb-3">Écris les infos du client :</p>
-                <textarea
-                  value={texteManuel}
-                  onChange={(e) => setTexteManuel(e.target.value)}
-                  placeholder="Ex: Jean Tremblay, Granby, 450-555-1234, ressort cassé côté gauche"
-                  rows={4}
-                  autoFocus
-                  className="w-full bg-gray-700 text-white text-base px-4 py-3 rounded-xl border border-gray-600 focus:border-red-600 outline-none resize-none"
-                />
-              </div>
+      {statut === "succes" ? (
+        <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+          <div className="bg-green-900/40 border border-green-700 rounded-2xl p-6 text-center w-full">
+            <p className="text-green-400 text-xl font-bold mb-1">Client sauvegardé</p>
+            <p className="text-green-300 text-base">{message}</p>
+          </div>
+          <button type="button" onClick={recommencer} className="w-full bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors">
+            Nouveau client
+          </button>
+        </div>
+      ) : statut === "erreur" ? (
+        <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+          <div className="bg-red-900/40 border border-red-700 rounded-2xl p-6 text-center w-full">
+            <p className="text-red-400 text-base font-semibold">{message}</p>
+          </div>
+          <button type="button" onClick={recommencer} className="w-full bg-gray-800 text-white text-lg font-bold py-4 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors">
+            Recommencer
+          </button>
+        </div>
+      ) : modeTexte ? (
+        <div className="flex flex-col gap-4 w-full max-w-sm">
+          <div className="bg-gray-800 rounded-2xl p-4">
+            <p className="text-gray-400 text-sm mb-3">Écris les infos du client :</p>
+            <textarea
+              value={texteManuel}
+              onChange={(e) => setTexteManuel(e.target.value)}
+              placeholder="Ex: Jean Tremblay, Granby, 450-555-1234, ressort cassé côté gauche"
+              rows={4}
+              autoFocus
+              className="w-full bg-gray-700 text-white text-base px-4 py-3 rounded-xl border border-gray-600 focus:border-red-600 outline-none resize-none"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => texteManuel.trim() && traiterTexte(texteManuel)}
+            disabled={!texteManuel.trim() || statut === "traitement"}
+            className="w-full bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors disabled:opacity-40"
+          >
+            {statut === "traitement" ? "Analyse..." : "Analyser"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setModeTexte(false)}
+            className="w-full bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
+          >
+            ← Retour au micro
+          </button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+          <div className="flex justify-center">
+            {statut === "idle" ? (
               <button
                 type="button"
-                onClick={() => texteManuel.trim() && traiterTexte(texteManuel)}
-                disabled={!texteManuel.trim() || statut === "traitement"}
-                className="w-full bg-red-600 text-white text-lg font-bold py-4 rounded-2xl active:bg-red-700 hover:bg-red-700 transition-colors disabled:opacity-40"
+                onClick={demarrerEcoute}
+                className="w-40 h-40 rounded-full bg-red-600 active:bg-red-700 hover:bg-red-700 flex flex-col items-center justify-center shadow-lg shadow-red-900/40 transition-colors"
               >
-                {statut === "traitement" ? "Analyse..." : "Analyser"}
+                <span className="text-6xl mb-1">🎙️</span>
+                <span className="text-white text-sm font-semibold">Dicter</span>
               </button>
+            ) : statut === "ecoute" ? (
               <button
                 type="button"
-                onClick={() => setModeTexte(false)}
-                className="w-full bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
+                onClick={arreterEcoute}
+                className="w-40 h-40 rounded-full bg-red-700 flex flex-col items-center justify-center shadow-lg shadow-red-900/60 animate-pulse"
               >
-                ← Retour au micro
+                <span className="text-6xl mb-1">⏹️</span>
+                <span className="text-white text-sm font-semibold">Arrêter</span>
               </button>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-              <div className="flex justify-center">
-                {statut === "idle" ? (
-                  <button
-                    type="button"
-                    onClick={demarrerEcoute}
-                    className="w-40 h-40 rounded-full bg-red-600 active:bg-red-700 hover:bg-red-700 flex flex-col items-center justify-center shadow-lg shadow-red-900/40 transition-colors"
-                  >
-                    <span className="text-6xl mb-1">🎙️</span>
-                    <span className="text-white text-sm font-semibold">Dicter</span>
-                  </button>
-                ) : statut === "ecoute" ? (
-                  <button
-                    type="button"
-                    onClick={arreterEcoute}
-                    className="w-40 h-40 rounded-full bg-red-700 flex flex-col items-center justify-center shadow-lg shadow-red-900/60 animate-pulse"
-                  >
-                    <span className="text-6xl mb-1">⏹️</span>
-                    <span className="text-white text-sm font-semibold">Arrêter</span>
-                  </button>
-                ) : (
-                  <div className="w-40 h-40 rounded-full bg-gray-800 flex flex-col items-center justify-center">
-                    <span className="text-5xl mb-2">⚙️</span>
-                    <span className="text-gray-400 text-sm">Analyse...</span>
-                  </div>
-                )}
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-gray-800 flex flex-col items-center justify-center">
+                <span className="text-5xl mb-2">⚙️</span>
+                <span className="text-gray-400 text-sm">Analyse...</span>
               </div>
+            )}
+          </div>
 
-              {statut === "ecoute" && (
-                <div className="bg-gray-800 rounded-2xl p-4 text-center w-full">
-                  <p className="text-gray-400 text-sm">
-                    {transcription || "Je t\u2019écoute\u2026 parle maintenant"}
-                  </p>
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={() => setModeTexte(true)}
-                className="w-full bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
-              >
-                ✏️ Écrire à la place
-              </button>
-
-              <p className="text-gray-600 text-sm text-center leading-relaxed">
-                Appuie sur le micro et dicte :<br />
-                <span className="text-gray-500 italic">&ldquo;Jean Tremblay, Granby, 450-555-1234, ressort cassé&rdquo;</span>
+          {statut === "ecoute" && (
+            <div className="bg-gray-800 rounded-2xl p-4 text-center w-full">
+              <p className="text-gray-400 text-sm">
+                {transcription || "Je t\u2019écoute\u2026 parle maintenant"}
               </p>
             </div>
           )}
-        </div>
 
-        {/* Colonne droite — desktop only */}
-        <div className="hidden md:flex flex-col justify-center p-8 w-80 border-l border-gray-800 gap-4">
-          <p className="text-gray-500 text-xs uppercase tracking-widest mb-2">Navigation</p>
-          <Link
-            href="/dicter/jobs"
-            className="bg-gray-800 hover:bg-gray-700 transition-colors rounded-2xl p-5 text-left group"
+          <button
+            type="button"
+            onClick={() => setModeTexte(true)}
+            className="w-full bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 hover:bg-gray-700 transition-colors"
           >
-            <p className="text-2xl mb-2">📋</p>
-            <p className="text-white font-bold mb-1">Jobs de la semaine</p>
-            <p className="text-gray-500 text-sm">Voir et gérer tes travaux, générer un itinéraire</p>
-            <p className="text-red-500 text-sm mt-3 group-hover:underline">Ouvrir →</p>
-          </Link>
+            ✏️ Écrire à la place
+          </button>
+
+          <p className="text-gray-600 text-sm text-center leading-relaxed">
+            Appuie sur le micro et dicte :<br />
+            <span className="text-gray-500 italic">&ldquo;Jean Tremblay, Granby, 450-555-1234, ressort cassé&rdquo;</span>
+          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -172,23 +171,15 @@ export default function JobsPage() {
     : itineraireUrl(jobsAFaire);
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] flex flex-col">
-      {/* Header */}
-      <div className="bg-[#1a1a1a] px-5 py-4 shrink-0">
+    <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+      {/* Sous-header */}
+      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-5 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/dicter" className="text-white/40 hover:text-white/80 text-sm transition-colors">
-              ← Dicter
-            </Link>
-            <div>
-              <h1 className="font-heading text-white text-lg md:text-xl uppercase">Jobs de la semaine</h1>
-              <p className="text-white/50 text-xs">
-                {jobs.filter(j => j.statut === "a_faire").length} à faire ·{" "}
-                {jobs.filter(j => j.statut === "en_cours").length} en cours ·{" "}
-                {jobs.filter(j => j.statut === "complete").length} complétés
-              </p>
-            </div>
-          </div>
+          <p className="text-white/50 text-xs">
+            {jobs.filter(j => j.statut === "a_faire").length} à faire ·{" "}
+            {jobs.filter(j => j.statut === "en_cours").length} en cours ·{" "}
+            {jobs.filter(j => j.statut === "complete").length} complétés
+          </p>
           <button
             onClick={() => setShowForm(!showForm)}
             className="bg-red-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors"
