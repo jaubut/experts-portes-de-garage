@@ -660,7 +660,7 @@ export default function JobsPage() {
 
       {/* Filtres mobile */}
       {showFiltres && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex gap-2">
+        <div className="md:hidden bg-white/[0.04] border-b border-white/[0.06] px-4 py-3 flex gap-2">
           <input type="date" value={filtreDate} onChange={e => setFiltreDate(e.target.value)} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600" />
           <select value={filtreVille} onChange={e => setFiltreVille(e.target.value)} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600">
             <option value="">Toutes les villes</option>
@@ -710,7 +710,7 @@ export default function JobsPage() {
                 <h2 className="text-xs font-bold text-white/25 uppercase tracking-widest mb-2 px-1">{formatDate(date)}</h2>
                 <div className="space-y-2">
                   {grouped[date].map(job => (
-                    <div key={job.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all duration-150 hover:shadow-md ${job.statut === "complete" ? "opacity-40" : ""}`}>
+                    <div key={job.id} className={`bg-white/[0.04] rounded-2xl border border-white/[0.06] overflow-hidden transition-all duration-150 hover:bg-white/[0.06] ${job.statut === "complete" ? "opacity-40" : ""}`}>
 
                       {editJobId === job.id ? (
                         /* Formulaire édition */
