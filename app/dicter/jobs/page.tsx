@@ -178,9 +178,9 @@ export default function JobsPage() {
   const [selectionIds, setSelectionIds] = useState<Set<string>>(new Set());
   const [optimisant, setOptimisant] = useState(false);
   const [destination, setDestination] = useState("");
-  const [suggestionsDestination, setSuggestionsDestination] = useState<Array<{label: string; adresse: string; ville: string}>>([]);
+  const [suggestionsDestination, setSuggestionsDestination] = useState<Array<{label: string; adresse: string; ville: string; lat: number; lon: number}>>([]);
   const [showSuggestionsDestination, setShowSuggestionsDestination] = useState(false);
-  const [destinationChoisie, setDestinationChoisie] = useState<{adresse: string; ville: string} | null>(null);
+  const [destinationChoisie, setDestinationChoisie] = useState<{adresse: string; ville: string; lat: number; lon: number} | null>(null);
   const debounceDestRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -336,7 +336,13 @@ export default function JobsPage() {
           const rue = r.address?.road ?? "";
           const ville = r.address?.city ?? r.address?.town ?? r.address?.village ?? r.address?.municipality ?? r.address?.county ?? "";
           const adresse = rue ? `${num} ${rue}`.trim() : ville;
-          return { label: r.display_name.split(",").slice(0, 3).join(",").trim(), adresse, ville };
+          return {
+            label: r.display_name.split(",").slice(0, 3).join(",").trim(),
+            adresse,
+            ville,
+            lat: parseFloat(r.lat),
+            lon: parseFloat(r.lon),
+          };
         }).filter(r => r.ville);
         setSuggestionsDestination(results);
         setShowSuggestionsDestination(results.length > 0);
@@ -417,11 +423,11 @@ export default function JobsPage() {
       // 5. Construire l'URL Maps
       const stops = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
 
-      // Ajouter destination finale si spécifiée
+      // Ajouter destination finale — coordonnées GPS si dispo, sinon texte brut
       if (destinationChoisie) {
-        stops.push(encodeURIComponent(`${destinationChoisie.adresse}, ${destinationChoisie.ville}, QC`));
+        stops.push(`${destinationChoisie.lat},${destinationChoisie.lon}`);
       } else if (destination.trim()) {
-        stops.push(encodeURIComponent(`${destination.trim()}, QC`));
+        stops.push(encodeURIComponent(`${destination.trim()}, QC, Canada`));
       }
 
       let url: string;
@@ -598,7 +604,7 @@ export default function JobsPage() {
                         type="button"
                         onMouseDown={() => {
                           setDestination(s.label);
-                          setDestinationChoisie({ adresse: s.adresse, ville: s.ville });
+                          setDestinationChoisie({ adresse: s.adresse, ville: s.ville, lat: s.lat, lon: s.lon });
                           setShowSuggestionsDestination(false);
                         }}
                         className="w-full text-left px-4 py-3 text-sm hover:bg-red-50 hover:text-red-700 transition-colors border-b border-gray-50 last:border-0"
