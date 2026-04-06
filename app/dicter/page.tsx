@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -390,6 +391,13 @@ export default function DicterPage() {
           >
             ✏️ Écrire à la place
           </button>
+
+          <Link
+            href="/dicter/jobs"
+            className="mt-3 w-full bg-gray-800 text-gray-400 text-base py-3 rounded-2xl active:bg-gray-700 flex items-center justify-center"
+          >
+            📋 Jobs de la semaine
+          </Link>
 
           <div className="mt-auto pt-8">
             <p className="text-gray-600 text-sm text-center leading-relaxed">
