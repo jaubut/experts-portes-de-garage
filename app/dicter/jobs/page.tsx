@@ -289,10 +289,12 @@ export default function JobsPage() {
 
     setOptimisant(true);
     try {
-      // Géocoder toutes les adresses en parallèle
-      const coordonnees = await Promise.all(
-        jobsSelectionnes.map(j => geocoderAdresse(j.adresse, j.ville))
-      );
+      // Géocoder une par une (Nominatim = max 1 req/sec)
+      const coordonnees: Array<{ lat: number; lon: number } | null> = [];
+      for (const j of jobsSelectionnes) {
+        coordonnees.push(await geocoderAdresse(j.adresse, j.ville));
+        if (jobsSelectionnes.length > 1) await new Promise(r => setTimeout(r, 1100));
+      }
 
       // Attacher les coordonnées aux jobs (garder les jobs sans coords à la fin)
       const avecCoords = jobsSelectionnes
