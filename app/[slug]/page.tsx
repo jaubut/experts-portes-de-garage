@@ -15,6 +15,13 @@ const BASE_URL = "https://www.expertsportesdegarage.ca";
 const HERO_BG = "/images/maison_garage_v1.png";
 const LOGO_SRC = "/images/logo_experts.png";
 
+const PAGE_IMAGES: Record<string, string> = {
+  "a-propos": "/images/blog/technicien-avec-client.webp",
+  "carriere": "/images/blog/blog-ouvre-porte-reparer.webp",
+  "planifier-une-visite": "/images/blog/technicien-avec-client.webp",
+  "reservation": "/images/blog/blog-choisir-porte.webp",
+};
+
 const CITY_IMAGES: Record<string, string> = {
   "portes-de-garage-granby": "/images/villes/ville-granby.webp",
   "portes-de-garage-sherbrooke": "/images/villes/ville-sherbrooke.webp",
@@ -141,6 +148,7 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
   const isCityPage = slug.startsWith("portes-de-garage-");
   const otherCities = CITY_LINKS.filter((c) => c.slug !== slug);
   const cityImage = CITY_IMAGES[slug] ?? null;
+  const heroImage = cityImage ?? PAGE_IMAGES[slug] ?? null;
 
   return (
     <>
@@ -162,8 +170,8 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
 
       {/* ── 1. HERO ── */}
       <section className="relative bg-cover bg-center overflow-hidden">
-        {isCityPage && cityImage ? (
-          <Image src={cityImage} alt={page.title} fill className="object-cover" priority />
+        {heroImage ? (
+          <Image src={heroImage} alt={page.title} fill className="object-cover" priority />
         ) : (
           <Image src={HERO_BG} alt={page.title} fill className="object-cover" priority />
         )}
