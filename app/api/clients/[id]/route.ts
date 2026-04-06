@@ -16,3 +16,13 @@ export async function PATCH(req: Request, props: { params: Promise<{ id: string 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
+
+export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
+  const supabase = getSupabase();
+
+  const { error } = await supabase.from("clients").delete().eq("id", id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ success: true });
+}
