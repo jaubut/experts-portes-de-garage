@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -63,8 +62,7 @@ function groupByDate(jobs: Job[]) {
   }, {});
 }
 
-function JobsPageInner() {
-  const searchParams = useSearchParams();
+export default function JobsPage() {
   const [auth, setAuth] = useState(false);
   const [mdp, setMdp] = useState("");
   const [mdpErreur, setMdpErreur] = useState(false);
@@ -84,22 +82,17 @@ function JobsPageInner() {
     if (saved === MOT_DE_PASSE) setAuth(true);
   }, []);
 
-  // Pré-remplir depuis Leads
+  // Pré-remplir depuis Leads (via sessionStorage)
   useEffect(() => {
-    const prefill = searchParams.get("prefill");
+    const prefill = sessionStorage.getItem("job_prefill");
     if (!prefill) return;
+    sessionStorage.removeItem("job_prefill");
     try {
-      const params = new URLSearchParams(decodeURIComponent(prefill));
-      setForm((f) => ({
-        ...f,
-        nom: params.get("nom") ?? f.nom,
-        telephone: params.get("telephone") ?? f.telephone,
-        adresse: params.get("adresse") ?? f.adresse,
-        ville: params.get("ville") ?? f.ville,
-      }));
+      const data = JSON.parse(prefill);
+      setForm((f) => ({ ...f, ...data }));
       setShowForm(true);
     } catch { /* ignore */ }
-  }, [searchParams]);
+  }, []);
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
@@ -425,10 +418,3 @@ function JobsPageInner() {
   );
 }
 
-export default function JobsPage() {
-  return (
-    <Suspense fallback={<div className="flex-1 bg-[#f5f5f5] flex items-center justify-center"><p className="text-gray-400">Chargement...</p></div>}>
-      <JobsPageInner />
-    </Suspense>
-  );
-}

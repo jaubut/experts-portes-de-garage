@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -51,26 +51,17 @@ function formatDate(iso: string) {
   return d.toLocaleDateString("fr-CA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 }
 
-function jobUrl(client: Client) {
-  const params = new URLSearchParams({
-    nom: client.nom,
-    telephone: client.telephone,
-    adresse: client.adresse ?? "",
-    ville: client.ville,
-  });
-  return `/dicter/jobs?prefill=${encodeURIComponent(params.toString())}`;
-}
-
 export default function LeadsPage() {
+  const router = useRouter();
   const [auth, setAuth] = useState(false);
   const [mdp, setMdp] = useState("");
   const [mdpErreur, setMdpErreur] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtreStatut, setFiltreStatut] = useState<StatutLead | "">("");
-  const [noteOuverte, setNoteOuverte] = useState<string | null>(null);
-  const [noteTexte, setNoteTexte] = useState("");
-  const [savingNote, setSavingNote] = useState(false);
+  const [editOuvert, setEditOuvert] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Client>>({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -108,21 +99,55 @@ export default function LeadsPage() {
     });
   }
 
-  async function sauvegarderNote(client: Client) {
-    setSavingNote(true);
+  function ouvrirEdit(client: Client) {
+    setEditOuvert(client.id);
+    setEditForm({
+      nom: client.nom,
+      telephone: client.telephone,
+      courriel: client.courriel ?? "",
+      adresse: client.adresse ?? "",
+      ville: client.ville,
+      probleme: client.probleme,
+      notes: client.notes ?? "",
+    });
+  }
+
+  async function sauvegarderEdit(client: Client) {
+    setSaving(true);
+    const payload = {
+      nom: editForm.nom,
+      telephone: editForm.telephone,
+      courriel: editForm.courriel || null,
+      adresse: editForm.adresse || null,
+      ville: editForm.ville,
+      probleme: editForm.probleme,
+      notes: editForm.notes || null,
+    };
     await fetch(`/api/clients/${client.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ notes: noteTexte }),
+      body: JSON.stringify(payload),
     });
-    setClients((prev) => prev.map((c) => c.id === client.id ? { ...c, notes: noteTexte } : c));
-    setNoteOuverte(null);
-    setSavingNote(false);
+    setClients((prev) => prev.map((c) => c.id === client.id ? { ...c, ...payload } as Client : c));
+    setEditOuvert(null);
+    setSaving(false);
+  }
+
+  function transfererVersJob(client: Client) {
+    // Passer les infos via sessionStorage — fiable, pas d'encodage URL
+    sessionStorage.setItem("job_prefill", JSON.stringify({
+      nom: client.nom,
+      telephone: client.telephone,
+      adresse: client.adresse ?? "",
+      ville: client.ville,
+    }));
+    changerStatut(client, "job_planifie");
+    router.push("/dicter/jobs");
   }
 
   if (!auth) {
     return (
-      <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center px-4">
+      <div className="flex-1 bg-[#1a1a1a] flex items-center justify-center px-4">
         <form onSubmit={soumettreMdp} className="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl">
           <p className="text-gray-400 text-sm text-center mb-2 uppercase tracking-widest">Experts Portes de Garage</p>
           <h1 className="text-2xl font-bold text-[#1a1a1a] mb-6 text-center">Espace admin</h1>
@@ -155,9 +180,9 @@ export default function LeadsPage() {
   const urgents = clients.filter((c) => c.statut === "nouveau" || c.statut === "a_rappeler").length;
 
   return (
-    <div className="flex-1 bg-[#f5f5f5] flex flex-col overflow-hidden">
+    <div className="flex-1 bg-[#f5f5f5] flex flex-col">
       {/* Sous-header */}
-      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-5 py-3">
+      <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-5 py-2.5">
         <div className="max-w-7xl mx-auto">
           <p className="text-white/50 text-xs">
             {urgents > 0
@@ -167,8 +192,8 @@ export default function LeadsPage() {
         </div>
       </div>
 
-      {/* Filtres pipeline — horizontal scroll sur mobile */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2.5 overflow-x-auto">
+      {/* Filtres pipeline — scroll horizontal mobile */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2.5 overflow-x-auto shrink-0">
         <div className="flex gap-2 min-w-max md:max-w-7xl md:mx-auto">
           <button
             onClick={() => setFiltreStatut("")}
@@ -183,9 +208,7 @@ export default function LeadsPage() {
               key={s}
               onClick={() => setFiltreStatut(filtreStatut === s ? "" : s)}
               className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap ${
-                filtreStatut === s
-                  ? `${STATUT_COLORS[s]} opacity-100`
-                  : `border-gray-200 text-gray-500 hover:border-gray-400`
+                filtreStatut === s ? `${STATUT_COLORS[s]}` : "border-gray-200 text-gray-500 hover:border-gray-400"
               }`}
             >
               {STATUT_LABELS[s]} ({counts[s] ?? 0})
@@ -196,7 +219,7 @@ export default function LeadsPage() {
 
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-4 md:py-6 md:flex md:gap-6">
 
-        {/* Sidebar desktop — pipeline détaillé */}
+        {/* Sidebar desktop */}
         <aside className="hidden md:block md:w-64 shrink-0 space-y-4 md:sticky md:top-6 md:self-start">
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200">
             <h2 className="font-bold text-[#1a1a1a] text-sm uppercase tracking-wide mb-3">Pipeline</h2>
@@ -217,10 +240,7 @@ export default function LeadsPage() {
               ))}
             </div>
             {filtreStatut && (
-              <button
-                onClick={() => setFiltreStatut("")}
-                className="mt-3 text-red-600 text-xs font-semibold hover:underline w-full text-left"
-              >
+              <button onClick={() => setFiltreStatut("")} className="mt-3 text-red-600 text-xs font-semibold hover:underline w-full text-left">
                 Voir actifs seulement
               </button>
             )}
@@ -246,112 +266,163 @@ export default function LeadsPage() {
             clientsFiltres.map((client) => (
               <div
                 key={client.id}
-                className={`bg-white rounded-xl border shadow-sm transition-opacity ${
+                className={`bg-white rounded-xl border shadow-sm ${
                   client.statut === "complete" || client.statut === "sans_suite" ? "opacity-50" : ""
                 }`}
               >
-                <div className="p-4">
-                  <div className="flex items-start gap-4">
-                    {/* Infos */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="font-bold text-[#1a1a1a]">{client.nom}</span>
+                {/* Vue normale */}
+                {editOuvert !== client.id ? (
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="font-bold text-[#1a1a1a]">{client.nom}</span>
+                          <button
+                            onClick={() => changerStatut(client, STATUT_NEXT[client.statut])}
+                            className={`text-xs font-semibold px-2 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${STATUT_COLORS[client.statut]}`}
+                            title="Cliquer pour avancer"
+                          >
+                            {STATUT_LABELS[client.statut]}
+                          </button>
+                        </div>
+                        <p className="text-sm text-gray-500">{client.telephone}</p>
+                        {client.adresse && <p className="text-sm text-gray-600">{client.adresse}, {client.ville}</p>}
+                        {!client.adresse && <p className="text-sm text-gray-600">{client.ville}</p>}
+                        <p className="text-sm text-gray-500 mt-0.5 italic">{client.probleme}</p>
+                        {client.notes && (
+                          <p className="text-xs text-gray-400 mt-1 bg-gray-50 rounded px-2 py-1 italic">{client.notes}</p>
+                        )}
+                        <p className="text-xs text-gray-300 mt-1">{formatDate(client.created_at)}</p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        <div className="flex items-center gap-1">
+                          <a
+                            href={`tel:${client.telephone}`}
+                            className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors"
+                            title="Appeler"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
+                            </svg>
+                          </a>
+                          <button
+                            onClick={() => ouvrirEdit(client)}
+                            className="text-gray-400 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                            title="Modifier les infos"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                        </div>
                         <button
-                          onClick={() => changerStatut(client, STATUT_NEXT[client.statut])}
-                          className={`text-xs font-semibold px-2 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${STATUT_COLORS[client.statut]}`}
-                          title="Cliquer pour avancer dans le pipeline"
+                          onClick={() => transfererVersJob(client)}
+                          className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors"
                         >
-                          {STATUT_LABELS[client.statut]}
+                          + Créer un job
                         </button>
                       </div>
-                      <p className="text-sm text-gray-600">{client.ville}</p>
-                      <p className="text-sm text-gray-500 mt-0.5 italic">{client.probleme}</p>
-                      {client.notes && noteOuverte !== client.id && (
-                        <p className="text-xs text-gray-400 mt-1 bg-gray-50 rounded px-2 py-1 italic">{client.notes}</p>
-                      )}
-                      <p className="text-xs text-gray-300 mt-1">{formatDate(client.created_at)}</p>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-1 shrink-0">
-                      <a
-                        href={`tel:${client.telephone}`}
-                        className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                        title="Appeler"
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
-                        </svg>
-                      </a>
-                      <button
-                        onClick={() => {
-                          setNoteOuverte(noteOuverte === client.id ? null : client.id);
-                          setNoteTexte(client.notes ?? "");
-                        }}
-                        className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                        title="Ajouter une note"
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      <Link
-                        href={jobUrl(client)}
-                        className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors"
-                        title="Créer un job pour ce client"
-                        onClick={() => changerStatut(client, "job_planifie")}
-                      >
-                        + Job
-                      </Link>
+                    {/* Sélecteur statut */}
+                    <div className="mt-3 pt-3 border-t border-gray-50 flex gap-2 flex-wrap">
+                      {PIPELINE_ORDER.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => changerStatut(client, s)}
+                          className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
+                            client.statut === s
+                              ? `${STATUT_COLORS[s]} font-bold`
+                              : "border-gray-200 text-gray-400 hover:border-gray-400"
+                          }`}
+                        >
+                          {STATUT_LABELS[s]}
+                        </button>
+                      ))}
                     </div>
                   </div>
-
-                  {/* Zone note */}
-                  {noteOuverte === client.id && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <textarea
-                        value={noteTexte}
-                        onChange={(e) => setNoteTexte(e.target.value)}
-                        placeholder="Ajoute une note..."
-                        rows={2}
-                        autoFocus
-                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600 resize-none"
-                      />
-                      <div className="flex gap-2 mt-2">
-                        <button
-                          onClick={() => sauvegarderNote(client)}
-                          disabled={savingNote}
-                          className="bg-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-                        >
-                          {savingNote ? "Sauvegarde..." : "Sauvegarder"}
-                        </button>
-                        <button
-                          onClick={() => setNoteOuverte(null)}
-                          className="text-gray-400 text-xs hover:text-gray-600"
-                        >
-                          Annuler
-                        </button>
+                ) : (
+                  /* Formulaire d'édition */
+                  <div className="p-4">
+                    <h3 className="font-bold text-[#1a1a1a] text-sm mb-3">Modifier — {client.nom}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Nom</label>
+                        <input
+                          value={editForm.nom ?? ""}
+                          onChange={e => setEditForm(f => ({...f, nom: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Téléphone</label>
+                        <input
+                          value={editForm.telephone ?? ""}
+                          onChange={e => setEditForm(f => ({...f, telephone: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Adresse</label>
+                        <input
+                          value={editForm.adresse ?? ""}
+                          onChange={e => setEditForm(f => ({...f, adresse: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Ville</label>
+                        <input
+                          value={editForm.ville ?? ""}
+                          onChange={e => setEditForm(f => ({...f, ville: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Problème</label>
+                        <input
+                          value={editForm.probleme ?? ""}
+                          onChange={e => setEditForm(f => ({...f, probleme: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Courriel</label>
+                        <input
+                          value={editForm.courriel ?? ""}
+                          onChange={e => setEditForm(f => ({...f, courriel: e.target.value}))}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="text-xs text-gray-500 uppercase tracking-wide mb-1 block">Notes</label>
+                        <textarea
+                          value={editForm.notes ?? ""}
+                          onChange={e => setEditForm(f => ({...f, notes: e.target.value}))}
+                          rows={2}
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-600 resize-none"
+                        />
                       </div>
                     </div>
-                  )}
-                </div>
-
-                {/* Sélecteur statut manuel */}
-                <div className="px-4 pb-3 flex gap-2 flex-wrap">
-                  {PIPELINE_ORDER.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => changerStatut(client, s)}
-                      className={`text-xs px-2 py-0.5 rounded-full border transition-opacity ${
-                        client.statut === s
-                          ? `${STATUT_COLORS[s]} font-bold`
-                          : "border-gray-200 text-gray-400 hover:border-gray-400"
-                      }`}
-                    >
-                      {STATUT_LABELS[s]}
-                    </button>
-                  ))}
-                </div>
+                    <div className="flex gap-3 mt-3">
+                      <button
+                        onClick={() => sauvegarderEdit(client)}
+                        disabled={saving}
+                        className="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-red-700 transition-colors disabled:opacity-50"
+                      >
+                        {saving ? "Sauvegarde..." : "Sauvegarder"}
+                      </button>
+                      <button
+                        onClick={() => setEditOuvert(null)}
+                        className="text-gray-400 text-sm hover:text-gray-600 px-3"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))
           )}
