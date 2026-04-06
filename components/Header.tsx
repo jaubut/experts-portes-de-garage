@@ -48,7 +48,7 @@ export default function Header() {
             alt="Experts Portes de Garage"
             width={320}
             height={100}
-            className="h-24 w-64 object-contain object-left"
+            className="h-24 w-auto object-contain"
             priority
           />
         </Link>
