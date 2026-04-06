@@ -42,3 +42,6 @@ next-env.d.ts
 
 # MCP
 .mcp.json
+
+# Claude Code
+.claude/settings.local.json
