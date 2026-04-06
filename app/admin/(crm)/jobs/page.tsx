@@ -293,7 +293,7 @@ export default function JobsPage() {
 
   function ouvrirEditJob(job: Job) {
     setEditJobId(job.id);
-    setEditJobForm({ nom: job.nom, telephone: job.telephone, adresse: job.adresse, ville: job.ville, date: job.date, heure: job.heure ?? "", notes: job.notes ?? "" });
+    setEditJobForm({ nom: job.nom, telephone: job.telephone, adresse: job.adresse, ville: job.ville, date: job.date, heure: job.heure ?? "", notes: job.notes ?? "", montant: job.montant != null ? String(job.montant) : "" });
   }
 
   async function sauvegarderEditJob(job: Job) {
