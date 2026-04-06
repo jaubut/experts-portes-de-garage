@@ -40,10 +40,7 @@ function mapsUrl(adresse: string, ville: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${adresse}, ${ville}, QC`)}`;
 }
 
-function itineraireUrl(jobs: Job[]) {
-  const adresses = jobs
-    .filter((j) => j.statut !== "complete")
-    .map((j) => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
+function itineraireUrl(adresses: string[]) {
   if (adresses.length === 0) return null;
   if (adresses.length === 1) return `https://www.google.com/maps/search/?api=1&query=${adresses[0]}`;
   return `https://www.google.com/maps/dir/${adresses.join("/")}`;
@@ -62,6 +59,24 @@ function groupByDate(jobs: Job[]) {
   }, {});
 }
 
+function groupByVille(jobs: Job[]) {
+  return jobs.reduce<Record<string, Job[]>>((acc, job) => {
+    if (!acc[job.ville]) acc[job.ville] = [];
+    acc[job.ville].push(job);
+    return acc;
+  }, {});
+}
+
+function nowDateStr() {
+  return new Date().toISOString().split("T")[0];
+}
+
+function nowHeureStr() {
+  return new Date().toTimeString().slice(0, 5);
+}
+
+const FORM_VIDE = { nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "" };
+
 export default function JobsPage() {
   const [auth, setAuth] = useState(false);
   const [mdp, setMdp] = useState("");
@@ -73,12 +88,14 @@ export default function JobsPage() {
   const [filtreVille, setFiltreVille] = useState("");
   const [filtreDate, setFiltreDate] = useState("");
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({
-    nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "",
-  });
+  const [form, setForm] = useState(FORM_VIDE);
   const [suggestions, setSuggestions] = useState<Array<{adresse: string; ville: string; label: string}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Mode itinéraire
+  const [modeItineraire, setModeItineraire] = useState(false);
+  const [selectionIds, setSelectionIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const saved = sessionStorage.getItem("dicter_auth");
@@ -92,7 +109,7 @@ export default function JobsPage() {
     sessionStorage.removeItem("job_prefill");
     try {
       const data = JSON.parse(prefill);
-      setForm((f) => ({ ...f, ...data }));
+      setForm({ ...FORM_VIDE, date: nowDateStr(), heure: nowHeureStr(), ...data });
       setShowForm(true);
     } catch { /* ignore */ }
   }, []);
@@ -119,6 +136,15 @@ export default function JobsPage() {
     }
   }
 
+  function ouvrirFormulaire() {
+    setForm(f => ({
+      ...f,
+      date: f.date || nowDateStr(),
+      heure: f.heure || nowHeureStr(),
+    }));
+    setShowForm(true);
+  }
+
   async function ajouterJob(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -127,7 +153,7 @@ export default function JobsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    setForm({ nom: "", telephone: "", adresse: "", ville: "", date: "", heure: "", notes: "" });
+    setForm(FORM_VIDE);
     setShowForm(false);
     await fetchJobs();
     setSaving(false);
@@ -176,7 +202,7 @@ export default function JobsPage() {
           .filter(r => r.adresse && r.ville);
         setSuggestions(results);
         setShowSuggestions(results.length > 0);
-      } catch { /* ignore network errors */ }
+      } catch { /* ignore */ }
     }, 400);
   }
 
@@ -184,6 +210,43 @@ export default function JobsPage() {
     setForm(f => ({ ...f, adresse: s.adresse, ville: s.ville }));
     setSuggestions([]);
     setShowSuggestions(false);
+  }
+
+  // Itinéraire — sélection
+  function toggleSelection(id: string) {
+    setSelectionIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleVille(villeJobs: Job[]) {
+    const ids = villeJobs.map(j => j.id);
+    const tousCoches = ids.every(id => selectionIds.has(id));
+    setSelectionIds(prev => {
+      const next = new Set(prev);
+      if (tousCoches) ids.forEach(id => next.delete(id));
+      else ids.forEach(id => next.add(id));
+      return next;
+    });
+  }
+
+  function entrerModeItineraire() {
+    // Pré-sélectionner les jobs à faire d'aujourd'hui
+    const aujourd_hui = nowDateStr();
+    const ids = jobs
+      .filter(j => j.statut !== "complete" && j.date === aujourd_hui)
+      .map(j => j.id);
+    setSelectionIds(new Set(ids));
+    setModeItineraire(true);
+  }
+
+  function genererItineraire() {
+    const jobsSelectionnes = jobs.filter(j => selectionIds.has(j.id));
+    const adresses = jobsSelectionnes.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
+    const url = itineraireUrl(adresses);
+    if (url) window.open(url, "_blank");
   }
 
   if (!auth) {
@@ -218,10 +281,11 @@ export default function JobsPage() {
   const villes = [...new Set(jobs.map((j) => j.ville))].sort();
   const grouped = groupByDate(jobsFiltres);
   const dates = Object.keys(grouped).sort();
-  const jobsAFaire = jobsFiltres.filter((j) => j.statut !== "complete");
-  const urlItineraire = filtreDate
-    ? itineraireUrl(jobsFiltres.filter((j) => j.date === filtreDate))
-    : itineraireUrl(jobsAFaire);
+
+  // Jobs non-complétés pour le mode itinéraire
+  const jobsPourItineraire = jobs.filter(j => j.statut !== "complete");
+  const parVille = groupByVille(jobsPourItineraire);
+  const villesItineraire = Object.keys(parVille).sort();
 
   const formulaire = (
     <form onSubmit={ajouterJob} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-200 space-y-3">
@@ -260,8 +324,14 @@ export default function JobsPage() {
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <input required type="date" value={form.date} onChange={e => setForm(f => ({...f, date: e.target.value}))} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
-        <input type="time" value={form.heure} onChange={e => setForm(f => ({...f, heure: e.target.value}))} className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
+        <div>
+          <label className="text-xs text-gray-400 block mb-1">Date *</label>
+          <input required type="date" value={form.date} onChange={e => setForm(f => ({...f, date: e.target.value}))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
+        </div>
+        <div>
+          <label className="text-xs text-gray-400 block mb-1">Heure</label>
+          <input type="time" value={form.heure} onChange={e => setForm(f => ({...f, heure: e.target.value}))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600" />
+        </div>
       </div>
       <textarea value={form.notes} onChange={e => setForm(f => ({...f, notes: e.target.value}))} placeholder="Notes (optionnel)" rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-red-600 resize-none" />
       <div className="flex gap-3">
@@ -275,10 +345,123 @@ export default function JobsPage() {
     </form>
   );
 
+  // ─── MODE ITINÉRAIRE ────────────────────────────────────────────────────────
+  if (modeItineraire) {
+    const nbSelectionnes = selectionIds.size;
+
+    return (
+      <div className="flex-1 bg-[#f5f5f5] flex flex-col">
+        {/* Barre itinéraire */}
+        <div className="bg-[#1a1a1a] border-b border-white/10 px-4 py-3 shrink-0">
+          <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
+            <button
+              onClick={() => setModeItineraire(false)}
+              className="text-white/60 hover:text-white text-sm flex items-center gap-1"
+            >
+              ← Retour
+            </button>
+            <p className="text-white font-bold text-sm">
+              {nbSelectionnes === 0 ? "Sélectionner des jobs" : `${nbSelectionnes} job${nbSelectionnes > 1 ? "s" : ""} sélectionné${nbSelectionnes > 1 ? "s" : ""}`}
+            </p>
+            <button
+              onClick={genererItineraire}
+              disabled={nbSelectionnes === 0}
+              className="bg-red-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors disabled:opacity-40"
+            >
+              🗺️ Ouvrir Maps
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-4 space-y-4">
+          <p className="text-xs text-gray-400 text-center">Coche les jobs à inclure dans ton itinéraire, puis clique «&nbsp;Ouvrir Maps&nbsp;»</p>
+
+          {villesItineraire.length === 0 ? (
+            <div className="text-center text-gray-400 py-16 bg-white rounded-2xl border border-gray-200">
+              Aucun job à faire
+            </div>
+          ) : (
+            villesItineraire.map(ville => {
+              const villeJobs = parVille[ville];
+              const tousCoches = villeJobs.every(j => selectionIds.has(j.id));
+              const aucunCoche = villeJobs.every(j => !selectionIds.has(j.id));
+
+              return (
+                <div key={ville} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                  {/* En-tête ville */}
+                  <button
+                    onClick={() => toggleVille(villeJobs)}
+                    className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                        tousCoches ? "bg-red-600 border-red-600" : aucunCoche ? "border-gray-300" : "bg-red-100 border-red-400"
+                      }`}>
+                        {!aucunCoche && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            {tousCoches
+                              ? <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              : <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                            }
+                          </svg>
+                        )}
+                      </div>
+                      <span className="font-bold text-[#1a1a1a]">{ville}</span>
+                    </div>
+                    <span className="text-sm text-gray-400">{villeJobs.filter(j => selectionIds.has(j.id)).length}/{villeJobs.length}</span>
+                  </button>
+
+                  {/* Jobs de cette ville */}
+                  {villeJobs.map(job => (
+                    <button
+                      key={job.id}
+                      onClick={() => toggleSelection(job.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors text-left ${
+                        selectionIds.has(job.id) ? "bg-red-50/50" : ""
+                      }`}
+                    >
+                      <div className={`w-5 h-5 rounded border-2 shrink-0 flex items-center justify-center transition-colors ${
+                        selectionIds.has(job.id) ? "bg-red-600 border-red-600" : "border-gray-300"
+                      }`}>
+                        {selectionIds.has(job.id) && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-[#1a1a1a]">{job.nom}</p>
+                        <p className="text-xs text-gray-400 truncate">{job.adresse}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-xs text-gray-400">{formatDate(job.date)}</p>
+                        {job.heure && <p className="text-xs font-medium text-gray-500">{job.heure.slice(0, 5)}</p>}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              );
+            })
+          )}
+
+          {nbSelectionnes > 0 && (
+            <button
+              onClick={genererItineraire}
+              className="w-full bg-red-600 text-white font-bold py-4 rounded-2xl text-base hover:bg-red-700 transition-colors shadow"
+            >
+              🗺️ Générer itinéraire — {nbSelectionnes} arrêt{nbSelectionnes > 1 ? "s" : ""}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ─── MODE NORMAL ────────────────────────────────────────────────────────────
   return (
     <div className="flex-1 bg-[#f5f5f5] flex flex-col">
 
-      {/* Barre d'actions — visible partout */}
+      {/* Barre d'actions */}
       <div className="bg-[#1a1a1a]/80 border-b border-white/10 px-4 py-2.5 shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <p className="text-white/50 text-xs">
@@ -287,7 +470,12 @@ export default function JobsPage() {
             {jobs.filter(j => j.statut === "complete").length} complétés
           </p>
           <div className="flex items-center gap-2">
-            {/* Filtres mobile toggle */}
+            <button
+              onClick={entrerModeItineraire}
+              className="text-xs px-3 py-1.5 rounded-lg font-medium bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors"
+            >
+              🗺️ Itinéraire
+            </button>
             <button
               onClick={() => setShowFiltres(!showFiltres)}
               className={`md:hidden text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
@@ -297,7 +485,7 @@ export default function JobsPage() {
               Filtres {(filtreDate || filtreVille) ? "●" : ""}
             </button>
             <button
-              onClick={() => setShowForm(!showForm)}
+              onClick={ouvrirFormulaire}
               className="bg-red-600 text-white font-bold px-4 py-1.5 rounded-lg text-sm hover:bg-red-700 transition-colors"
             >
               + Ajouter
@@ -306,14 +494,14 @@ export default function JobsPage() {
         </div>
       </div>
 
-      {/* Formulaire mobile (plein écran) */}
+      {/* Formulaire mobile */}
       {showForm && (
         <div className="md:hidden px-4 pt-4">
           {formulaire}
         </div>
       )}
 
-      {/* Filtres mobile dépliables */}
+      {/* Filtres mobile */}
       {showFiltres && (
         <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex gap-2">
           <input
@@ -336,24 +524,10 @@ export default function JobsPage() {
         </div>
       )}
 
-      {/* Itinéraire mobile */}
-      {urlItineraire && (
-        <div className="md:hidden px-4 pt-3">
-          <a
-            href={urlItineraire}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-4 py-3 rounded-xl hover:bg-red-700 transition-colors text-sm w-full"
-          >
-            🗺️ Itinéraire Google Maps ({jobsAFaire.length} adresses)
-          </a>
-        </div>
-      )}
-
       {/* Contenu principal */}
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 py-4 md:py-6 md:flex md:gap-6">
 
-        {/* Sidebar desktop uniquement */}
+        {/* Sidebar desktop */}
         <aside className="hidden md:block md:w-72 lg:w-80 shrink-0 space-y-4 md:sticky md:top-6 md:self-start">
           {showForm && formulaire}
 
@@ -385,17 +559,6 @@ export default function JobsPage() {
               </button>
             )}
           </div>
-
-          {urlItineraire && (
-            <a
-              href={urlItineraire}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-red-600 text-white font-bold px-5 py-3 rounded-xl hover:bg-red-700 transition-colors shadow-sm w-full justify-center text-sm"
-            >
-              🗺️ Itinéraire Google Maps ({jobsAFaire.length})
-            </a>
-          )}
         </aside>
 
         {/* Liste des jobs */}
@@ -416,7 +579,6 @@ export default function JobsPage() {
                 <div className="space-y-2">
                   {grouped[date].map((job) => (
                     <div key={job.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${job.statut === "complete" ? "opacity-40" : ""}`}>
-                      {/* Infos */}
                       <div className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2 min-w-0">
@@ -441,7 +603,6 @@ export default function JobsPage() {
                         </a>
                         {job.notes && <p className="text-xs text-gray-400 italic bg-gray-50 rounded-lg px-2.5 py-1.5">{job.notes}</p>}
                       </div>
-                      {/* Actions */}
                       <div className="border-t border-gray-100 grid grid-cols-3 divide-x divide-gray-100">
                         <a href={`tel:${job.telephone}`} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 transition-colors">
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
@@ -467,4 +628,3 @@ export default function JobsPage() {
     </div>
   );
 }
-
