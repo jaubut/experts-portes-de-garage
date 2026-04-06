@@ -348,63 +348,46 @@ export default function JobsPage() {
                 </h2>
                 <div className="space-y-2">
                   {grouped[date].map((job) => (
-                    <div
-                      key={job.id}
-                      className={`bg-white rounded-xl border shadow-sm transition-opacity ${job.statut === "complete" ? "opacity-50" : ""}`}
-                    >
+                    <div key={job.id} className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${job.statut === "complete" ? "opacity-40" : ""}`}>
+                      {/* Infos */}
                       <div className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap mb-1">
-                              <span className="font-bold text-[#1a1a1a]">{job.nom}</span>
-                              <button
-                                onClick={() => changerStatut(job)}
-                                className={`text-xs font-semibold px-2 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${STATUT_COLORS[job.statut]}`}
-                              >
-                                {STATUT_LABELS[job.statut]}
-                              </button>
-                              {job.heure && (
-                                <span className="text-sm text-gray-500 font-medium">{job.heure.slice(0, 5)}</span>
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600">{job.adresse}, {job.ville}</p>
-                            {job.telephone && <p className="text-sm text-gray-400 mt-0.5">{job.telephone}</p>}
-                            {job.notes && <p className="text-xs text-gray-400 mt-1 italic bg-gray-50 rounded px-2 py-1">{job.notes}</p>}
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="font-bold text-[#1a1a1a]">{job.nom}</span>
+                            {job.heure && <span className="text-gray-400 text-sm font-medium shrink-0">{job.heure.slice(0, 5)}</span>}
                           </div>
-
-                          <div className="flex items-center gap-1 shrink-0">
-                            <a
-                              href={mapsUrl(job.adresse, job.ville)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                              title="Maps"
-                            >
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                              </svg>
-                            </a>
-                            <a
-                              href={`tel:${job.telephone}`}
-                              className="text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                              title="Appeler"
-                            >
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
-                              </svg>
-                            </a>
-                            <button
-                              onClick={() => supprimerJob(job.id)}
-                              className="text-gray-300 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                              title="Supprimer"
-                            >
-                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                            </button>
-                          </div>
+                          <button
+                            onClick={() => changerStatut(job)}
+                            className={`text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ml-2 ${STATUT_COLORS[job.statut]}`}
+                          >
+                            {STATUT_LABELS[job.statut]}
+                          </button>
                         </div>
+                        <a
+                          href={mapsUrl(job.adresse, job.ville)}
+                          target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-3 py-2 mb-2 group"
+                        >
+                          <span className="text-red-600 text-sm">📍</span>
+                          <span className="text-red-700 text-sm font-medium">{job.adresse}, {job.ville}</span>
+                          <span className="text-red-400 text-xs ml-auto group-hover:text-red-600">Maps →</span>
+                        </a>
+                        {job.notes && <p className="text-xs text-gray-400 italic bg-gray-50 rounded-lg px-2.5 py-1.5">{job.notes}</p>}
+                      </div>
+                      {/* Actions */}
+                      <div className="border-t border-gray-100 grid grid-cols-3 divide-x divide-gray-100">
+                        <a href={`tel:${job.telephone}`} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-500 hover:bg-gray-50 transition-colors">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" /></svg>
+                          Appeler
+                        </a>
+                        <button onClick={() => changerStatut(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                          Avancer
+                        </button>
+                        <button onClick={() => supprimerJob(job.id)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          Supprimer
+                        </button>
                       </div>
                     </div>
                   ))}
