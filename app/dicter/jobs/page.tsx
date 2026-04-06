@@ -67,17 +67,39 @@ function groupByVille(jobs: Job[]) {
   }, {});
 }
 
-async function geocoderAdresse(adresse: string, ville: string): Promise<{ lat: number; lon: number } | null> {
+async function nominatimQuery(q: string): Promise<{ lat: number; lon: number } | null> {
   try {
-    const q = encodeURIComponent(`${adresse}, ${ville}, Quebec, Canada`);
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=ca`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=ca`,
       { headers: { "Accept-Language": "fr" } }
     );
     const data = await res.json();
     if (!data.length) return null;
     return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
   } catch { return null; }
+}
+
+// Essaie adresse complète → rue seulement → ville seulement
+async function geocoderAdresse(adresse: string, ville: string): Promise<{ lat: number; lon: number } | null> {
+  const delay = () => new Promise(r => setTimeout(r, 1100));
+
+  // 1. Adresse complète
+  const r1 = await nominatimQuery(`${adresse}, ${ville}, Quebec, Canada`);
+  if (r1) return r1;
+  await delay();
+
+  // 2. Rue sans numéro civique
+  const rueSansNum = adresse.replace(/^\d+\s*/, "").trim();
+  if (rueSansNum && rueSansNum !== adresse) {
+    const r2 = await nominatimQuery(`${rueSansNum}, ${ville}, Quebec, Canada`);
+    if (r2) return r2;
+    await delay();
+  }
+
+  // 3. Juste la ville (au pire on groupe géographiquement)
+  const r3 = await nominatimQuery(`${ville}, Quebec, Canada`);
+  await delay();
+  return r3;
 }
 
 function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }) {
@@ -88,6 +110,40 @@ function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: numb
     Math.sin(dLat / 2) ** 2 +
     Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+}
+
+function longueurTotale(route: Array<{ lat: number; lon: number }>, depart: { lat: number; lon: number }) {
+  let total = distanceKm(depart, route[0]);
+  for (let i = 0; i < route.length - 1; i++) total += distanceKm(route[i], route[i + 1]);
+  return total;
+}
+
+// 2-opt : améliore le résultat du nearest neighbor en inversant des segments
+function deuxOpt<T extends { lat: number; lon: number }>(
+  route: T[],
+  depart: { lat: number; lon: number }
+): T[] {
+  if (route.length <= 2) return route;
+  let best = [...route];
+  let ameliore = true;
+  while (ameliore) {
+    ameliore = false;
+    for (let i = 0; i < best.length - 1; i++) {
+      for (let j = i + 2; j < best.length; j++) {
+        const avant = i === 0 ? depart : best[i - 1];
+        const dActuel = distanceKm(avant, best[i]) + distanceKm(best[j - 1], best[j]);
+        const dInverse = distanceKm(avant, best[j - 1]) + distanceKm(best[i], best[j]);
+        if (dInverse < dActuel - 0.01) {
+          // Inverser le segment [i, j-1]
+          const nouveau = [...best];
+          nouveau.splice(i, j - i, ...best.slice(i, j).reverse());
+          best = nouveau;
+          ameliore = true;
+        }
+      }
+    }
+  }
+  return best;
 }
 
 
@@ -317,11 +373,10 @@ export default function JobsPage() {
         });
       } catch { /* GPS non disponible, pas grave */ }
 
-      // 2. Géocoder une par une (Nominatim = max 1 req/sec)
+      // 2. Géocoder une par une avec fallbacks (délai géré dans geocoderAdresse)
       const coordonnees: Array<{ lat: number; lon: number } | null> = [];
       for (const j of jobsSelectionnes) {
         coordonnees.push(await geocoderAdresse(j.adresse, j.ville));
-        if (jobsSelectionnes.length > 1) await new Promise(r => setTimeout(r, 1100));
       }
 
       // 3. Attacher les coordonnées aux jobs
@@ -330,17 +385,15 @@ export default function JobsPage() {
         .filter(j => j.lat !== 0);
       const sansCoords = jobsSelectionnes.filter((_, i) => !coordonnees[i]);
 
-      // 4. Optimiser depuis la position actuelle (ou depuis le premier job)
+      // 4. Nearest neighbor depuis la position actuelle
       const pointDepart = positionActuelle ?? (avecCoords[0] ?? null);
       let optimises: typeof avecCoords;
       if (pointDepart && avecCoords.length > 1) {
-        // Nearest neighbor en partant de la position actuelle
         const restants = [...avecCoords];
         optimises = [];
         let courant = pointDepart;
         while (restants.length > 0) {
-          let idx = 0;
-          let minDist = Infinity;
+          let idx = 0, minDist = Infinity;
           for (let i = 0; i < restants.length; i++) {
             const d = distanceKm(courant, restants[i]);
             if (d < minDist) { minDist = d; idx = i; }
@@ -349,6 +402,12 @@ export default function JobsPage() {
           optimises.push(suivant);
           courant = suivant;
         }
+        // 5. 2-opt pour affiner l'ordre
+        const depart = pointDepart;
+        const avant = longueurTotale(optimises, depart);
+        optimises = deuxOpt(optimises, depart);
+        const apres = longueurTotale(optimises, depart);
+        console.log(`Optimisation : ${avant.toFixed(1)} km → ${apres.toFixed(1)} km`);
       } else {
         optimises = avecCoords;
       }
