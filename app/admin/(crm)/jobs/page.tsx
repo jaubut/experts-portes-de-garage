@@ -104,27 +104,29 @@ function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: numb
   return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
 }
 
-function longueurTotale(route: Array<{ lat: number; lon: number }>, depart: { lat: number; lon: number }) {
+function longueurTotale(route: Array<{ lat: number; lon: number }>, depart: { lat: number; lon: number }, arrivee?: { lat: number; lon: number } | null) {
+  if (route.length === 0) return 0;
   let total = distanceKm(depart, route[0]);
   for (let i = 0; i < route.length - 1; i++) total += distanceKm(route[i], route[i + 1]);
+  if (arrivee) total += distanceKm(route[route.length - 1], arrivee);
   return total;
 }
 
-function deuxOpt<T extends { lat: number; lon: number }>(route: T[], depart: { lat: number; lon: number }): T[] {
+function deuxOpt<T extends { lat: number; lon: number }>(route: T[], depart: { lat: number; lon: number }, arrivee?: { lat: number; lon: number } | null): T[] {
   if (route.length <= 2) return route;
   let best = [...route];
+  let bestCost = longueurTotale(best, depart, arrivee);
   let ameliore = true;
   while (ameliore) {
     ameliore = false;
     for (let i = 0; i < best.length - 1; i++) {
-      for (let j = i + 2; j < best.length; j++) {
-        const avant = i === 0 ? depart : best[i - 1];
-        const dActuel = distanceKm(avant, best[i]) + distanceKm(best[j - 1], best[j]);
-        const dInverse = distanceKm(avant, best[j - 1]) + distanceKm(best[i], best[j]);
-        if (dInverse < dActuel - 0.01) {
-          const nouveau = [...best];
-          nouveau.splice(i, j - i, ...best.slice(i, j).reverse());
-          best = nouveau;
+      for (let j = i + 2; j <= best.length; j++) {
+        const candidat = [...best];
+        candidat.splice(i, j - i, ...best.slice(i, j).reverse());
+        const cout = longueurTotale(candidat, depart, arrivee);
+        if (cout < bestCost - 0.01) {
+          best = candidat;
+          bestCost = cout;
           ameliore = true;
         }
       }
@@ -231,6 +233,16 @@ export default function JobsPage() {
   const [showSuggestionsDestination, setShowSuggestionsDestination] = useState(false);
   const [destinationChoisie, setDestinationChoisie] = useState<{ adresse: string; ville: string; lat: number; lon: number } | null>(null);
   const debounceDestRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Point de départ
+  const [depart, setDepart] = useState("");
+  const [suggestionsDepart, setSuggestionsDepart] = useState<Array<{ label: string; adresse: string; ville: string; lat: number; lon: number }>>([]);
+  const [showSuggestionsDepart, setShowSuggestionsDepart] = useState(false);
+  const [departChoisi, setDepartChoisi] = useState<{ adresse: string; ville: string; lat: number; lon: number } | null>(null);
+  const debounceDepartRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Priorités optionnelles
+  const [priorites, setPriorites] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     if (sessionStorage.getItem("dicter_auth") === MOT_DE_PASSE) setAuth(true);
@@ -352,14 +364,75 @@ export default function JobsPage() {
     }, 400);
   }
 
+  function rechercherDepart(query: string) {
+    setDepart(query);
+    setDepartChoisi(null);
+    if (debounceDepartRef.current) clearTimeout(debounceDepartRef.current);
+    if (query.length < 3) { setSuggestionsDepart([]); setShowSuggestionsDepart(false); return; }
+    debounceDepartRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ", Quebec, Canada")}&format=json&addressdetails=1&limit=5&countrycodes=ca`,
+          { headers: { "Accept-Language": "fr" } }
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data: any[] = await res.json();
+        const results = data.map(r => {
+          const num = r.address?.house_number ?? "";
+          const rue = r.address?.road ?? "";
+          const ville = r.address?.city ?? r.address?.town ?? r.address?.village ?? r.address?.municipality ?? r.address?.county ?? "";
+          const adresse = rue ? `${num} ${rue}`.trim() : ville;
+          const label = [adresse, ville].filter(Boolean).join(", ");
+          return { label, adresse, ville, lat: parseFloat(r.lat), lon: parseFloat(r.lon) };
+        }).filter(r => r.ville);
+        setSuggestionsDepart(results);
+        setShowSuggestionsDepart(results.length > 0);
+      } catch { /* ignore */ }
+    }, 400);
+  }
+
   function toggleSelection(id: string) {
     setSelectionIds(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+    setPriorites(prev => {
+      if (!prev.has(id)) return prev;
+      const next = new Map(prev);
+      next.delete(id);
+      const sorted = [...next.entries()].sort((a, b) => a[1] - b[1]);
+      next.clear();
+      sorted.forEach(([k], i) => next.set(k, i + 1));
+      return next;
+    });
   }
 
   function toggleVille(villeJobs: Job[]) {
     const ids = villeJobs.map(j => j.id);
     const tousCoches = ids.every(id => selectionIds.has(id));
     setSelectionIds(prev => { const next = new Set(prev); if (tousCoches) ids.forEach(id => next.delete(id)); else ids.forEach(id => next.add(id)); return next; });
+    if (tousCoches) {
+      setPriorites(prev => {
+        const next = new Map(prev);
+        ids.forEach(id => next.delete(id));
+        const sorted = [...next.entries()].sort((a, b) => a[1] - b[1]);
+        next.clear();
+        sorted.forEach(([k], i) => next.set(k, i + 1));
+        return next;
+      });
+    }
+  }
+
+  function togglePriorite(jobId: string) {
+    setPriorites(prev => {
+      const next = new Map(prev);
+      if (next.has(jobId)) {
+        next.delete(jobId);
+        const sorted = [...next.entries()].sort((a, b) => a[1] - b[1]);
+        next.clear();
+        sorted.forEach(([k], i) => next.set(k, i + 1));
+      } else {
+        next.set(jobId, next.size + 1);
+      }
+      return next;
+    });
   }
 
   function entrerModeItineraire() {
@@ -368,6 +441,9 @@ export default function JobsPage() {
     setSelectionIds(new Set(ids));
     setDestination("");
     setDestinationChoisie(null);
+    setDepart("");
+    setDepartChoisi(null);
+    setPriorites(new Map());
     setModeItineraire(true);
   }
 
@@ -376,18 +452,26 @@ export default function JobsPage() {
     if (jobsSelectionnes.length === 0) return;
     setOptimisant(true);
     try {
+      // 1. Déterminer le point de départ
       let positionActuelle: { lat: number; lon: number } | null = null;
-      try {
-        positionActuelle = await new Promise(resolve => {
-          if (!navigator.geolocation) { resolve(null); return; }
-          navigator.geolocation.getCurrentPosition(
-            pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-            () => resolve(null),
-            { timeout: 5000, maximumAge: 60000 }
-          );
-        });
-      } catch { /* GPS non disponible */ }
+      if (departChoisi) {
+        positionActuelle = { lat: departChoisi.lat, lon: departChoisi.lon };
+      } else if (depart.trim()) {
+        positionActuelle = await nominatimQuery(depart.trim() + ", Quebec, Canada");
+      } else {
+        try {
+          positionActuelle = await new Promise(resolve => {
+            if (!navigator.geolocation) { resolve(null); return; }
+            navigator.geolocation.getCurrentPosition(
+              pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+              () => resolve(null),
+              { timeout: 5000, maximumAge: 60000 }
+            );
+          });
+        } catch { /* GPS non disponible */ }
+      }
 
+      // 2. Geocoder toutes les adresses
       const coordonnees: Array<{ lat: number; lon: number } | null> = [];
       for (const j of jobsSelectionnes) {
         coordonnees.push(await geocoderAdresse(j.adresse, j.ville));
@@ -397,32 +481,55 @@ export default function JobsPage() {
       const sansCoords = jobsSelectionnes.filter((_, i) => !coordonnees[i]);
 
       const pointDepart = positionActuelle ?? (avecCoords[0] ?? null);
-      let optimises: typeof avecCoords;
-      if (pointDepart && avecCoords.length > 1) {
-        const restants = [...avecCoords];
-        optimises = [];
-        let courant = pointDepart;
-        while (restants.length > 0) {
+      const arrivee = destinationChoisie ?? null;
+
+      // 3. Séparer prioritaires et restants
+      const prioritaires = avecCoords
+        .filter(j => priorites.has(j.id))
+        .sort((a, b) => (priorites.get(a.id) ?? 0) - (priorites.get(b.id) ?? 0));
+      const restants = avecCoords.filter(j => !priorites.has(j.id));
+
+      // 4. Optimiser les restants
+      const pointDepartRestants = prioritaires.length > 0
+        ? prioritaires[prioritaires.length - 1]
+        : pointDepart;
+
+      let restantsOptimises: typeof restants;
+      if (pointDepartRestants && restants.length > 1) {
+        const pool = [...restants];
+        restantsOptimises = [];
+        let courant = pointDepartRestants;
+        while (pool.length > 0) {
           let idx = 0, minDist = Infinity;
-          for (let i = 0; i < restants.length; i++) { const d = distanceKm(courant, restants[i]); if (d < minDist) { minDist = d; idx = i; } }
-          const suivant = restants.splice(idx, 1)[0];
-          optimises.push(suivant);
+          for (let i = 0; i < pool.length; i++) { const d = distanceKm(courant, pool[i]); if (d < minDist) { minDist = d; idx = i; } }
+          const suivant = pool.splice(idx, 1)[0];
+          restantsOptimises.push(suivant);
           courant = suivant;
         }
-        const avant = longueurTotale(optimises, pointDepart);
-        optimises = deuxOpt(optimises, pointDepart);
-        console.log(`Optimisation : ${avant.toFixed(1)} km → ${longueurTotale(optimises, pointDepart).toFixed(1)} km`);
+        restantsOptimises = deuxOpt(restantsOptimises, pointDepartRestants, arrivee);
       } else {
-        optimises = avecCoords;
+        restantsOptimises = restants;
       }
 
+      const optimises = [...prioritaires, ...restantsOptimises];
+      if (pointDepart) {
+        const avant = longueurTotale([...prioritaires, ...restants], pointDepart, arrivee);
+        const apres = longueurTotale(optimises, pointDepart, arrivee);
+        console.log(`Optimisation : ${avant.toFixed(1)} km → ${apres.toFixed(1)} km`);
+      }
+
+      // 5. Construire l'URL Google Maps
       const tousEnOrdre = [...optimises, ...sansCoords];
       const stops = tousEnOrdre.map(j => encodeURIComponent(`${j.adresse}, ${j.ville}, QC`));
       if (destinationChoisie) stops.push(`${destinationChoisie.lat},${destinationChoisie.lon}`);
       else if (destination.trim()) stops.push(encodeURIComponent(`${destination.trim()}, QC, Canada`));
 
+      let startSegment = "";
+      if (departChoisi) startSegment = `${departChoisi.lat},${departChoisi.lon}`;
+      else if (positionActuelle) startSegment = `${positionActuelle.lat},${positionActuelle.lon}`;
+
       let url: string;
-      if (positionActuelle) url = `https://www.google.com/maps/dir/${positionActuelle.lat},${positionActuelle.lon}/${stops.join("/")}`;
+      if (startSegment) url = `https://www.google.com/maps/dir/${startSegment}/${stops.join("/")}`;
       else url = itineraireUrl(stops) ?? "";
       if (url) window.open(url, "_blank");
     } finally { setOptimisant(false); }
@@ -463,6 +570,11 @@ export default function JobsPage() {
   const villesItineraire = Object.keys(parVille).sort();
   const nbSelectionnes = selectionIds.size;
   const aujourdhui = nowDateStr();
+
+  // SVG icons
+  const mapSvg = <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>;
+  const pinSvg = <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>;
+  const spinnerSvg = <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>;
 
   const formulaire = (
     <form onSubmit={ajouterJob} className="bg-white/[0.03] rounded-2xl p-5 border border-white/[0.06] space-y-3">
@@ -509,47 +621,104 @@ export default function JobsPage() {
             <p className="text-white font-bold text-sm">
               {nbSelectionnes === 0 ? "Sélectionner des jobs" : `${nbSelectionnes} job${nbSelectionnes > 1 ? "s" : ""} sélectionné${nbSelectionnes > 1 ? "s" : ""}`}
             </p>
-            <button onClick={genererItineraire} disabled={nbSelectionnes === 0 || optimisant} className="bg-red-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-700 active:scale-95 transition-all disabled:opacity-40">
-              {optimisant ? "⏳..." : "🗺️ Maps"}
+            <button onClick={genererItineraire} disabled={nbSelectionnes === 0 || optimisant} className="bg-red-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-red-700 active:scale-95 transition-all disabled:opacity-40 flex items-center gap-1.5">
+              {optimisant ? spinnerSvg : mapSvg} Maps
             </button>
           </div>
         </div>
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-4 py-4 space-y-4">
-          <p className="text-xs text-white/30 text-center">Coche les jobs à inclure, puis clique «&nbsp;Maps&nbsp;»</p>
+          <p className="text-xs text-white/30 text-center">
+            {nbSelectionnes > 0
+              ? `${nbSelectionnes} job${nbSelectionnes > 1 ? "s" : ""} d'aujourd'hui pré-sélectionné${nbSelectionnes > 1 ? "s" : ""}. Modifie la sélection si besoin.`
+              : "Coche les jobs à inclure, puis clique « Maps »"}
+          </p>
 
-          {/* Destination finale */}
-          <div className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-4">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Terminer à (optionnel)</label>
-            <div className="relative">
-              <input
-                type="text"
-                value={destination}
-                onChange={e => rechercherDestination(e.target.value)}
-                onBlur={() => setTimeout(() => setShowSuggestionsDestination(false), 150)}
-                onFocus={() => suggestionsDestination.length > 0 && setShowSuggestionsDestination(true)}
-                placeholder="ex: Ange-Gardien, maison, bureau..."
-                autoComplete="off"
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all"
-              />
-              {destinationChoisie && (
-                <button type="button" onClick={() => { setDestination(""); setDestinationChoisie(null); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg transition-colors">×</button>
-              )}
-              {showSuggestionsDestination && (
-                <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
-                  {suggestionsDestination.map((s, i) => (
-                    <li key={i}>
-                      <button type="button" onMouseDown={() => { setDestination(s.label); setDestinationChoisie({ adresse: s.adresse, ville: s.ville, lat: s.lat, lon: s.lon }); setShowSuggestionsDestination(false); }}
-                        className="w-full text-left px-4 py-3 text-sm hover:bg-red-500/10 hover:text-red-400 transition-colors border-b border-white/[0.04] last:border-0">
-                        📍 {s.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+          {/* Départ + Destination */}
+          <div className="bg-white/[0.03] rounded-2xl border border-white/[0.06] p-4 space-y-3">
+            {/* Point de départ */}
+            <div>
+              <label className="text-xs font-bold text-white/30 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="3" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 2v4m0 12v4m10-10h-4M6 12H2" /></svg>
+                Partir de (optionnel)
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={depart}
+                  onChange={e => rechercherDepart(e.target.value)}
+                  onBlur={() => setTimeout(() => setShowSuggestionsDepart(false), 150)}
+                  onFocus={() => suggestionsDepart.length > 0 && setShowSuggestionsDepart(true)}
+                  placeholder="GPS auto ou tapez une adresse..."
+                  autoComplete="off"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-emerald-500/50 transition-all"
+                />
+                {departChoisi && (
+                  <button type="button" onClick={() => { setDepart(""); setDepartChoisi(null); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg transition-colors">×</button>
+                )}
+                {showSuggestionsDepart && (
+                  <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
+                    {suggestionsDepart.map((s, i) => (
+                      <li key={i}>
+                        <button type="button" onMouseDown={() => { setDepart(s.label); setDepartChoisi({ adresse: s.adresse, ville: s.ville, lat: s.lat, lon: s.lon }); setShowSuggestionsDepart(false); }}
+                          className="w-full text-left px-4 py-3 text-sm hover:bg-emerald-500/10 hover:text-emerald-400 transition-colors border-b border-white/[0.04] last:border-0 flex items-center gap-2">
+                          <span className="text-emerald-400 shrink-0">{pinSvg}</span> {s.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              {departChoisi && <p className="text-xs text-emerald-400 mt-1.5 font-medium">✓ Départ — {departChoisi.adresse}, {departChoisi.ville}</p>}
+              {!departChoisi && !depart.trim() && <p className="text-xs text-white/20 mt-1 italic">Position GPS utilisée par défaut</p>}
             </div>
-            {destinationChoisie && <p className="text-xs text-emerald-400 mt-1.5 font-medium">✓ Destination confirmée — {destinationChoisie.adresse}, {destinationChoisie.ville}</p>}
+
+            <div className="border-t border-white/[0.06]" />
+
+            {/* Destination finale */}
+            <div>
+              <label className="text-xs font-bold text-white/30 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                <svg className="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 21l3.75-7.5L12 12l5.25 1.5L21 21" /><circle cx="12" cy="7" r="3" /></svg>
+                Terminer à (optionnel)
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={destination}
+                  onChange={e => rechercherDestination(e.target.value)}
+                  onBlur={() => setTimeout(() => setShowSuggestionsDestination(false), 150)}
+                  onFocus={() => suggestionsDestination.length > 0 && setShowSuggestionsDestination(true)}
+                  placeholder="ex: Ange-Gardien, maison, bureau..."
+                  autoComplete="off"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-red-500/50 transition-all"
+                />
+                {destinationChoisie && (
+                  <button type="button" onClick={() => { setDestination(""); setDestinationChoisie(null); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg transition-colors">×</button>
+                )}
+                {showSuggestionsDestination && (
+                  <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-[#13131a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
+                    {suggestionsDestination.map((s, i) => (
+                      <li key={i}>
+                        <button type="button" onMouseDown={() => { setDestination(s.label); setDestinationChoisie({ adresse: s.adresse, ville: s.ville, lat: s.lat, lon: s.lon }); setShowSuggestionsDestination(false); }}
+                          className="w-full text-left px-4 py-3 text-sm hover:bg-red-500/10 hover:text-red-400 transition-colors border-b border-white/[0.04] last:border-0 flex items-center gap-2">
+                          <span className="text-red-400 shrink-0">{pinSvg}</span> {s.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              {destinationChoisie && <p className="text-xs text-emerald-400 mt-1.5 font-medium">✓ Destination — {destinationChoisie.adresse}, {destinationChoisie.ville}</p>}
+            </div>
           </div>
+
+          {/* Priorités info */}
+          {priorites.size > 0 && (
+            <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/25 rounded-xl px-3 py-2 text-xs text-amber-400 font-medium">
+              <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+              {priorites.size} job{priorites.size > 1 ? "s" : ""} prioritaire{priorites.size > 1 ? "s" : ""} — visité{priorites.size > 1 ? "s" : ""} en premier
+            </div>
+          )}
 
           {villesItineraire.length === 0 ? (
             <div className="text-center text-white/30 py-16 bg-white/[0.03] rounded-2xl border border-white/[0.06]">Aucun job à faire</div>
@@ -575,6 +744,20 @@ export default function JobsPage() {
                       <div className={`w-5 h-5 rounded border-2 shrink-0 flex items-center justify-center transition-all ${selectionIds.has(job.id) ? "bg-red-600 border-red-600" : "border-white/20"}`}>
                         {selectionIds.has(job.id) && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                       </div>
+                      {selectionIds.has(job.id) && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); togglePriorite(job.id); }}
+                          className={`w-7 h-7 rounded-full text-xs font-bold shrink-0 flex items-center justify-center transition-all ${
+                            priorites.has(job.id)
+                              ? "bg-amber-500 text-black shadow-sm shadow-amber-500/30"
+                              : "bg-white/10 text-white/30 hover:bg-white/20"
+                          }`}
+                          title={priorites.has(job.id) ? "Retirer la priorité" : "Définir comme prioritaire"}
+                        >
+                          {priorites.has(job.id) ? priorites.get(job.id) : "#"}
+                        </button>
+                      )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-white/90">{job.nom}</p>
                         <p className="text-xs text-white/30 truncate">{job.adresse}</p>
@@ -592,8 +775,8 @@ export default function JobsPage() {
 
           {nbSelectionnes > 0 && (
             <button onClick={genererItineraire} disabled={optimisant}
-              className="w-full bg-red-600 text-white font-bold py-4 rounded-2xl text-base hover:bg-red-700 active:scale-[0.98] transition-all shadow disabled:opacity-60">
-              {optimisant ? `⏳ Optimisation... (${nbSelectionnes} adresses)` : `🗺️ Générer itinéraire optimisé — ${nbSelectionnes} arrêt${nbSelectionnes > 1 ? "s" : ""}`}
+              className="w-full bg-red-600 text-white font-bold py-4 rounded-2xl text-base hover:bg-red-700 active:scale-[0.98] transition-all shadow disabled:opacity-60 flex items-center justify-center gap-2">
+              {optimisant ? <>{spinnerSvg} Optimisation... ({nbSelectionnes} adresses)</> : <>{mapSvg} Générer itinéraire optimisé — {nbSelectionnes} arrêt{nbSelectionnes > 1 ? "s" : ""}</>}
             </button>
           )}
         </div>
@@ -613,8 +796,8 @@ export default function JobsPage() {
             {jobs.filter(j => j.statut === "en_cours").length} en cours
           </p>
           <div className="flex items-center gap-2">
-            <button onClick={entrerModeItineraire} className="text-xs px-3 py-1.5 rounded-lg font-medium bg-white/10 text-white/70 hover:bg-white/20 hover:text-white active:scale-95 transition-all">
-              🗺️ Itinéraire
+            <button onClick={entrerModeItineraire} className="text-xs px-3 py-1.5 rounded-lg font-medium bg-white/10 text-white/70 hover:bg-white/20 hover:text-white active:scale-95 transition-all flex items-center gap-1.5">
+              {mapSvg} Itinéraire
             </button>
             <button onClick={() => setShowFiltres(!showFiltres)}
               className={`md:hidden text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${(filtreDate || filtreVille) ? "bg-red-600 text-white" : "bg-white/10 text-white/70"}`}>
@@ -782,7 +965,7 @@ export default function JobsPage() {
                             </div>
                             <a href={mapsUrl(job.adresse, job.ville)} target="_blank" rel="noopener noreferrer"
                               className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mb-2 group hover:bg-red-500/15 transition-colors">
-                              <span className="text-red-400 text-sm">📍</span>
+                              <span className="text-red-400">{pinSvg}</span>
                               <span className="text-red-300 text-sm font-medium">{job.adresse}, {job.ville}</span>
                               <span className="text-red-400/50 text-xs ml-auto group-hover:text-red-300 transition-colors">Maps →</span>
                             </a>
