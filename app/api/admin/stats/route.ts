@@ -7,12 +7,16 @@ export async function GET() {
   const supabase = getSupabase();
 
   const [clientsRes, jobsRes] = await Promise.all([
-    supabase.from("clients").select("id, statut, montant_estime, created_at"),
-    supabase.from("jobs").select("id, statut, montant, date, telephone"),
+    supabase.from("clients").select("*"),
+    supabase.from("jobs").select("*"),
   ]);
 
   const clients = clientsRes.data ?? [];
   const jobs = jobsRes.data ?? [];
+
+  if (clientsRes.error) console.error("[stats] clients error:", clientsRes.error);
+  if (jobsRes.error) console.error("[stats] jobs error:", jobsRes.error);
+  console.log(`[stats] ${clients.length} clients, ${jobs.length} jobs`);
 
   // Pipeline valeur
   const pipelineTotal = clients.reduce((s, c) => s + (c.montant_estime ?? 0), 0);
@@ -25,10 +29,11 @@ export async function GET() {
   const leadsConvertis = clients.filter(c => c.statut === "complete" || c.statut === "job_planifie").length;
   const tauxConversion = totalLeads > 0 ? Math.round((leadsConvertis / totalLeads) * 100) : 0;
 
-  // Revenu moyen par lead converti
-  const jobsCompletes = jobs.filter(j => j.statut === "complete" && j.montant);
-  const revenuTotal = jobsCompletes.reduce((s, j) => s + (j.montant ?? 0), 0);
-  const revenuMoyen = jobsCompletes.length > 0 ? Math.round(revenuTotal / jobsCompletes.length) : 0;
+  // Revenus et jobs complétés
+  const jobsCompletesAll = jobs.filter(j => j.statut === "complete");
+  const jobsAvecMontant = jobsCompletesAll.filter(j => j.montant);
+  const revenuTotal = jobsAvecMontant.reduce((s, j) => s + (j.montant ?? 0), 0);
+  const revenuMoyen = jobsAvecMontant.length > 0 ? Math.round(revenuTotal / jobsAvecMontant.length) : 0;
 
   // Revenus par mois (12 derniers mois)
   const revenusMensuels: Record<string, number> = {};
@@ -38,7 +43,7 @@ export async function GET() {
     const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
     revenusMensuels[key] = 0;
   }
-  for (const job of jobsCompletes) {
+  for (const job of jobsAvecMontant) {
     const key = job.date?.substring(0, 7);
     if (key && key in revenusMensuels) {
       revenusMensuels[key] += job.montant ?? 0;
@@ -77,7 +82,7 @@ export async function GET() {
     revenuMoyen,
     jobsAFaire,
     jobsEnCours,
-    jobsCompletes: jobsCompletes.length,
+    jobsCompletes: jobsCompletesAll.length,
     revenusMensuels,
     jobsMensuels,
     leadsMensuels,
