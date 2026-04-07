@@ -261,7 +261,7 @@ export default function JobsPage() {
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/jobs");
+    const res = await fetch("/api/jobs", { cache: "no-store" });
     const data = await res.json();
     setJobs(Array.isArray(data) ? data : []);
     setLoading(false);
@@ -284,7 +284,8 @@ export default function JobsPage() {
     e.preventDefault();
     setSaving(true);
     const payload = { ...form, montant: form.montant ? parseFloat(form.montant) : null };
-    await fetch("/api/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const res = await fetch("/api/jobs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    if (!res.ok) { alert("Erreur lors de l'ajout du job"); setSaving(false); return; }
     setForm(FORM_VIDE);
     setShowForm(false);
     await fetchJobs();
@@ -305,7 +306,11 @@ export default function JobsPage() {
   async function changerStatut(job: Job, newStatut?: Statut) {
     const next = newStatut ?? STATUT_NEXT[job.statut];
     setJobs(prev => prev.map(j => j.id === job.id ? { ...j, statut: next } : j));
-    await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: next }) });
+    const res = await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: next }) });
+    if (!res.ok) {
+      alert("Erreur de sauvegarde du statut");
+      await fetchJobs();
+    }
   }
 
   async function copierLienAvis(jobId: string) {
@@ -318,7 +323,11 @@ export default function JobsPage() {
   async function supprimerJob(id: string) {
     if (!confirm("Supprimer ce job?")) return;
     setJobs(prev => prev.filter(j => j.id !== id));
-    await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      alert("Erreur de suppression");
+      await fetchJobs();
+    }
   }
 
   function ouvrirEditJob(job: Job) {
@@ -329,8 +338,14 @@ export default function JobsPage() {
   async function sauvegarderEditJob(job: Job) {
     setSavingEdit(true);
     const payload = { nom: editJobForm.nom, telephone: editJobForm.telephone, adresse: editJobForm.adresse, ville: editJobForm.ville, date: editJobForm.date, heure: editJobForm.heure || null, notes: editJobForm.notes || null, montant: editJobForm.montant ? parseFloat(editJobForm.montant) : null };
-    await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    setJobs(prev => prev.map(j => j.id === job.id ? { ...j, ...payload } as Job : j));
+    const res = await fetch(`/api/jobs/${job.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    if (!res.ok) {
+      alert("Erreur de sauvegarde — les modifications n'ont pas été enregistrées");
+      setSavingEdit(false);
+      return;
+    }
+    const saved: Job = await res.json();
+    setJobs(prev => prev.map(j => j.id === job.id ? saved : j));
     setEditJobId(null);
     setSavingEdit(false);
   }

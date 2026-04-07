@@ -1,10 +1,14 @@
 import { getSupabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function PATCH(req: Request, props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
   const supabase = getSupabase();
   const body = await req.json();
+
+  console.log(`[PATCH clients/${id}] payload:`, JSON.stringify(body));
 
   const { data, error } = await supabase
     .from("clients")
@@ -13,7 +17,11 @@ export async function PATCH(req: Request, props: { params: Promise<{ id: string 
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error(`[PATCH clients/${id}] ERROR:`, error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  console.log(`[PATCH clients/${id}] OK — saved:`, JSON.stringify(data));
   return NextResponse.json(data);
 }
 

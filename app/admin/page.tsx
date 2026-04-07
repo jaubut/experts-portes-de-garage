@@ -27,7 +27,7 @@ export default function AdminPage() {
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const res = await fetch("/api/admin/stats");
+      const res = await fetch("/api/admin/stats", { cache: "no-store" });
       setStats(await res.json());
     } catch { /* ignore */ }
     finally { setLoadingStats(false); }

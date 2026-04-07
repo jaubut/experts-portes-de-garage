@@ -151,8 +151,8 @@ export default function LeadsPage() {
   const fetchClients = useCallback(async () => {
     setLoading(true);
     const [clientsRes, jobsRes] = await Promise.all([
-      fetch("/api/clients"),
-      fetch("/api/jobs"),
+      fetch("/api/clients", { cache: "no-store" }),
+      fetch("/api/jobs", { cache: "no-store" }),
     ]);
     const clientsData = await clientsRes.json();
     const jobsData = await jobsRes.json();
@@ -181,19 +181,28 @@ export default function LeadsPage() {
   async function ajouterLead(e: React.FormEvent) {
     e.preventDefault();
     setSavingAjout(true);
-    await fetch("/api/client-rapide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nom: ajoutForm.nom, telephone: ajoutForm.telephone, adresse: ajoutForm.adresse || undefined, ville: ajoutForm.ville, probleme: ajoutForm.probleme || "Non précisé", courriel: ajoutForm.courriel || undefined, notes: ajoutForm.notes || undefined, montant_estime: ajoutForm.montant_estime ? parseFloat(ajoutForm.montant_estime) : undefined }) });
+    const res = await fetch("/api/client-rapide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nom: ajoutForm.nom, telephone: ajoutForm.telephone, adresse: ajoutForm.adresse || undefined, ville: ajoutForm.ville, probleme: ajoutForm.probleme || "Non précisé", courriel: ajoutForm.courriel || undefined, notes: ajoutForm.notes || undefined, montant_estime: ajoutForm.montant_estime ? parseFloat(ajoutForm.montant_estime) : undefined }) });
+    if (!res.ok) { alert("Erreur lors de l'ajout du lead"); setSavingAjout(false); return; }
     setAjoutForm(FORM_VIDE); setShowAjout(false);
     await fetchClients(); setSavingAjout(false);
   }
 
   async function changerStatut(client: Client, newStatut: StatutLead) {
     setClients(prev => prev.map(c => c.id === client.id ? { ...c, statut: newStatut } : c));
-    await fetch(`/api/clients/${client.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: newStatut }) });
+    const res = await fetch(`/api/clients/${client.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ statut: newStatut }) });
+    if (!res.ok) {
+      alert("Erreur de sauvegarde du statut");
+      await fetchClients();
+    }
   }
 
   async function sauvegarderRappel(clientId: string, date: string) {
     setClients(prev => prev.map(c => c.id === clientId ? { ...c, date_rappel: date || null, statut: date ? "a_rappeler" : c.statut } : c));
-    await fetch(`/api/clients/${clientId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ date_rappel: date || null, ...(date ? { statut: "a_rappeler" } : {}) }) });
+    const res = await fetch(`/api/clients/${clientId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ date_rappel: date || null, ...(date ? { statut: "a_rappeler" } : {}) }) });
+    if (!res.ok) {
+      alert("Erreur de sauvegarde du rappel");
+      await fetchClients();
+    }
     setRappelOuvert(null);
   }
 
@@ -205,15 +214,25 @@ export default function LeadsPage() {
   async function sauvegarderEdit(client: Client) {
     setSavingEdit(true);
     const payload = { nom: editForm.nom, telephone: editForm.telephone, adresse: editForm.adresse || null, ville: editForm.ville, probleme: editForm.probleme, courriel: editForm.courriel || null, notes: editForm.notes || null, montant_estime: editForm.montant_estime ? parseFloat(editForm.montant_estime) : null };
-    await fetch(`/api/clients/${client.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    setClients(prev => prev.map(c => c.id === client.id ? { ...c, ...payload } as Client : c));
+    const res = await fetch(`/api/clients/${client.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    if (!res.ok) {
+      alert("Erreur de sauvegarde — les modifications n'ont pas été enregistrées");
+      setSavingEdit(false);
+      return;
+    }
+    const saved: Client = await res.json();
+    setClients(prev => prev.map(c => c.id === client.id ? saved : c));
     setEditOuvert(null); setSavingEdit(false);
   }
 
   async function supprimerClient(id: string) {
     if (!confirm("Supprimer ce client?")) return;
     setClients(prev => prev.filter(c => c.id !== id));
-    await fetch(`/api/clients/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/clients/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      alert("Erreur de suppression");
+      await fetchClients();
+    }
   }
 
   function transfererVersJob(client: Client) {
