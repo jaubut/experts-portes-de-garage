@@ -131,6 +131,14 @@ export default function LeadsPage() {
   // Menu statut dropdown
   const [statutMenuOuvert, setStatutMenuOuvert] = useState<string | null>(null);
 
+  // Fermer le menu statut quand on clique ailleurs
+  useEffect(() => {
+    if (!statutMenuOuvert) return;
+    const handler = () => setStatutMenuOuvert(null);
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [statutMenuOuvert]);
+
   // Historique jobs par client
   interface JobRecord { id: string; date: string; statut: string; montant: number | null; notes: string | null; }
   const [jobsParTel, setJobsParTel] = useState<Record<string, JobRecord[]>>({});
@@ -359,7 +367,7 @@ export default function LeadsPage() {
                           <span className="text-xs text-white/20 shrink-0">{formatDate(client.created_at)}</span>
                         </div>
                         <div className="relative shrink-0 ml-2">
-                          <button onClick={() => setStatutMenuOuvert(statutMenuOuvert === client.id ? null : client.id)} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
+                          <button onClick={(e) => { e.stopPropagation(); setStatutMenuOuvert(statutMenuOuvert === client.id ? null : client.id); }} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[client.statut]}`}>
                             {STATUT_LABELS[client.statut]} ▾
                           </button>
                           {statutMenuOuvert === client.id && (

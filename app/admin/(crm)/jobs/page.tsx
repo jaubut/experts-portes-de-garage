@@ -282,6 +282,14 @@ export default function JobsPage() {
   const [lienCopie, setLienCopie] = useState<string | null>(null);
   const [statutMenuOuvert, setStatutMenuOuvert] = useState<string | null>(null);
 
+  // Fermer le menu statut quand on clique ailleurs
+  useEffect(() => {
+    if (!statutMenuOuvert) return;
+    const handler = () => setStatutMenuOuvert(null);
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [statutMenuOuvert]);
+
   async function changerStatut(job: Job, newStatut?: Statut) {
     const next = newStatut ?? STATUT_NEXT[job.statut];
     setJobs(prev => prev.map(j => j.id === job.id ? { ...j, statut: next } : j));
@@ -757,7 +765,7 @@ export default function JobsPage() {
                                 {job.montant && <span className="text-emerald-400 text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{formatMontant(job.montant)}</span>}
                               </div>
                               <div className="relative shrink-0 ml-2">
-                                <button type="button" onClick={() => setStatutMenuOuvert(statutMenuOuvert === job.id ? null : job.id)} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
+                                <button type="button" onClick={(e) => { e.stopPropagation(); setStatutMenuOuvert(statutMenuOuvert === job.id ? null : job.id); }} className={`text-xs font-bold px-2.5 py-1 rounded-full border transition-all active:scale-95 ${STATUT_COLORS[job.statut]}`}>
                                   {STATUT_LABELS[job.statut]} ▾
                                 </button>
                                 {statutMenuOuvert === job.id && (
@@ -804,9 +812,9 @@ export default function JobsPage() {
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                               Modifier
                             </button>
-                            <button onClick={() => changerStatut(job)} className="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/20 transition-colors">
+                            <button onClick={() => { if (job.statut !== "complete") changerStatut(job); }} className={`flex items-center justify-center gap-1.5 py-3 text-sm font-semibold transition-colors ${job.statut === "complete" ? "text-white/15 cursor-default" : "text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/20"}`} disabled={job.statut === "complete"}>
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                              Avancer
+                              {job.statut === "complete" ? "Fait" : "Avancer"}
                             </button>
                             <button onClick={() => supprimerJob(job.id)} className="flex items-center justify-center gap-1.5 py-3 text-sm text-white/20 hover:bg-red-500/10 hover:text-red-400 active:bg-red-500/20 transition-colors">
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
