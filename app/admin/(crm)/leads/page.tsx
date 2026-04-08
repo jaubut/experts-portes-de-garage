@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const MOT_DE_PASSE = "l1a2m3B5";
 
@@ -236,9 +237,17 @@ export default function LeadsPage() {
   }
 
   function transfererVersJob(client: Client) {
-    sessionStorage.setItem("job_prefill", JSON.stringify({ nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville, montant: client.montant_estime != null ? String(client.montant_estime) : "" }));
-    changerStatut(client, "job_planifie");
-    router.push("/admin/jobs");
+    const choix = confirm("Créer une soumission d'abord?\n\nOK = Soumission\nAnnuler = Job direct");
+    if (choix) {
+      // Vers soumission
+      sessionStorage.setItem("soumission_prefill", JSON.stringify({ client_id: client.id }));
+      router.push("/admin/soumissions");
+    } else {
+      // Job direct
+      sessionStorage.setItem("job_prefill", JSON.stringify({ client_id: client.id, nom: client.nom, telephone: client.telephone, adresse: client.adresse ?? "", ville: client.ville, montant: client.montant_estime != null ? String(client.montant_estime) : "" }));
+      changerStatut(client, "job_planifie");
+      router.push("/admin/jobs");
+    }
   }
 
   if (!auth) {
@@ -381,7 +390,7 @@ export default function LeadsPage() {
 
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="font-bold text-white text-base truncate">{client.nom}</span>
+                          <Link href={`/admin/clients/${client.id}`} className="font-bold text-white text-base truncate hover:text-red-400 transition-colors">{client.nom}</Link>
                           {client.montant_estime != null && <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">{client.montant_estime.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span>}
                           <span className="text-xs text-white/20 shrink-0">{formatDate(client.created_at)}</span>
                         </div>

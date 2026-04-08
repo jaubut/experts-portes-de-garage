@@ -34,6 +34,15 @@ const NAV_ITEMS = [
     ),
   },
   {
+    href: "/admin/soumissions",
+    label: "Soumissions",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+  },
+  {
     href: "/admin/calendrier",
     label: "Calendrier",
     icon: (
@@ -71,9 +80,12 @@ const NAV_ITEMS = [
   },
 ];
 
+const MOBILE_MAIN = ["/admin", "/admin/leads", "/admin/jobs", "/admin/calendrier"];
+
 export default function AdminNav() {
   const pathname = usePathname();
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("admin_theme") as "dark" | "light" | null;
@@ -151,13 +163,46 @@ export default function AdminNav() {
 
       {/* Mobile bottom bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 admin-nav-bar backdrop-blur-xl border-t z-50 safe-area-bottom">
+        {/* More drawer */}
+        {moreOpen && (
+          <div className="absolute bottom-full left-0 right-0 admin-nav-bar border-t border-b backdrop-blur-xl p-3">
+            <div className="grid grid-cols-4 gap-2">
+              {NAV_ITEMS.filter(item => !MOBILE_MAIN.includes(item.href)).map((item) => {
+                const active = isActive(item);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMoreOpen(false)}
+                    className={`flex flex-col items-center justify-center py-3 gap-1.5 rounded-xl transition-all ${
+                      active ? "bg-red-500/10 text-red-400" : "admin-text-dim hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    {item.icon}
+                    <span className="text-[10px] font-semibold">{item.label}</span>
+                  </Link>
+                );
+              })}
+              <button
+                type="button"
+                onClick={() => { toggleTheme(); setMoreOpen(false); }}
+                className="flex flex-col items-center justify-center py-3 gap-1.5 rounded-xl admin-text-dim hover:bg-white/[0.04] transition-all"
+              >
+                {theme === "dark" ? sunIcon : moonIcon}
+                <span className="text-[10px] font-semibold">{theme === "dark" ? "Clair" : "Sombre"}</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="flex">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.filter(item => MOBILE_MAIN.includes(item.href)).map((item) => {
             const active = isActive(item);
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setMoreOpen(false)}
                 className={`flex-1 flex flex-col items-center justify-center py-2.5 gap-1 transition-all duration-200 ${
                   active ? "text-red-400" : "admin-text-dim"
                 }`}
@@ -172,11 +217,13 @@ export default function AdminNav() {
           })}
           <button
             type="button"
-            onClick={toggleTheme}
-            className="flex flex-col items-center justify-center py-2.5 gap-1 px-3 admin-text-dim transition-all duration-200 active:scale-95"
+            onClick={() => setMoreOpen(!moreOpen)}
+            className={`flex-1 flex flex-col items-center justify-center py-2.5 gap-1 transition-all duration-200 ${moreOpen ? "text-red-400" : "admin-text-dim"}`}
           >
-            <span>{theme === "dark" ? sunIcon : moonIcon}</span>
-            <span className="text-[10px] font-semibold tracking-wide">{theme === "dark" ? "Clair" : "Sombre"}</span>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+            </svg>
+            <span className="text-[10px] font-semibold tracking-wide">Plus</span>
           </button>
         </div>
       </nav>

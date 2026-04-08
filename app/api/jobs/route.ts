@@ -39,6 +39,8 @@ export async function POST(req: Request) {
       statut: "a_faire",
       notes: body.notes || null,
       montant: body.montant ?? null,
+      client_id: body.client_id ?? null,
+      soumission_id: body.soumission_id ?? null,
     })
     .select()
     .single();

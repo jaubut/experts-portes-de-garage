@@ -6,12 +6,12 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from("factures")
+    .from("checklists")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: true });
 
   if (error) {
-    console.error("[factures] GET error:", error);
+    console.error("[checklists] GET error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json(data ?? []);
@@ -22,24 +22,16 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const { data, error } = await supabase
-    .from("factures")
+    .from("checklists")
     .insert({
-      job_id: body.job_id,
-      client_id: body.client_id ?? null,
-      soumission_id: body.soumission_id ?? null,
       nom: body.nom,
-      telephone: body.telephone,
-      adresse: body.adresse,
-      ville: body.ville,
-      description: body.description,
-      montant: body.montant,
-      statut: body.statut || "brouillon",
+      items: body.items || [],
     })
     .select()
     .single();
 
   if (error) {
-    console.error("[factures] POST error:", error);
+    console.error("[checklists] POST error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json(data);
@@ -51,14 +43,14 @@ export async function PATCH(req: NextRequest) {
   const { id, ...updates } = body;
 
   const { data, error } = await supabase
-    .from("factures")
+    .from("checklists")
     .update(updates)
     .eq("id", id)
     .select()
     .single();
 
   if (error) {
-    console.error("[factures] PATCH error:", error);
+    console.error("[checklists] PATCH error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json(data);
@@ -68,10 +60,10 @@ export async function DELETE(req: NextRequest) {
   const supabase = getSupabase();
   const { id } = await req.json();
 
-  const { error } = await supabase.from("factures").delete().eq("id", id);
+  const { error } = await supabase.from("checklists").delete().eq("id", id);
 
   if (error) {
-    console.error("[factures] DELETE error:", error);
+    console.error("[checklists] DELETE error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

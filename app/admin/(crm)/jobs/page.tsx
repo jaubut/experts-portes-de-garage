@@ -6,6 +6,12 @@ const MOT_DE_PASSE = "l1a2m3B5";
 
 type Statut = "a_faire" | "en_cours" | "complete";
 
+interface CoutItem {
+  description: string;
+  montant: number;
+  type: "materiel" | "main_oeuvre" | "sous_traitant";
+}
+
 interface Job {
   id: string;
   nom: string;
@@ -17,6 +23,11 @@ interface Job {
   statut: Statut;
   notes: string | null;
   montant: number | null;
+  client_id: string | null;
+  soumission_id: string | null;
+  couts: CoutItem[] | null;
+  temps_debut: string | null;
+  temps_fin: string | null;
 }
 
 const STATUT_LABELS: Record<Statut, string> = {
@@ -224,6 +235,10 @@ export default function JobsPage() {
   const [editJobForm, setEditJobForm] = useState(FORM_VIDE);
   const [savingEdit, setSavingEdit] = useState(false);
 
+  // Job costing
+  const [costingJobId, setCostingJobId] = useState<string | null>(null);
+  const [newCout, setNewCout] = useState({ description: "", montant: "", type: "materiel" as CoutItem["type"] });
+
   // Mode itinéraire
   const [modeItineraire, setModeItineraire] = useState(false);
   const [selectionIds, setSelectionIds] = useState<Set<string>>(new Set());
@@ -310,6 +325,32 @@ export default function JobsPage() {
     if (!res.ok) {
       alert("Erreur de sauvegarde du statut");
       await fetchJobs();
+      return;
+    }
+
+    // Proposer de créer une facture quand job complété
+    if (next === "complete" && job.montant) {
+      const creer = confirm(`Job complété! Créer une facture de ${job.montant.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}?`);
+      if (creer) {
+        try {
+          await fetch("/api/admin/factures", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              job_id: job.id,
+              client_id: job.client_id ?? null,
+              soumission_id: job.soumission_id ?? null,
+              nom: job.nom,
+              telephone: job.telephone,
+              adresse: job.adresse,
+              ville: job.ville,
+              description: job.notes || null,
+              montant: job.montant,
+              statut: "brouillon",
+            }),
+          });
+        } catch { /* ignore */ }
+      }
     }
   }
 
@@ -318,6 +359,47 @@ export default function JobsPage() {
     await navigator.clipboard.writeText(url);
     setLienCopie(jobId);
     setTimeout(() => setLienCopie(null), 2000);
+  }
+
+  async function ajouterCout(job: Job) {
+    if (!newCout.description || !newCout.montant) return;
+    const couts = [...(job.couts || []), { description: newCout.description, montant: parseFloat(newCout.montant), type: newCout.type }];
+    try {
+      await fetch(`/api/jobs/${job.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ couts }),
+      });
+      setNewCout({ description: "", montant: "", type: "materiel" });
+      fetchJobs();
+    } catch { /* ignore */ }
+  }
+
+  async function supprimerCout(job: Job, idx: number) {
+    const couts = (job.couts || []).filter((_, i) => i !== idx);
+    try {
+      await fetch(`/api/jobs/${job.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ couts }),
+      });
+      fetchJobs();
+    } catch { /* ignore */ }
+  }
+
+  async function toggleTimer(job: Job) {
+    const now = new Date().toISOString();
+    const updates = job.temps_debut && !job.temps_fin
+      ? { temps_fin: now }
+      : { temps_debut: now, temps_fin: null };
+    try {
+      await fetch(`/api/jobs/${job.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      fetchJobs();
+    } catch { /* ignore */ }
   }
 
   async function supprimerJob(id: string) {
@@ -985,6 +1067,116 @@ export default function JobsPage() {
                               <span className="text-red-400/50 text-xs ml-auto group-hover:text-red-300 transition-colors">Maps →</span>
                             </a>
                             {job.notes && <p className="text-xs text-white/30 italic bg-white/[0.03] rounded-lg px-2.5 py-1.5">{job.notes}</p>}
+
+                            {/* Job Costing toggle */}
+                            <button
+                              type="button"
+                              onClick={() => setCostingJobId(costingJobId === job.id ? null : job.id)}
+                              className="flex items-center gap-1.5 text-[11px] text-white/25 hover:text-white/50 transition-colors mt-1"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                              Coûts & marge {(job.couts?.length ?? 0) > 0 && `(${job.couts!.length})`}
+                            </button>
+
+                            {/* Costing panel */}
+                            {costingJobId === job.id && (
+                              <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 mt-1 space-y-2">
+                                {/* Timer */}
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] text-white/25 uppercase tracking-wider font-medium">Temps</span>
+                                  <div className="flex items-center gap-2">
+                                    {job.temps_debut && job.temps_fin && (
+                                      <span className="text-xs text-white/40">
+                                        {Math.round((new Date(job.temps_fin).getTime() - new Date(job.temps_debut).getTime()) / 60000)} min
+                                      </span>
+                                    )}
+                                    {job.temps_debut && !job.temps_fin && (
+                                      <span className="text-xs text-amber-400 animate-pulse">En cours...</span>
+                                    )}
+                                    <button
+                                      onClick={() => toggleTimer(job)}
+                                      className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                                        job.temps_debut && !job.temps_fin
+                                          ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                                          : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                      }`}
+                                    >
+                                      {job.temps_debut && !job.temps_fin ? "Stop" : "Start"}
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Existing costs */}
+                                {(job.couts || []).map((cout, ci) => (
+                                  <div key={ci} className="flex items-center gap-2 text-xs">
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                                      cout.type === "materiel" ? "bg-blue-500/15 text-blue-400" :
+                                      cout.type === "main_oeuvre" ? "bg-amber-500/15 text-amber-400" :
+                                      "bg-purple-500/15 text-purple-400"
+                                    }`}>
+                                      {cout.type === "materiel" ? "MAT" : cout.type === "main_oeuvre" ? "M-O" : "S-T"}
+                                    </span>
+                                    <span className="text-white/40 flex-1 truncate">{cout.description}</span>
+                                    <span className="text-white/50 font-bold shrink-0">{cout.montant.toLocaleString("fr-CA", { style: "currency", currency: "CAD" })}</span>
+                                    <button onClick={() => supprimerCout(job, ci)} className="text-white/10 hover:text-red-400 transition-colors">
+                                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                  </div>
+                                ))}
+
+                                {/* Add cost */}
+                                <div className="flex gap-1.5 items-center">
+                                  <select
+                                    value={newCout.type}
+                                    onChange={e => setNewCout(c => ({ ...c, type: e.target.value as CoutItem["type"] }))}
+                                    className="bg-white/[0.04] border border-white/[0.06] rounded-lg px-2 py-1.5 text-[10px] text-white outline-none"
+                                  >
+                                    <option value="materiel">Matériel</option>
+                                    <option value="main_oeuvre">Main d&apos;oeuvre</option>
+                                    <option value="sous_traitant">Sous-traitant</option>
+                                  </select>
+                                  <input
+                                    className="flex-1 bg-white/[0.04] border border-white/[0.06] rounded-lg px-2 py-1.5 text-[10px] text-white placeholder-white/20 outline-none"
+                                    placeholder="Description"
+                                    value={newCout.description}
+                                    onChange={e => setNewCout(c => ({ ...c, description: e.target.value }))}
+                                  />
+                                  <input
+                                    className="w-16 bg-white/[0.04] border border-white/[0.06] rounded-lg px-2 py-1.5 text-[10px] text-white placeholder-white/20 outline-none text-right"
+                                    placeholder="$"
+                                    type="number"
+                                    step="0.01"
+                                    value={newCout.montant}
+                                    onChange={e => setNewCout(c => ({ ...c, montant: e.target.value }))}
+                                  />
+                                  <button
+                                    onClick={() => ajouterCout(job)}
+                                    className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/25 transition-all shrink-0"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                                  </button>
+                                </div>
+
+                                {/* Margin summary */}
+                                {(job.montant || (job.couts?.length ?? 0) > 0) && (() => {
+                                  const totalCouts = (job.couts || []).reduce((s, c) => s + c.montant, 0);
+                                  const revenu = job.montant ?? 0;
+                                  const marge = revenu - totalCouts;
+                                  const pct = revenu > 0 ? Math.round((marge / revenu) * 100) : 0;
+                                  return (
+                                    <div className="border-t border-white/[0.06] pt-2 mt-1 flex items-center justify-between">
+                                      <div className="flex gap-3 text-[10px]">
+                                        <span className="text-white/25">Revenu: <span className="text-white/50 font-bold">{revenu.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span></span>
+                                        <span className="text-white/25">Coûts: <span className="text-white/50 font-bold">{totalCouts.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })}</span></span>
+                                      </div>
+                                      <span className={`text-xs font-black ${marge >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                                        {marge >= 0 ? "+" : ""}{marge.toLocaleString("fr-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 })} ({pct}%)
+                                      </span>
+                                    </div>
+                                  );
+                                })()}
+                              </div>
+                            )}
                           </div>
                           {job.statut === "complete" && (
                             <div className="border-t border-white/[0.06] px-4 py-2.5">

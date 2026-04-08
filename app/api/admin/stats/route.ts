@@ -6,17 +6,23 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const supabase = getSupabase();
 
-  const [clientsRes, jobsRes] = await Promise.all([
+  const [clientsRes, jobsRes, facturesRes, soumissionsRes] = await Promise.all([
     supabase.from("clients").select("*"),
     supabase.from("jobs").select("*"),
+    supabase.from("factures").select("*"),
+    supabase.from("soumissions_crm").select("*"),
   ]);
 
   const clients = clientsRes.data ?? [];
   const jobs = jobsRes.data ?? [];
+  const factures = facturesRes.data ?? [];
+  const soumissionsCrm = soumissionsRes.data ?? [];
 
   if (clientsRes.error) console.error("[stats] clients error:", clientsRes.error);
   if (jobsRes.error) console.error("[stats] jobs error:", jobsRes.error);
-  console.log(`[stats] ${clients.length} clients, ${jobs.length} jobs`);
+  if (facturesRes.error) console.error("[stats] factures error:", facturesRes.error);
+  if (soumissionsRes.error) console.error("[stats] soumissions error:", soumissionsRes.error);
+  console.log(`[stats] ${clients.length} clients, ${jobs.length} jobs, ${factures.length} factures, ${soumissionsCrm.length} soumissions`);
 
   // Pipeline valeur
   const pipelineTotal = clients.reduce((s, c) => s + (c.montant_estime ?? 0), 0);
@@ -71,6 +77,36 @@ export async function GET() {
   const jobsAFaire = jobs.filter(j => j.statut === "a_faire").length;
   const jobsEnCours = jobs.filter(j => j.statut === "en_cours").length;
 
+  // --- Nouvelles stats ---
+  const today = new Date().toISOString().split("T")[0];
+
+  // Jobs aujourd'hui
+  const todayJobs = jobs.filter(j => j.date === today);
+
+  // Rappels du jour
+  const rappelsDuJour = clients.filter(
+    (c: Record<string, unknown>) => c.date_rappel && (c.date_rappel as string) <= today && c.statut !== "complete" && c.statut !== "sans_suite"
+  );
+
+  // Factures en retard (envoyées depuis > 30 jours)
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const facturesEnRetard = factures.filter(
+    (f: Record<string, unknown>) => f.statut === "envoyee" && new Date(f.created_at as string) < thirtyDaysAgo
+  );
+
+  // Soumissions en attente
+  const soumissionsEnAttente = soumissionsCrm.filter((s: Record<string, unknown>) => s.statut === "envoyee");
+
+  // Marge totale (jobs avec coûts)
+  const totalCouts = jobs.reduce((sum: number, j: Record<string, unknown>) => {
+    if (Array.isArray(j.couts)) {
+      return sum + (j.couts as { montant: number }[]).reduce((s, c) => s + (c.montant ?? 0), 0);
+    }
+    return sum;
+  }, 0);
+  const margeTotale = revenuTotal - totalCouts;
+
   return NextResponse.json({
     totalLeads,
     leadsActifs,
@@ -86,5 +122,12 @@ export async function GET() {
     revenusMensuels,
     jobsMensuels,
     leadsMensuels,
+    // Nouvelles stats
+    todayJobs,
+    rappelsDuJour,
+    facturesEnRetard,
+    soumissionsEnAttente,
+    margeTotale,
+    totalCouts,
   });
 }
