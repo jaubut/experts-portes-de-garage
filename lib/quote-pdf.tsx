@@ -121,7 +121,7 @@ function QuoteDocument({ data, quoteNum, today }: { data: WeatherSealBookingPayl
             <Text style={s.quoteTitle}>SOUMISSION</Text>
             <Text style={s.quoteNum}>N° {quoteNum}</Text>
             <Text style={[s.quoteNum, { marginTop: 4 }]}>Émise le : {formatDateFr(today)}</Text>
-            <Text style={s.quoteNum}>Valide jusqu'au : {formatDateFr(validUntil)}</Text>
+            <Text style={s.quoteNum}>Valide jusqu&apos;au : {formatDateFr(validUntil)}</Text>
           </View>
         </View>
 
@@ -138,9 +138,9 @@ function QuoteDocument({ data, quoteNum, today }: { data: WeatherSealBookingPayl
             <Text style={s.infoLineGray}>{data.courriel}</Text>
           </View>
           <View style={s.infoBox}>
-            <Text style={s.infoTitle}>Rendez-vous prévu</Text>
-            <Text style={[s.infoLine, { fontFamily: "Helvetica-Bold" }]}>{formatDateFr(data.date)}</Text>
-            <Text style={s.infoLine}>{data.timeSlot}</Text>
+            <Text style={s.infoTitle}>Rendez-vous</Text>
+            <Text style={[s.infoLine, { fontFamily: "Helvetica-Bold" }]}>Date à planifier</Text>
+            <Text style={s.infoLine}>Nous vous contacterons pour fixer la date et l&apos;heure.</Text>
             <Text style={[s.infoLine, { marginTop: 8 }]}>Service :</Text>
             <Text style={[s.infoLine, { fontFamily: "Helvetica-Bold", color: RED }]}>Remplacement de coupe-froid</Text>
             {data.color && data.color !== "__autre__" && (

@@ -44,28 +44,21 @@ async function upsertClient(data: {
   return client.id;
 }
 
-export async function saveBookingToDb(
-  data: GeneralBookingPayload,
-  eventId?: string
-): Promise<void> {
+export async function saveBookingToDb(data: GeneralBookingPayload): Promise<void> {
   const clientId = await upsertClient(data);
 
+  // La date/heure n'est plus choisie par le client : le rendez-vous est planifié
+  // par téléphone après la demande.
   const { error } = await getSupabase().from("rendez_vous").insert({
     client_id: clientId,
     service: data.serviceType,
-    date: data.date,
-    heure: data.timeSlot,
     statut: "en_attente",
-    google_event_id: eventId ?? null,
   });
 
   if (error) throw error;
 }
 
-export async function saveWeatherSealBookingToDb(
-  data: WeatherSealBookingPayload,
-  eventId?: string
-): Promise<void> {
+export async function saveWeatherSealBookingToDb(data: WeatherSealBookingPayload): Promise<void> {
   const clientId = await upsertClient(data);
 
   const { data: rdv, error: rdvError } = await getSupabase()
@@ -73,10 +66,7 @@ export async function saveWeatherSealBookingToDb(
     .insert({
       client_id: clientId,
       service: data.serviceType,
-      date: data.date,
-      heure: data.timeSlot,
       statut: "en_attente",
-      google_event_id: eventId ?? null,
       numero_soumission: data.quoteNum ?? null,
     })
     .select("id")

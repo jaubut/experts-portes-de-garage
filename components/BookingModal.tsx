@@ -16,8 +16,6 @@ interface FormData {
   nom: string;
   telephone: string;
   courriel: string;
-  date: string;
-  timeSlot: string;
 }
 
 const EMPTY_FORM: FormData = {
@@ -28,8 +26,6 @@ const EMPTY_FORM: FormData = {
   nom: "",
   telephone: "",
   courriel: "",
-  date: "",
-  timeSlot: "",
 };
 
 const SERVICES = [
@@ -59,162 +55,8 @@ const SERVICES = [
   )},
 ];
 
-const TIME_SLOTS = ["10h00 - 11h00", "12h00 - 13h00", "15h00 - 16h00"];
-
-const STEP_LABELS = ["Votre service", "Votre adresse", "Vos coordonnées", "Rendez-vous"];
-
-const FR_MONTHS = [
-  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre",
-];
-const FR_MONTHS_LONG = [
-  "janvier", "février", "mars", "avril", "mai", "juin",
-  "juillet", "août", "septembre", "octobre", "novembre", "décembre",
-];
-const FR_DAYS_SHORT = ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"];
-const FR_DAYS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-
-function toDateString(y: number, m: number, d: number) {
-  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-}
-
-function formatDateFr(dateStr: string) {
-  if (!dateStr) return "";
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const dow = new Date(y, m - 1, d).getDay();
-  return `${FR_DAYS_LONG[dow]} ${d} ${FR_MONTHS_LONG[m - 1]} ${y}`;
-}
-
-interface CalendarProps {
-  value: string;
-  onChange: (date: string) => void;
-  hasError: boolean;
-}
-
-function Calendar({ value, onChange, hasError }: CalendarProps) {
-  const todayDate = new Date();
-  todayDate.setHours(0, 0, 0, 0);
-  const todayStr = toDateString(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
-
-  const [viewYear, setViewYear] = useState(() => todayDate.getFullYear());
-  const [viewMonth, setViewMonth] = useState(() => todayDate.getMonth());
-
-  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-
-  const prevMonth = () => {
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
-    else setViewMonth(m => m - 1);
-  };
-  const nextMonth = () => {
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
-    else setViewMonth(m => m + 1);
-  };
-
-  const canGoPrev = viewYear > todayDate.getFullYear() ||
-    (viewYear === todayDate.getFullYear() && viewMonth > todayDate.getMonth());
-
-  const cells: (number | null)[] = [
-    ...Array(firstDay).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-  ];
-  while (cells.length % 7 !== 0) cells.push(null);
-
-  return (
-    <div className={`border rounded-xl overflow-hidden bg-white ${hasError ? "border-red-400" : "border-gray-200"}`}>
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-100">
-        <button
-          type="button"
-          onClick={prevMonth}
-          disabled={!canGoPrev}
-          aria-label="Mois précédent"
-          className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
-            canGoPrev ? "hover:bg-gray-200 text-gray-600" : "text-gray-300 cursor-not-allowed"
-          }`}
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <span className="text-sm font-bold text-gray-800">
-          {FR_MONTHS[viewMonth]} {viewYear}
-        </span>
-        <button
-          type="button"
-          onClick={nextMonth}
-          aria-label="Mois suivant"
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-600 transition-colors"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-
-      <div className="grid grid-cols-7 border-b border-gray-100">
-        {FR_DAYS_SHORT.map((d, i) => (
-          <div
-            key={d}
-            className={`text-center text-xs font-semibold py-2 ${
-              i === 0 || i === 6 ? "text-gray-400" : "text-gray-500"
-            }`}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-7">
-        {cells.map((day, idx) => {
-          if (day === null) return <div key={`blank-${idx}`} className="py-1.5" />;
-
-          const dateStr = toDateString(viewYear, viewMonth, day);
-          const isPast = dateStr < todayStr;
-          const isToday = dateStr === todayStr;
-          const isSelected = dateStr === value;
-          const col = idx % 7;
-          const isWeekend = col === 0 || col === 6;
-
-          let cls = "relative mx-auto flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium cursor-pointer transition-all select-none ";
-
-          if (isSelected) {
-            cls += "bg-brand text-white font-bold shadow-sm";
-          } else if (isPast) {
-            cls += "text-gray-300 cursor-not-allowed";
-          } else if (isToday) {
-            cls += "border-2 border-brand text-brand font-bold hover:bg-brand/10";
-          } else if (isWeekend) {
-            cls += "text-gray-500 hover:bg-brand/10 hover:text-brand";
-          } else {
-            cls += "text-gray-700 hover:bg-brand/10 hover:text-brand";
-          }
-
-          return (
-            <div
-              key={dateStr}
-              className={`flex items-center justify-center py-1 ${isWeekend && !isSelected ? "bg-gray-50/60" : ""}`}
-            >
-              <span
-                className={cls}
-                onClick={() => { if (!isPast) onChange(dateStr); }}
-              >
-                {day}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {value && (
-        <div className="px-4 py-2.5 bg-brand/5 border-t border-brand/10 text-center">
-          <span className="text-sm font-semibold text-brand capitalize">
-            {formatDateFr(value)}
-          </span>
-        </div>
-      )}
-    </div>
-  );
-}
+const STEP_LABELS = ["Votre service", "Votre adresse", "Vos coordonnées"];
+const TOTAL_STEPS = 3;
 
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [step, setStep] = useState(1);
@@ -226,8 +68,6 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [suggestions, setSuggestions] = useState<{ placeId: string; text: string; secondary: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
-  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
-  const [loadingSlots, setLoadingSlots] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const telephoneRef = useRef<HTMLInputElement>(null);
   const courrielRef = useRef<HTMLInputElement>(null);
@@ -345,9 +185,6 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       } else if (!/\S+@\S+\.\S+/.test(form.courriel)) {
         errs.courriel = "Adresse courriel invalide";
       }
-    } else if (step === 4) {
-      if (!form.date) errs.date = "Veuillez choisir une date";
-      if (!form.timeSlot) errs.timeSlot = "Veuillez choisir une plage horaire";
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -355,7 +192,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   const handleNext = async () => {
     if (!validateStep()) return;
-    if (step < 4) {
+    if (step < TOTAL_STEPS) {
       setStep((s) => s + 1);
     } else {
       setIsSubmitting(true);
@@ -416,7 +253,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
               <h3 className="font-heading text-2xl text-brand uppercase mb-3">Demande envoyée!</h3>
               <p className="text-gray-600 leading-relaxed mb-8">
-                Merci {prenom}! Nous vous contacterons pour confirmer votre rendez-vous.
+                Merci {prenom}! Nous vous contacterons rapidement pour planifier le rendez-vous à un moment qui vous convient.
               </p>
               <button
                 onClick={onClose}
@@ -429,7 +266,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             <>
               {/* Step indicators */}
               <div className="flex items-center gap-1 mb-6">
-                {[1, 2, 3, 4].map((s) => (
+                {[1, 2, 3].map((s) => (
                   <div key={s} className="flex-1 flex flex-col items-center gap-1.5">
                     <div
                       className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
@@ -457,7 +294,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               <div className="h-1 bg-gray-100 rounded-full overflow-hidden mb-7">
                 <div
                   className="h-full bg-brand rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(step / 4) * 100}%` }}
+                  style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
                 />
               </div>
 
@@ -588,60 +425,6 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 </div>
               )}
 
-              {/* Step 4 — Rendez-vous */}
-              {step === 4 && (
-                <div className="flex flex-col gap-5">
-                  <div>
-                    <p className="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</p>
-                    {errors.date && <p className="text-xs text-red-500 mb-2">{errors.date}</p>}
-                    <Calendar
-                      value={form.date}
-                      onChange={(d) => {
-                        update("date", d);
-                        update("timeSlot", "");
-                        setBookedSlots([]);
-                        if (d) {
-                          setLoadingSlots(true);
-                          fetch(`/api/availability?date=${d}`)
-                            .then((r) => r.json())
-                            .then((data) => setBookedSlots(data.bookedSlots ?? []))
-                            .catch(() => {})
-                            .finally(() => setLoadingSlots(false));
-                        }
-                      }}
-                      hasError={!!errors.date}
-                    />
-                  </div>
-                  <div>
-                    <p className="block text-sm font-semibold text-gray-700 mb-2">Plage horaire</p>
-                    {errors.timeSlot && <p className="text-xs text-red-500 mb-2">{errors.timeSlot}</p>}
-                    <div className="flex flex-col gap-2.5">
-                      {loadingSlots && <p className="text-xs text-gray-400">Vérification des disponibilités...</p>}
-                      {TIME_SLOTS.map((slot) => {
-                        const booked = bookedSlots.includes(slot);
-                        return (
-                          <button
-                            key={slot}
-                            type="button"
-                            disabled={booked}
-                            onClick={() => !booked && update("timeSlot", slot)}
-                            className={`border-2 rounded-xl py-4 px-4 text-base font-bold text-center transition-all w-full ${
-                              booked
-                                ? "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed line-through"
-                                : form.timeSlot === slot
-                                ? "border-brand bg-brand text-white shadow-md"
-                                : "border-gray-200 text-gray-700 hover:border-brand hover:text-brand"
-                            }`}
-                          >
-                            {slot}{booked ? " — Indisponible" : ""}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Navigation */}
               {submitError && (
                 <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mt-6">{submitError}</p>
@@ -666,7 +449,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   disabled={isSubmitting}
                   className="bg-brand text-white font-bold px-7 py-3 rounded-lg hover:bg-brand-dark transition-colors text-sm shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Envoi en cours..." : step === 4 ? "Confirmer la réservation" : "Suivant"}
+                  {isSubmitting ? "Envoi en cours..." : step === TOTAL_STEPS ? "Envoyer ma demande" : "Suivant"}
                 </button>
               </div>
             </>

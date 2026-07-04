@@ -1,5 +1,4 @@
 import { Resend } from "resend";
-import { google } from "googleapis";
 import { PHONE_DISPLAY, PHONE_HREF, EMAIL } from "@/lib/config";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -11,12 +10,10 @@ export interface BaseBookingPayload {
   adresse: string;
   ville: string;
   codePostal: string;
-  date: string;      // YYYY-MM-DD
-  timeSlot: string;  // "10h00 - 11h00"
 }
 
 export interface GeneralBookingPayload extends BaseBookingPayload {
-  serviceType: "Réparation / Remplacement de porte";
+  serviceType: string;
 }
 
 export interface WeatherSealBookingPayload extends BaseBookingPayload {
@@ -54,28 +51,7 @@ const PRICE_PER_FOOT: Record<string, number> = {
   reteneur: 10,
 };
 
-const FR_DAYS = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-const FR_MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-
 // ── Helpers ───────────────────────────────────────────────────────────────
-
-function formatDateFr(dateStr: string): string {
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const dow = new Date(y, m - 1, d).getDay();
-  return `${FR_DAYS[dow]} ${d} ${FR_MONTHS[m - 1]} ${y}`;
-}
-
-function parseTimeSlot(date: string, timeSlot: string): { startStr: string; endStr: string } {
-  const [startPart] = timeSlot.split(" - ");
-  const [hourStr, minuteStr] = startPart.split("h");
-  const hour = parseInt(hourStr, 10);
-  const minute = parseInt(minuteStr || "0", 10);
-  const [year, month, day] = date.split("-");
-  const pad = (n: number) => String(n).padStart(2, "0");
-  const startStr = `${year}-${month}-${day}T${pad(hour)}:${pad(minute)}:00`;
-  const endStr = `${year}-${month}-${day}T${pad(hour + 1)}:${pad(minute)}:00`;
-  return { startStr, endStr };
-}
 
 function calcTotal(seals: string[], measurements: Record<string, string>): number {
   return seals
@@ -106,15 +82,15 @@ function section(title: string, rows: string): string {
     </div>`;
 }
 
+function isWeatherSealPayload(data: BookingPayload): data is WeatherSealBookingPayload {
+  return "seals" in data && Array.isArray((data as WeatherSealBookingPayload).seals);
+}
+
 export function buildOwnerEmailHtml(data: BookingPayload): string {
-  const isWeatherSeal = data.serviceType === "Remplacement de coupe-froid";
-  const ws = isWeatherSeal ? (data as WeatherSealBookingPayload) : null;
+  const ws = isWeatherSealPayload(data) ? data : null;
   const total = ws ? calcTotal(ws.seals, ws.measurements) : 0;
 
-  const appointmentRows =
-    row("Service :", data.serviceType) +
-    row("Date :", formatDateFr(data.date)) +
-    row("Heure :", data.timeSlot);
+  const appointmentRows = row("Service :", data.serviceType);
 
   const clientRows =
     row("Nom :", data.nom) +
@@ -149,10 +125,13 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
     <div style="${baseStyle} max-width: 600px; margin: 0 auto;">
       <div style="background: #DC2626; padding: 24px 28px; border-radius: 8px 8px 0 0;">
         <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">Experts Portes de Garage</p>
-        <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Nouvelle réservation</h1>
+        <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Nouvelle demande de rendez-vous</h1>
       </div>
       <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
-        ${section("Rendez-vous", appointmentRows)}
+        <div style="background: #fef2f2; border: 2px solid #DC2626; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px;">
+          <p style="margin: 0; font-size: 14px; font-weight: 700; color: #DC2626;">📞 Contactez le client pour planifier le rendez-vous.</p>
+        </div>
+        ${section("Demande", appointmentRows)}
         ${section("Client", clientRows)}
         ${section("Adresse de service", addressRows)}
         ${sealSection}
@@ -164,30 +143,12 @@ export function buildOwnerEmailHtml(data: BookingPayload): string {
     </div>`;
 }
 
-export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdfAttached?: boolean): string {
+export function buildClientEmailHtml(data: BookingPayload, pdfAttached?: boolean): string {
   const prenom = data.nom.trim().split(/\s+/)[0];
-  const dateFormatted = formatDateFr(data.date);
-  const secret = process.env.ADMIN_PASSWORD ?? "";
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://expertsportesdegarage.ca";
-
-  const actionButtons = eventId ? `
-    <div style="margin: 28px 0; text-align: center;">
-      <p style="font-size: 14px; color: #4b5563; margin-bottom: 16px;">Veuillez confirmer ou annuler votre rendez-vous en cliquant ci-dessous :</p>
-      <div style="display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-        <a href="${baseUrl}/api/admin/action?eventId=${eventId}&action=confirme&secret=${encodeURIComponent(secret)}"
-           style="display: inline-block; background: #16a34a; color: #fff; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-size: 15px; letter-spacing: 0.3px;">
-          ✓ Confirmer mon rendez-vous
-        </a>
-        <a href="${baseUrl}/api/admin/action?eventId=${eventId}&action=annule&secret=${encodeURIComponent(secret)}"
-           style="display: inline-block; background: #f3f4f6; color: #6b7280; font-weight: 700; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-size: 15px;">
-          ✕ Annuler
-        </a>
-      </div>
-    </div>` : "";
 
   let priceSection = "";
-  if (data.serviceType === "Remplacement de coupe-froid") {
-    const ws = data as WeatherSealBookingPayload;
+  if (isWeatherSealPayload(data)) {
+    const ws = data;
     const hasCustomColor = ws.seals.includes("lateraux") && ws.color && ws.color !== "noir" && ws.color !== "blanc";
     const measurableSeals = ws.seals.filter((id) => id !== "inconnu" && ws.measurements[id]);
     const subtotal = calcTotal(ws.seals, ws.measurements);
@@ -254,21 +215,19 @@ export function buildClientEmailHtml(data: BookingPayload, eventId?: string, pdf
       </div>
       <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
         <p style="font-size: 15px; line-height: 1.7; color: #1a1a1a;">
-          Vous avez réservé une visite d'installation avec <strong>Experts Portes de Garage</strong>. Notre technicien se présentera chez vous avec les matériaux et le contrat — tout sera réglé sur place.
+          Merci d'avoir choisi <strong>Experts Portes de Garage</strong>. Nous avons bien reçu votre demande —
+          <strong>nous vous contacterons sous peu pour planifier le rendez-vous</strong> à un moment qui vous convient.
           Des centaines de clients nous font confiance chaque année — nous avons hâte de vous offrir le même service de qualité.
         </p>
 
         <div style="background: #fef2f2; border: 2px solid #DC2626; border-radius: 10px; padding: 20px 24px; margin: 20px 0;">
-          <p style="margin: 0 0 12px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">📅 Votre rendez-vous</p>
+          <p style="margin: 0 0 12px; font-size: 13px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.5px;">📋 Votre demande</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>Service :</strong> ${data.serviceType}</p>
-          <p style="margin: 6px 0; font-size: 15px;"><strong>Date :</strong> ${dateFormatted}</p>
-          <p style="margin: 6px 0; font-size: 15px;"><strong>Heure :</strong> ${data.timeSlot}</p>
           <p style="margin: 6px 0; font-size: 15px;"><strong>Adresse :</strong> ${data.adresse}, ${data.ville}</p>
+          <p style="margin: 12px 0 0; font-size: 14px; color: #4b5563;">📞 <strong>Prochaine étape :</strong> nous vous appellerons pour fixer la date et l'heure de la visite.</p>
         </div>
 
         ${priceSection}
-
-        ${actionButtons}
 
         <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
           Des questions? Appelez-nous au <a href="${PHONE_HREF}" style="color: #DC2626; font-weight: 700;">${PHONE_DISPLAY}</a> ou répondez à ce courriel — nous sommes là pour vous.
@@ -313,10 +272,19 @@ export function buildReviewEmailHtml(nom: string): string {
     </div>`;
 }
 
+// Resend v6 ne lance pas d'erreur en cas d'échec d'envoi — il retourne { data, error }.
+// Sans cette vérification, un envoi refusé passe silencieusement pour un succès.
+async function sendOrThrow(resend: Resend, payload: Parameters<typeof resend.emails.send>[0]): Promise<void> {
+  const { error } = await resend.emails.send(payload);
+  if (error) {
+    throw new Error(`Resend (${error.name}): ${error.message}`);
+  }
+}
+
 export async function sendReviewEmail(nom: string, courriel: string): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const prenom = nom.trim().split(/\s+/)[0];
-  await resend.emails.send({
+  await sendOrThrow(resend, {
     from: `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`,
     to: [courriel],
     subject: `Merci ${prenom}! Un petit avis Google? ⭐`,
@@ -326,130 +294,29 @@ export async function sendReviewEmail(nom: string, courriel: string): Promise<vo
 
 // ── Resend ────────────────────────────────────────────────────────────────
 
-export async function sendQuoteEmail(data: WeatherSealBookingPayload, pdfBuffer: Buffer): Promise<void> {
-  const resend = new Resend(process.env.RESEND_API_KEY!);
-  const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
-  const prenom = data.nom.trim().split(/\s+/)[0];
-  const total = calcTotal(data.seals, data.measurements) * 1.14975;
-  await resend.emails.send({
-    from,
-    to: [data.courriel],
-    subject: `Votre soumission — Experts Portes de Garage`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #1a1a1a; max-width: 600px; margin: 0 auto;">
-        <div style="background: #CC0000; padding: 24px 28px; border-radius: 8px 8px 0 0;">
-          <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">Experts Portes de Garage</p>
-          <h1 style="margin: 6px 0 0; font-size: 22px; color: #fff;">Votre soumission, ${prenom}!</h1>
-        </div>
-        <div style="background: #fff; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
-          <p style="font-size: 15px; line-height: 1.7; color: #1a1a1a;">
-            Vous trouverez votre soumission en pièce jointe (PDF). Elle est valide <strong>30 jours</strong>.
-          </p>
-          ${total > 0 ? `
-          <div style="background: #fef2f2; border: 2px solid #CC0000; border-radius: 10px; padding: 16px 20px; margin: 20px 0; text-align: center;">
-            <p style="margin: 0 0 6px; font-size: 13px; color: #CC0000; font-weight: 700; text-transform: uppercase;">Total estimé (taxes incluses)</p>
-            <p style="margin: 0; font-size: 28px; font-weight: 700; color: #CC0000;">${total.toFixed(2)} $</p>
-          </div>` : ""}
-          <div style="background: #f9fafb; border-radius: 8px; padding: 16px 20px; margin: 20px 0;">
-            <p style="margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px;">💳 Payer en avance par Interac</p>
-            <p style="margin: 0 0 4px; font-size: 14px;">Envoyez le montant à : <strong style="color: #CC0000;">${EMAIL}</strong></p>
-            <p style="margin: 0; font-size: 13px; color: #6b7280;">Votre numéro de soumission se trouve sur le PDF.</p>
-          </div>
-          <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
-            Des questions? Appelez-nous au <a href="tel:${PHONE_DISPLAY.replace(/\s/g, "")}" style="color: #CC0000; font-weight: 700;">${PHONE_DISPLAY}</a> — nous sommes là pour vous.
-          </p>
-          <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 20px 0;">
-          <p style="margin: 0; font-size: 12px; color: #9ca3af; text-align: center;">
-            Experts Portes de Garage · ${PHONE_DISPLAY} · ${EMAIL}
-          </p>
-        </div>
-      </div>`,
-    attachments: [{
-      filename: `soumission_coupe_froid_${data.date}.pdf`,
-      content: pdfBuffer,
-    }],
-  });
-}
-
-export async function sendBookingEmails(data: BookingPayload, eventId?: string, pdfBuffer?: Buffer): Promise<void> {
+export async function sendBookingEmails(data: BookingPayload, pdfBuffer?: Buffer): Promise<void> {
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = `Experts Portes de Garage <${process.env.RESEND_FROM_EMAIL!}>`;
   const clientEmail: Parameters<typeof resend.emails.send>[0] = {
     from,
     to: [data.courriel],
-    subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, votre rendez-vous du ${formatDateFr(data.date)} — Experts Portes de Garage`,
-    html: buildClientEmailHtml(data, eventId, !!pdfBuffer),
+    subject: `Bonjour ${data.nom.trim().split(/\s+/)[0]}, nous avons bien reçu votre demande — Experts Portes de Garage`,
+    html: buildClientEmailHtml(data, !!pdfBuffer),
   };
   if (pdfBuffer) {
+    const quoteNum = isWeatherSealPayload(data) ? data.quoteNum : undefined;
     clientEmail.attachments = [{
-      filename: `soumission_coupe_froid_${data.date}.pdf`,
+      filename: `soumission_coupe_froid_${quoteNum ?? "epg"}.pdf`,
       content: pdfBuffer,
     }];
   }
   await Promise.all([
-    resend.emails.send({
+    sendOrThrow(resend, {
       from,
       to: [process.env.OWNER_EMAIL!],
-      subject: `Nouvelle réservation — ${data.serviceType} — ${data.nom}`,
+      subject: `Nouvelle demande — ${data.serviceType} — ${data.nom}`,
       html: buildOwnerEmailHtml(data),
     }),
-    resend.emails.send(clientEmail),
+    sendOrThrow(resend, clientEmail),
   ]);
-}
-
-// ── Google Calendar ───────────────────────────────────────────────────────
-
-function buildEventDescription(data: BookingPayload): string {
-  const lines = [
-    `Service: ${data.serviceType}`,
-    `Client: ${data.nom}`,
-    `Téléphone: ${data.telephone}`,
-    `Courriel: ${data.courriel}`,
-    `Adresse: ${data.adresse}, ${data.ville}, QC ${data.codePostal}`,
-  ];
-
-  if (data.serviceType === "Remplacement de coupe-froid") {
-    const ws = data as WeatherSealBookingPayload;
-    lines.push("");
-    lines.push(`Joints: ${ws.seals.map((s) => SEAL_LABELS[s] || s).join(", ")}`);
-    if (ws.color) lines.push(`Couleur: ${ws.color}`);
-    const measurableSeals = ws.seals.filter((s) => s !== "inconnu" && ws.measurements[s]);
-    if (measurableSeals.length > 0) {
-      lines.push("Mesures:");
-      measurableSeals.forEach((s) => lines.push(`  ${SEAL_LABELS[s]}: ${ws.measurements[s]} pi`));
-    }
-    const total = calcTotal(ws.seals, ws.measurements);
-    if (total > 0) {
-      lines.push(`Estimation: ${total.toFixed(2)}$`);
-      lines.push(`Estimation TTC: ${(total * 1.14975).toFixed(2)}$ (taxes incluses)`);
-    }
-    if (ws.quoteNum) lines.push(`Soumission: ${ws.quoteNum}`);
-    if (ws.notes) lines.push(`Notes: ${ws.notes}`);
-  }
-
-  return lines.join("\n");
-}
-
-export async function createCalendarEvent(data: BookingPayload): Promise<string | undefined> {
-  const privateKey = process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, "\n");
-  const auth = new google.auth.JWT({
-    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!,
-    key: privateKey,
-    scopes: ["https://www.googleapis.com/auth/calendar"],
-  });
-
-  const calendar = google.calendar({ version: "v3", auth });
-  const { startStr, endStr } = parseTimeSlot(data.date, data.timeSlot);
-
-  const res = await calendar.events.insert({
-    calendarId: process.env.GOOGLE_CALENDAR_ID!,
-    requestBody: {
-      summary: `${data.serviceType} — ${data.nom}`,
-      description: buildEventDescription(data),
-      start: { dateTime: startStr, timeZone: "America/Toronto" },
-      end: { dateTime: endStr, timeZone: "America/Toronto" },
-      location: `${data.adresse}, ${data.ville}, QC ${data.codePostal}`,
-    },
-  });
-  return res.data.id ?? undefined;
 }

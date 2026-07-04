@@ -1,37 +1,42 @@
 import { NextResponse } from "next/server";
-import { sendBookingEmails, createCalendarEvent } from "@/lib/notifications";
+import { sendBookingEmails } from "@/lib/notifications";
 import type { GeneralBookingPayload } from "@/lib/notifications";
 import { saveBookingToDb } from "@/lib/db";
+
+const SERVICE_LABELS: Record<string, string> = {
+  "reparation-porte": "Réparation de porte de garage",
+  "reparation-urgente": "Réparation urgente",
+  "reparation-ouvre-porte": "Réparation d'ouvre-porte",
+  "installation-ouvre-porte": "Installation d'ouvre-porte",
+  "installation-porte": "Installation de nouvelle porte",
+  "coupe-froid": "Remplacement de coupe-froid",
+  "inspection": "Inspection / Entretien",
+  "autre": "Autre / À déterminer",
+};
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nom, telephone, courriel, adresse, ville, codePostal, date, timeSlot } = body;
+    const { service, nom, telephone, courriel, adresse, ville, codePostal } = body;
 
-    if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal || !date || !timeSlot) {
+    if (!nom || !telephone || !courriel || !adresse || !ville || !codePostal) {
       return NextResponse.json({ error: "Champs manquants" }, { status: 400 });
     }
 
     const payload: GeneralBookingPayload = {
-      serviceType: "Réparation / Remplacement de porte",
+      serviceType: SERVICE_LABELS[service] ?? "Réparation / Remplacement de porte",
       nom,
       telephone,
       courriel,
       adresse,
       ville,
       codePostal,
-      date,
-      timeSlot,
     };
 
-    let eventId: string | undefined;
-    if (process.env.GOOGLE_PRIVATE_KEY) {
-      try { eventId = await createCalendarEvent(payload); } catch (err) { console.error("[booking] calendar error:", err); }
-    }
     if (process.env.SUPABASE_URL) {
-      try { await saveBookingToDb(payload, eventId); } catch (err) { console.error("[booking] supabase error:", err); }
+      try { await saveBookingToDb(payload); } catch (err) { console.error("[booking] supabase error:", err); }
     }
-    await sendBookingEmails(payload, eventId);
+    await sendBookingEmails(payload);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[booking] error:", err);
