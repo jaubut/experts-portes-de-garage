@@ -209,7 +209,9 @@ export default function InstallationPageContent() {
     <>
       {/* ── 1. HERO ── */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 hero-bg" />
+        <div className="absolute inset-0">
+          <Image src="/images/maison_garage_v1.webp" alt="" fill preload fetchPriority="high" sizes="100vw" className="object-cover" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/90 via-[#1a1a1a]/70 to-[#1a1a1a]/30" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 py-24 md:py-32">
           <nav className="reveal text-sm text-white/50 mb-6 flex items-center gap-2">

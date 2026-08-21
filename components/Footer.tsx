@@ -50,11 +50,11 @@ export default function Footer() {
         <div className="sm:col-span-2 lg:col-span-1">
           <Link
             href="/"
-            className="font-heading text-brand text-xl tracking-tight block mb-4 uppercase"
+            className="font-heading text-red-500 text-xl tracking-tight block mb-4 uppercase"
           >
             Experts Portes de Garage
           </Link>
-          <p className="text-sm leading-relaxed text-gray-500 mb-5">
+          <p className="text-sm leading-relaxed text-gray-400 mb-5">
             Service local de réparation de portes de garage — Granby &amp; régions.
             Résultats garantis dès la première visite.
           </p>
@@ -145,15 +145,15 @@ export default function Footer() {
                 info@expertsportesdegarage.ca
               </a>
             </li>
-            <li className="text-gray-500">Granby &amp; régions, Québec</li>
-            <li className="text-gray-500 text-xs mt-1">
+            <li className="text-gray-400">Granby &amp; régions, Québec</li>
+            <li className="text-gray-400 text-xs mt-1">
               Service d&apos;urgence disponible<br />7 jours sur 7, 24h/24
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-white/10 py-5 text-center text-xs text-gray-600">
+      <div className="border-t border-white/10 py-5 text-center text-xs text-gray-400">
         © <CopyrightYear /> Experts Portes de Garage. Tous droits réservés.
       </div>
     </footer>

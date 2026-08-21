@@ -128,10 +128,14 @@ export default function ReviewsSlider() {
               key={i}
               onClick={() => setIndex(i)}
               aria-label={`Avis ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
-                i === index ? "w-6 h-2.5 bg-brand" : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
-              }`}
-            />
+              className="group flex h-6 min-w-6 items-center justify-center"
+            >
+              <span
+                className={`rounded-full transition-all duration-300 ${
+                  i === index ? "w-6 h-2.5 bg-brand" : "w-2.5 h-2.5 bg-gray-300 group-hover:bg-gray-400"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

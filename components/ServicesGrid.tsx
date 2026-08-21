@@ -89,7 +89,7 @@ export default function ServicesGrid() {
         <h2 className="font-heading text-3xl md:text-4xl text-brand text-center uppercase mb-4">
           Nos services
         </h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">
+        <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
           Peu importe le problème, l&apos;entretien ou l&apos;amélioration
           recherchée — vous êtes au bon endroit.
         </p>
@@ -141,10 +141,14 @@ export default function ServicesGrid() {
                 key={i}
                 onClick={() => goTo(i)}
                 aria-label={`Service ${i + 1}`}
-                className={`rounded-full transition-all duration-300 ${
-                  i === activeIndex ? "w-6 h-2.5 bg-brand" : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
-                }`}
-              />
+                className="group flex h-6 min-w-6 items-center justify-center"
+              >
+                <span
+                  className={`rounded-full transition-all duration-300 ${
+                    i === activeIndex ? "w-6 h-2.5 bg-brand" : "w-2.5 h-2.5 bg-gray-300 group-hover:bg-gray-400"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>

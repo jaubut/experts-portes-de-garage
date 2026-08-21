@@ -1,3 +1,4 @@
+import Image from "next/image";
 import PlanifierButton from "@/components/PlanifierButton";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
@@ -13,8 +14,19 @@ export default function HeroSection() {
   return (
     <section className="relative overflow-hidden">
 
-      {/* Background image */}
-      <div className="absolute inset-0 hero-bg" />
+      {/* Background image — next/image avec preload : c'est l'élément LCP,
+          un background CSS serait découvert trop tard par le navigateur */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/maison_garage_v1.webp"
+          alt=""
+          fill
+          preload
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-white/60 lg:to-white/25" />
 
@@ -94,7 +106,7 @@ export default function HeroSection() {
               {/* Card header */}
               <div className="bg-brand px-6 py-4">
                 <p className="text-white font-bold text-sm uppercase tracking-widest">Experts Portes de Garage</p>
-                <p className="text-white/70 text-xs mt-0.5">Bienvenue — on est là pour vous aider</p>
+                <p className="text-white/90 text-xs mt-0.5">Bienvenue — on est là pour vous aider</p>
               </div>
 
               {/* Services list */}
@@ -113,7 +125,7 @@ export default function HeroSection() {
 
               {/* Card footer */}
               <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                <p className="text-center text-xs text-gray-400 font-medium">
+                <p className="text-center text-xs text-gray-600 font-medium">
                   Devis gratuit · Sans engagement · Réponse rapide
                 </p>
               </div>

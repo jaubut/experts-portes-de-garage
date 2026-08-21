@@ -121,8 +121,10 @@ export default function AnimatedTestimonials() {
                 type="button"
                 aria-label={`Avis ${i + 1}`}
                 onClick={() => { goTo(i); setPaused(true); }}
-                className={`h-2 rounded-full transition-all ${i === current ? "bg-brand w-5" : "bg-gray-300 w-2"}`}
-              />
+                className="flex h-6 min-w-6 items-center justify-center"
+              >
+                <span className={`h-2 rounded-full transition-all ${i === current ? "bg-brand w-5" : "bg-gray-300 w-2"}`} />
+              </button>
             ))}
           </div>
         </div>

@@ -46,7 +46,7 @@ export default function TrustBar() {
         <h2 className="font-heading text-3xl md:text-4xl text-brand text-center uppercase mb-4">
           Votre partenaire local de confiance
         </h2>
-        <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">
+        <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
           Avec plusieurs années d&apos;expérience dans la région de Granby et des environs,
           notre équipe met l&apos;accent sur la qualité, la transparence et la sécurité.
         </p>

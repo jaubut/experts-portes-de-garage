@@ -138,13 +138,6 @@ button, [role="button"] {
   background-repeat: no-repeat;
 }
 
-.hero-bg {
-  background-image: url('/images/maison_garage_v1.webp');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .smiling-technicien-bg {
   background-image: url('/images/smiling_technicien.webp');
   background-size: cover;
