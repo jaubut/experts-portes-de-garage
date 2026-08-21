@@ -26,12 +26,12 @@ Planifier une réparation ![](https://expertsportesdegarage.ca/wp-content/upload
 
 Nos techniciens qualifiés sont disponibles en tout temps pour diagnostiquer et réparer votre porte de garage rapidement et en toute sécurité.
 
-Planifier une inspection [Appeler maintenant](tel:4505585788)
+Planifier une inspection [Appeler maintenant](tel:4388089604)
 
 ## RÉPARATION DE PORTE DE GARAGE 24 H/24 AVEC TECHNICIENS LOCAUX EXPERTS
 
 Si vous avez besoin d’une réparation urgente de porte de garage, Experts Portes de Garage offre un service 24h/24 et 7j/7 sans frais supplémentaires, même les jours fériés. Nos techniciens certifiés interviennent rapidement pour vous éviter des risques et remettre votre système en état en toute sécurité. Pour une assistance immédiate, appelez le  
-[450-558-5788](tel:4505585788).
+[438-808-9604](tel:4388089604).
 
 ## APPELEZ POUR UNE ASSISTANCE IMMÉDIATE PRÈS DE CHEZ VOUS
 
@@ -40,11 +40,11 @@ Votre porte de garage fait des siennes? **Experts Portes de Garage** assure un s
 Forte de plusieurs années d’expérience, notre équipe met l’accent sur la qualité, la transparence et la sécurité à chaque intervention. Avec des pièces haut de gamme et des pratiques éprouvées, nous rétablissons rapidement le bon fonctionnement de votre porte — et votre tranquillité d’esprit.
 
 **Besoin d’assistance immédiate?**  
-Appelez le [450-558-5788](tel:4505585788) pour une intervention rapide et professionnelle, effectuée le jour même.
+Appelez le [438-808-9604](tel:4388089604) pour une intervention rapide et professionnelle, effectuée le jour même.
 
 ## QUAND APPELER POUR UNE RÉPARATION URGENTE DE PORTE DE GARAGE
 
-Si votre porte de garage est coincée ouverte ou fermée, vous devriez appeler un technicien. Mais avant, vous pouvez tenter quelques vérifications simples : assurez-vous que le moteur est bien branché — plus de gens qu’on pense le débranchent sans le savoir — vérifiez que les piles de la télécommande sont récentes, assurez-vous que les capteurs photoélectriques ne sont pas obstrués, puis essayez de lubrifier légèrement les pièces mobiles. Si malgré tout le problème persiste ou si vous vous demandez « Qui appeler pour une réparation urgente de porte de garage ? » ou recherchez une [réparation de porte de garage près de chez moi](https://expertsportesdegarage.ca/porte-de-garage-endommagee/), appelez le [450-558-5788](tel:4505585788) en tout temps. Nous sommes ouverts 24/7/365 pour toute réparation urgente de porte de garage. Peu importe l’heure ou la météo, nos techniciens experts sont prêts à vous aider.
+Si votre porte de garage est coincée ouverte ou fermée, vous devriez appeler un technicien. Mais avant, vous pouvez tenter quelques vérifications simples : assurez-vous que le moteur est bien branché — plus de gens qu’on pense le débranchent sans le savoir — vérifiez que les piles de la télécommande sont récentes, assurez-vous que les capteurs photoélectriques ne sont pas obstrués, puis essayez de lubrifier légèrement les pièces mobiles. Si malgré tout le problème persiste ou si vous vous demandez « Qui appeler pour une réparation urgente de porte de garage ? » ou recherchez une [réparation de porte de garage près de chez moi](https://expertsportesdegarage.ca/porte-de-garage-endommagee/), appelez le [438-808-9604](tel:4388089604) en tout temps. Nous sommes ouverts 24/7/365 pour toute réparation urgente de porte de garage. Peu importe l’heure ou la météo, nos techniciens experts sont prêts à vous aider.
 
 ## Signes que vous avez besoin d’une réparation urgente de porte de garage
 

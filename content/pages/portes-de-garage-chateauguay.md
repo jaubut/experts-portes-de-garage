@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-chateauguay/"
-excerpt: "Réparation et installation de portes de garage à Châteauguay. Techniciens disponibles 7j/7, intervention rapide, devis gratuit. Appelez le 450-558-5788."
+excerpt: "Réparation et installation de portes de garage à Châteauguay. Techniciens disponibles 7j/7, intervention rapide, devis gratuit. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À CHÂTEAUGUAY
 
 Vous habitez à **Châteauguay** et votre porte de garage vous cause des problèmes? **Experts Portes de Garage** se déplace rapidement dans toute la ville — secteurs Elgin, Maple, Châteauguay Centre, Saint-Francis et les environs — pour toute réparation ou installation résidentielle.
 
-Appelez-nous au [450-558-5788](tel:4505585788) — disponibles 7 jours sur 7, souvent le jour même.
+Appelez-nous au [438-808-9604](tel:4388089604) — disponibles 7 jours sur 7, souvent le jour même.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services disponibles à Châteauguay
 
@@ -61,7 +61,7 @@ Oui. Nous couvrons l'ensemble de la ville de Châteauguay ainsi que les municipa
 
 Intervenez-vous en urgence à Châteauguay?
 
-Oui. Si votre porte est bloquée ouverte ou fermée, appelez-nous immédiatement au [450-558-5788](tel:4505585788). Nous faisons notre possible pour intervenir le jour même.
+Oui. Si votre porte est bloquée ouverte ou fermée, appelez-nous immédiatement au [438-808-9604](tel:4388089604). Nous faisons notre possible pour intervenir le jour même.
 
 Combien coûte un remplacement de ressort à Châteauguay?
 

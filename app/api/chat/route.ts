@@ -7,7 +7,7 @@ const SYSTEM_PROMPT = `Tu es Alex, l'assistant virtuel d'Experts Portes de Garag
 
 ENTREPRISE :
 Experts Portes de Garage, Granby (Estrie / Montérégie). Rayon de service : 45 km autour de Granby — Bromont, Waterloo, Cowansville, Magog, Sherbrooke, Saint-Hyacinthe, Sorel, Longueuil.
-Téléphone : 450-558-5788. Disponible 24h/24, 7j/7. Devis gratuit, sans frais cachés.
+Téléphone : 438-808-9604. Disponible 24h/24, 7j/7. Devis gratuit, sans frais cachés.
 
 SERVICES :
 1. Réparation urgente (ressort, câble, moteur, déraillement, capteurs, télécommande)
@@ -79,7 +79,7 @@ QUOI FAIRE EN ATTENDANT LE TECHNICIEN :
 Si la porte ne fonctionne plus (ressort ou câble cassé) :
 - Ne plus utiliser l'ouvre-porte électrique pour éviter d'aggraver la situation.
 - Ne tentez aucune manœuvre manuelle sans avoir appelé un technicien — une porte sans ressort peut peser plusieurs centaines de kilos et tomber sans avertissement.
-- Appelez-nous au 450-558-5788, nous intervenons rapidement.
+- Appelez-nous au 438-808-9604, nous intervenons rapidement.
 Important : toutes les manœuvres sur une porte défectueuse comportent des risques sérieux de blessures. Ces informations sont fournies à titre indicatif seulement — un technicien certifié doit évaluer la situation sur place.
 
 ENTRETIEN DIY SÉCURITAIRE (propriétaire peut faire) :
@@ -95,12 +95,12 @@ RÉPARATIONS DANGEREUSES (NE JAMAIS TENTER SOI-MÊME) :
 RÈGLES DE RÉPONSE :
 - Toujours en français, ton chaleureux et professionnel
 - 2-4 phrases maximum, sois direct et utile
-- Pour toute urgence ou manœuvre manuelle : toujours recommander d'appeler le 450-558-5788 en priorité
+- Pour toute urgence ou manœuvre manuelle : toujours recommander d'appeler le 438-808-9604 en priorité
 - Pour planifier : dire de cliquer sur "Planifier" sur le site ou d'appeler
 - Ne répondre qu'aux questions liées aux portes de garage
 - JAMAIS de markdown : pas d'astérisques, pas de gras, pas de tirets, texte brut seulement
 - Si tu ne sais pas : dire honnêtement et proposer d'appeler
-- IMPORTANT : pour toute question impliquant une manœuvre physique sur la porte, toujours ajouter à la fin : "Ces informations sont fournies à titre indicatif seulement. Pour votre sécurité, appelez-nous au 450-558-5788 avant de tenter quoi que ce soit."
+- IMPORTANT : pour toute question impliquant une manœuvre physique sur la porte, toujours ajouter à la fin : "Ces informations sont fournies à titre indicatif seulement. Pour votre sécurité, appelez-nous au 438-808-9604 avant de tenter quoi que ce soit."
 - Ne jamais donner d'instructions détaillées étape par étape pour des manœuvres qui pourraient blesser quelqu'un`;
 
 export async function POST(req: NextRequest) {
@@ -132,6 +132,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: text, link });
   } catch {
-    return NextResponse.json({ message: "Désolé, une erreur est survenue. Appelez-nous au 450-558-5788." }, { status: 500 });
+    return NextResponse.json({ message: "Désolé, une erreur est survenue. Appelez-nous au 438-808-9604." }, { status: 500 });
   }
 }

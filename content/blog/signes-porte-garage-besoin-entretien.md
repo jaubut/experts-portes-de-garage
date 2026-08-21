@@ -133,4 +133,4 @@ Un entretien complet sur une vieille porte peut lui donner 5 à 10 ans de plus. 
 
 ---
 
-Chez **Experts Portes de Garage**, nous offrons un service d'inspection et d'entretien dans toute l'Estrie et la Montérégie. Si vous reconnaissez un de ces 7 signes, appelez-nous au [450-558-5788](tel:4505585788) — mieux vaut régler le problème maintenant que d'être bloqué dehors par -20 °C.
+Chez **Experts Portes de Garage**, nous offrons un service d'inspection et d'entretien dans toute l'Estrie et la Montérégie. Si vous reconnaissez un de ces 7 signes, appelez-nous au [438-808-9604](tel:4388089604) — mieux vaut régler le problème maintenant que d'être bloqué dehors par -20 °C.

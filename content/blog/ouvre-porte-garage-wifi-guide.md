@@ -162,4 +162,4 @@ Pour la majorité des familles québécoises, nous recommandons un **LiftMaster 
 
 Pour les résidences secondaires ou les propriétés locatives, un ouvre-porte WiFi est presque indispensable — il vous évite les échanges de clés et vous donne une tranquillité d'esprit totale sur l'état de votre propriété.
 
-**Experts Portes de Garage** installe et configure tous les modèles connectés en Estrie et Montérégie. On vous aide à choisir le bon modèle selon votre configuration et votre budget. Appelez le [450-558-5788](tel:4505585788) pour une consultation gratuite.
+**Experts Portes de Garage** installe et configure tous les modèles connectés en Estrie et Montérégie. On vous aide à choisir le bon modèle selon votre configuration et votre budget. Appelez le [438-808-9604](tel:4388089604) pour une consultation gratuite.

@@ -13,7 +13,7 @@ Choisissez votre date et votre plage horaire — notre équipe sera là pour vou
 
 ## Remplissez le formulaire ci-dessous
 
-Nous vous contacterons pour confirmer votre réservation. Pour une intervention urgente, appelez-nous directement au **[450-558-5788](tel:4505585788)**.
+Nous vous contacterons pour confirmer votre réservation. Pour une intervention urgente, appelez-nous directement au **[438-808-9604](tel:4388089604)**.
 
 #### Plages horaires disponibles
 
@@ -26,7 +26,7 @@ Nous vous contacterons pour confirmer votre réservation. Pour une intervention 
 
 Pour une urgence, contactez-nous directement :
 
-[📞 450-558-5788](tel:4505585788)
+[📞 438-808-9604](tel:4388089604)
 
 #### Zone desservie
 

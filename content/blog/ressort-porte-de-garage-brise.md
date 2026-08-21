@@ -105,7 +105,7 @@ Au Québec, le remplacement d'un ressort de porte de garage coûte généralemen
 - La taille et le poids de votre porte
 - Si vous remplacez un ou deux ressorts
 
-Chez **Experts Portes de Garage**, nous vous donnons un prix fixe avant de commencer — aucune mauvaise surprise. Appelez le [450-558-5788](tel:4505585788) pour un devis gratuit.
+Chez **Experts Portes de Garage**, nous vous donnons un prix fixe avant de commencer — aucune mauvaise surprise. Appelez le [438-808-9604](tel:4388089604) pour un devis gratuit.
 
 ## Ce que vous devez faire si votre ressort est brisé
 
@@ -115,4 +115,4 @@ Chez **Experts Portes de Garage**, nous vous donnons un prix fixe avant de comme
 
 ---
 
-Un ressort brisé n'est jamais une urgence difficile à gérer si vous connaissez les bons gestes. Contactez **Experts Portes de Garage** au [450-558-5788](tel:4505585788) — nous intervenons rapidement partout en Estrie et Montérégie.
+Un ressort brisé n'est jamais une urgence difficile à gérer si vous connaissez les bons gestes. Contactez **Experts Portes de Garage** au [438-808-9604](tel:4388089604) — nous intervenons rapidement partout en Estrie et Montérégie.

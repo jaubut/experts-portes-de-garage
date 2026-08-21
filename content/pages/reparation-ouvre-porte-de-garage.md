@@ -11,7 +11,7 @@ link: "https://expertsportesdegarage.ca/reparation-ouvre-porte-de-garage/"
 
 Profitez d’un **ouvre-porte de garage** fiable, silencieux et durable grâce à nos services professionnels d’**installation**, de **réparation** et d’**entretien d’ouvre-portes de garage**. Que vous souhaitiez faire installer un nouveau système ou remettre à neuf votre moteur existant, [Experts Portes de Garage](https://expertsportesdegarage.ca/) vous offre une solution rapide et efficace. Nos techniciens qualifiés s’occupent de tout, du **moteur de porte de garage** à la programmation intelligente, pour garantir un fonctionnement fluide et sécuritaire. Nous desservons fièrement Granby, Sherbrooke et Montréal avec un service de qualité supérieure, adapté à tous les types d’ouvre-portes résidentiels et commerciaux.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services et produits d’ouvre-portes de garage
 
@@ -49,13 +49,13 @@ Installation d’ouvre-porte de garage ![Technicien installant un ouvre-porte de
 
 **Jackshaft** – Un ouvre-porte mural idéal pour les garages à hauts plafonds ou à espaces restreints. Son système latéral libère de l’espace et assure une ouverture fluide, à condition d’un entretien professionnel effectué par des techniciens qualifiés d’Experts Portes de Garage.
 
-Peu importe la conception de votre garage, nous offrons des services de réparation et d’installation professionnelles. Que vous ayez besoin d’une réparation spécialisée, d’une mise à niveau moderne ou d’un changement de type d’ouvre-porte de garage, nous avons la solution. Appelez [450-558-5788](tel:4505585788) pour une installation d’ouvre-porte rapide, sans tracas, ou pour bénéficier d’un accompagnement rassurant tout au long du processus de réparation.
+Peu importe la conception de votre garage, nous offrons des services de réparation et d’installation professionnelles. Que vous ayez besoin d’une réparation spécialisée, d’une mise à niveau moderne ou d’un changement de type d’ouvre-porte de garage, nous avons la solution. Appelez [438-808-9604](tel:4388089604) pour une installation d’ouvre-porte rapide, sans tracas, ou pour bénéficier d’un accompagnement rassurant tout au long du processus de réparation.
 
-[Appeler](tel:4505585788) Planifier Problèmes courants d’ouvre-porte de garage que nous réparons ![Moteur d’ouvre-porte de garage LiftMaster installé dans un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_35_27-1024x683.webp) Les portes de garage peuvent causer toutes sortes de problèmes. Même si leur fonctionnement semble simple, le système est en réalité plus complexe qu’il n’y paraît. Heureusement, nous sommes en mesure de réparer la plupart des pannes et des signes indiquant que ton ouvre-porte de garage a besoin d’entretien ou de réparation.
+[Appeler](tel:4388089604) Planifier Problèmes courants d’ouvre-porte de garage que nous réparons ![Moteur d’ouvre-porte de garage LiftMaster installé dans un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_35_27-1024x683.webp) Les portes de garage peuvent causer toutes sortes de problèmes. Même si leur fonctionnement semble simple, le système est en réalité plus complexe qu’il n’y paraît. Heureusement, nous sommes en mesure de réparer la plupart des pannes et des signes indiquant que ton ouvre-porte de garage a besoin d’entretien ou de réparation.
 
 **Moteur de porte de garage défectueux** – Le moteur ou le mécanisme d’entraînement de ta porte de garage peut avoir cessé de fonctionner correctement. **Problèmes de capteurs** – Les capteurs de ton ouvre-porte peuvent ne plus détecter les signaux correctement pour ouvrir ou fermer la porte. **Programmation du clavier et de la télécommande** – Ton clavier ou ta télécommande peut nécessiter une reprogrammation, ou nous pouvons en configurer une nouvelle pour toi.
 
-[Appeler](tel:4505585788) Planifier Télécommandes pour ouvre-portes de garage ![Conductrice utilisant une télécommande d’ouvre-porte de garage moderne devant sa maison](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_42_58-1024x683.webp)
+[Appeler](tel:4388089604) Planifier Télécommandes pour ouvre-portes de garage ![Conductrice utilisant une télécommande d’ouvre-porte de garage moderne devant sa maison](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_42_58-1024x683.webp)
 
 Posséder une porte de garage à télécommande apporte commodité, sécurité et tranquillité d’esprit. Pour t’offrir ces avantages, nous proposons une gamme de télécommandes d’ouvre-portes de garage, de systèmes à code et d’entrées sans clé de haute qualité.
 
@@ -69,13 +69,13 @@ Nos produits sont conçus pour s’intégrer parfaitement à ton ouvre-porte et 
 
 **Jackshaft** – Un ouvre-porte mural idéal pour les garages à hauts plafonds ou à espaces restreints. Son système latéral libère de l’espace et assure une ouverture fluide, à condition d’un entretien professionnel effectué par des techniciens qualifiés d’Experts Portes de Garage.
 
-Peu importe la conception de votre garage, nous offrons des services de réparation et d’installation professionnelles. Que vous ayez besoin d’une réparation spécialisée, d’une mise à niveau moderne ou d’un changement de type d’ouvre-porte de garage, nous avons la solution. Appelez [450-558-5788](tel:4505585788) pour une installation d’ouvre-porte rapide, sans tracas, ou pour bénéficier d’un accompagnement rassurant tout au long du processus de réparation.
+Peu importe la conception de votre garage, nous offrons des services de réparation et d’installation professionnelles. Que vous ayez besoin d’une réparation spécialisée, d’une mise à niveau moderne ou d’un changement de type d’ouvre-porte de garage, nous avons la solution. Appelez [438-808-9604](tel:4388089604) pour une installation d’ouvre-porte rapide, sans tracas, ou pour bénéficier d’un accompagnement rassurant tout au long du processus de réparation.
 
-[Appeler](tel:4505585788) Planifier ![Moteur d’ouvre-porte de garage LiftMaster installé dans un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_35_27-1024x683.webp) Les portes de garage peuvent causer toutes sortes de problèmes. Même si leur fonctionnement semble simple, le système est en réalité plus complexe qu’il n’y paraît. Heureusement, nous sommes en mesure de réparer la plupart des pannes et des signes indiquant que ton ouvre-porte de garage a besoin d’entretien ou de réparation.
+[Appeler](tel:4388089604) Planifier ![Moteur d’ouvre-porte de garage LiftMaster installé dans un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_35_27-1024x683.webp) Les portes de garage peuvent causer toutes sortes de problèmes. Même si leur fonctionnement semble simple, le système est en réalité plus complexe qu’il n’y paraît. Heureusement, nous sommes en mesure de réparer la plupart des pannes et des signes indiquant que ton ouvre-porte de garage a besoin d’entretien ou de réparation.
 
 **Moteur de porte de garage défectueux** – Le moteur ou le mécanisme d’entraînement de ta porte de garage peut avoir cessé de fonctionner correctement. **Problèmes de capteurs** – Les capteurs de ton ouvre-porte peuvent ne plus détecter les signaux correctement pour ouvrir ou fermer la porte. **Programmation du clavier et de la télécommande** – Ton clavier ou ta télécommande peut nécessiter une reprogrammation, ou nous pouvons en configurer une nouvelle pour toi.
 
-[Appeler](tel:4505585788) Planifier ![Conductrice utilisant une télécommande d’ouvre-porte de garage moderne devant sa maison](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_42_58-1024x683.webp)
+[Appeler](tel:4388089604) Planifier ![Conductrice utilisant une télécommande d’ouvre-porte de garage moderne devant sa maison](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-13_42_58-1024x683.webp)
 
 Posséder une porte de garage à télécommande apporte commodité, sécurité et tranquillité d’esprit. Pour t’offrir ces avantages, nous proposons une gamme de télécommandes d’ouvre-portes de garage, de systèmes à code et d’entrées sans clé de haute qualité.
 

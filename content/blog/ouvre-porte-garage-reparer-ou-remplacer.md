@@ -134,4 +134,4 @@ Si votre ouvre-porte a **moins de 10 ans** et que la réparation est simple (eng
 
 Si votre ouvre-porte a **plus de 10-15 ans** ou si la réparation dépasse 250 $, investissez dans un nouveau modèle. Vous bénéficierez de meilleures fonctions de sécurité, d'une garantie, et souvent d'un fonctionnement beaucoup plus silencieux.
 
-**Experts Portes de Garage** peut diagnostiquer votre ouvre-porte et vous recommander la solution la plus économique selon votre situation. Appelez-nous au [450-558-5788](tel:4505585788) — on vous donne notre avis honnête, sans pression.
+**Experts Portes de Garage** peut diagnostiquer votre ouvre-porte et vous recommander la solution la plus économique selon votre situation. Appelez-nous au [438-808-9604](tel:4388089604) — on vous donne notre avis honnête, sans pression.

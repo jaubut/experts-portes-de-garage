@@ -148,7 +148,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       if (place.location) {
         const dist = haversineKm(place.location.latitude, place.location.longitude, 45.3972, -72.7330);
         if (dist > 60) {
-          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 450-558-5788.` }));
+          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 438-808-9604.` }));
         }
       }
     } catch { /* keep typed value */ }
@@ -178,7 +178,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       if (!form.telephone.trim()) {
         errs.telephone = "Ce champ est requis";
       } else if (!/^[\d\s\-().+]{10,}$/.test(form.telephone.trim()) || form.telephone.replace(/\D/g, "").length < 10) {
-        errs.telephone = "Entrez un numéro de téléphone valide (ex: 450-558-5788)";
+        errs.telephone = "Entrez un numéro de téléphone valide (ex: 438-808-9604)";
       }
       if (!form.courriel.trim()) {
         errs.courriel = "Ce champ est requis";
@@ -405,7 +405,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       value={form.telephone}
                       onChange={(e) => update("telephone", e.target.value)}
                       onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); courrielRef.current?.focus(); } }}
-                      placeholder="450-558-5788"
+                      placeholder="438-808-9604"
                       autoComplete="tel"
                       className={inputCls(!!errors.telephone)}
                     />

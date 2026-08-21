@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-saint-jean-sur-richelieu/"
-excerpt: "Réparation et installation de portes de garage à Saint-Jean-sur-Richelieu. Disponibles 7j/7, devis gratuit. Appelez le 450-558-5788."
+excerpt: "Réparation et installation de portes de garage à Saint-Jean-sur-Richelieu. Disponibles 7j/7, devis gratuit. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À SAINT-JEAN-SUR-RICHELIEU
 
 **Saint-Jean-sur-Richelieu** est une ville dynamique de la Montérégie avec de nombreuses maisons unifamiliales équipées de garages. Quand votre porte de garage tombe en panne — que ce soit un ressort brisé, un câble lâche ou un moteur défectueux — nos techniciens interviennent **rapidement et efficacement** pour vous remettre en route.
 
-Nous couvrons tous les secteurs de Saint-Jean : L'Acadie, Iberville, Saint-Luc, La Prairie (secteurs voisins) et les environs de la rivière Richelieu. Appelez **Experts Portes de Garage** au [450-558-5788](tel:4505585788).
+Nous couvrons tous les secteurs de Saint-Jean : L'Acadie, Iberville, Saint-Luc, La Prairie (secteurs voisins) et les environs de la rivière Richelieu. Appelez **Experts Portes de Garage** au [438-808-9604](tel:4388089604).
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Réparations disponibles à Saint-Jean-sur-Richelieu
 
@@ -62,7 +62,7 @@ Oui. Nous desservons l'ensemble de la ville de Saint-Jean-sur-Richelieu, incluan
 
 Ma porte ne s'ouvre plus du tout — que faire?
 
-Si votre porte est complètement bloquée, vérifiez d'abord si le ressort est intact (regardez au-dessus de la porte — si le ressort de torsion est en deux morceaux, c'est lui le coupable). N'essayez pas de forcer la porte manuellement. Appelez-nous au [450-558-5788](tel:4505585788) pour une intervention rapide.
+Si votre porte est complètement bloquée, vérifiez d'abord si le ressort est intact (regardez au-dessus de la porte — si le ressort de torsion est en deux morceaux, c'est lui le coupable). N'essayez pas de forcer la porte manuellement. Appelez-nous au [438-808-9604](tel:4388089604) pour une intervention rapide.
 
 Réparez-vous les garages détachés à Saint-Jean?
 

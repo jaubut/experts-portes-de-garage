@@ -57,7 +57,7 @@ export default function ChatBot() {
       const data = await res.json();
       setMessages((prev) => [...prev, { role: "assistant", content: data.message, link: data.link ?? undefined }]);
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Désolé, une erreur est survenue. Appelez-nous au 450-558-5788." }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Désolé, une erreur est survenue. Appelez-nous au 438-808-9604." }]);
     } finally {
       setLoading(false);
     }

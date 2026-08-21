@@ -178,7 +178,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       if (place.location) {
         const dist = haversineKm(place.location.latitude, place.location.longitude, 45.3972, -72.7330);
         if (dist > 60) {
-          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 450-558-5788.` }));
+          setErrors(e => ({ ...e, adresse: `Cette adresse est à ${Math.round(dist)} km de Granby — hors de notre zone de service (60 km max). Appelez-nous au 438-808-9604.` }));
         }
       }
     } catch { /* keep typed value */ }
@@ -243,7 +243,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
       if (!form.telephone.trim()) {
         errs.telephone = "Ce champ est requis";
       } else if (!/^[\d\s\-().+]{10,}$/.test(form.telephone.trim()) || form.telephone.replace(/\D/g, "").length < 10) {
-        errs.telephone = "Entrez un numéro de téléphone valide (ex: 450-558-5788)";
+        errs.telephone = "Entrez un numéro de téléphone valide (ex: 438-808-9604)";
       }
       if (!form.courriel.trim()) { errs.courriel = "Ce champ est requis"; }
       else if (!/\S+@\S+\.\S+/.test(form.courriel)) { errs.courriel = "Adresse courriel invalide"; }
@@ -600,7 +600,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
                     <input type="text" enterKeyHint="next" value={form.nom} onChange={(e) => update("nom", e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); wsTelephoneRef.current?.focus(); } }} placeholder="Jean Tremblay" autoComplete="name" className={inputCls(!!errors.nom)} />
                   </Field>
                   <Field label="Numéro de téléphone" error={errors.telephone}>
-                    <input ref={wsTelephoneRef} type="tel" enterKeyHint="next" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); wsCourrielRef.current?.focus(); } }} placeholder="450-558-5788" autoComplete="tel" className={inputCls(!!errors.telephone)} />
+                    <input ref={wsTelephoneRef} type="tel" enterKeyHint="next" value={form.telephone} onChange={(e) => update("telephone", e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); wsCourrielRef.current?.focus(); } }} placeholder="438-808-9604" autoComplete="tel" className={inputCls(!!errors.telephone)} />
                   </Field>
                   <Field label="Adresse courriel" error={errors.courriel}>
                     <input ref={wsCourrielRef} type="email" enterKeyHint="done" value={form.courriel} onChange={(e) => update("courriel", e.target.value)} placeholder="jean@exemple.com" autoComplete="email" className={inputCls(!!errors.courriel)} />

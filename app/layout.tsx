@@ -26,7 +26,7 @@ const BASE_URL = "https://www.expertsportesdegarage.ca";
 export const metadata: Metadata = {
   title: "Experts Portes de Garage — Réparation rapide, service local",
   description:
-    "Service local de réparation de portes de garage — Granby & régions. Urgences 24/7, installation, entretien. Appelez le 450-558-5788.",
+    "Service local de réparation de portes de garage — Granby & régions. Urgences 24/7, installation, entretien. Appelez le 438-808-9604.",
   metadataBase: new URL(BASE_URL),
   openGraph: {
     siteName: "Experts Portes de Garage",

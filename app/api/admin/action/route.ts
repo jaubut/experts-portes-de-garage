@@ -93,6 +93,6 @@ function errorPage(msg: string): string {
   h1{font-size:20px;color:#DC2626;}p{color:#4b5563;font-size:15px;}
   a{color:#DC2626;font-weight:700;}</style>
   </head><body><div class="card"><h1>⚠️ Erreur</h1><p>${msg}</p>
-  <p>Appelez-nous au <a href="tel:4505585788">450-558-5788</a></p>
+  <p>Appelez-nous au <a href="tel:4388089604">438-808-9604</a></p>
   </div></body></html>`;
 }

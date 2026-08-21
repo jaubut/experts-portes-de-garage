@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-sherbrooke/"
-excerpt: "Service expert de réparation et installation de portes de garage à Sherbrooke. Intervention rapide, devis gratuit, disponible 7 jours sur 7. Appelez le 450-558-5788."
+excerpt: "Service expert de réparation et installation de portes de garage à Sherbrooke. Intervention rapide, devis gratuit, disponible 7 jours sur 7. Appelez le 438-808-9604."
 ---
 
 ## EXPERTS EN PORTES DE GARAGE À SHERBROOKE — SERVICE RAPIDE ET FIABLE
 
 Vous avez un problème avec votre porte de garage à **Sherbrooke**? Nos techniciens certifiés interviennent rapidement pour tout type de réparation ou installation. Ressort brisé, câble lâche, ouvre-porte défectueux ou porte qui déraille — nous réglons le problème dès la première visite avec des **pièces de qualité supérieure** et une **garantie sur les travaux**.
 
-Chez **Experts Portes de Garage**, nous desservons tous les quartiers de Sherbrooke : Rock Forest, Fleurimont, Lennoxville, Mont-Bellevue, Brompton et les secteurs environnants. Appelez-nous dès maintenant au [450-558-5788](tel:4505585788) pour une intervention le jour même.
+Chez **Experts Portes de Garage**, nous desservons tous les quartiers de Sherbrooke : Rock Forest, Fleurimont, Lennoxville, Mont-Bellevue, Brompton et les secteurs environnants. Appelez-nous dès maintenant au [438-808-9604](tel:4388089604) pour une intervention le jour même.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services de portes de garage disponibles à Sherbrooke
 
@@ -66,7 +66,7 @@ Le remplacement d'un ressort de torsion coûte généralement entre **250 $ et 4
 
 Intervenez-vous en urgence à Sherbrooke?
 
-Oui. Nous offrons un service d'urgence pour les pannes qui empêchent l'accès à votre maison ou qui posent un risque de sécurité. Appelez le [450-558-5788](tel:4505585788) et un technicien sera envoyé dès que possible.
+Oui. Nous offrons un service d'urgence pour les pannes qui empêchent l'accès à votre maison ou qui posent un risque de sécurité. Appelez le [438-808-9604](tel:4388089604) et un technicien sera envoyé dès que possible.
 
 Quels quartiers de Sherbrooke desservez-vous?
 

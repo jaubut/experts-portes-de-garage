@@ -201,4 +201,4 @@ Pour la grande majorité des maisons québécoises, nous recommandons une **port
 
 Si votre budget le permet, un acier calibre 24 avec isolation polyuréthane (plutôt que polystyrène) est nettement supérieur en termes de solidité et de performance thermique.
 
-**Experts Portes de Garage** peut vous guider dans le choix et vous fournir une soumission complète pour la porte et l'installation. Appelez le [450-558-5788](tel:4505585788) — nos techniciens connaissent bien les conditions climatiques de l'Estrie et de la Montérégie et peuvent vous recommander le meilleur modèle pour votre maison.
+**Experts Portes de Garage** peut vous guider dans le choix et vous fournir une soumission complète pour la porte et l'installation. Appelez le [438-808-9604](tel:4388089604) — nos techniciens connaissent bien les conditions climatiques de l'Estrie et de la Montérégie et peuvent vous recommander le meilleur modèle pour votre maison.

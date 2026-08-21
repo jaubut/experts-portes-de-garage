@@ -883,7 +883,7 @@ function QuoteModal({ onClose, config }: { onClose: () => void; config: QuoteCon
               <div className="flex flex-col gap-4">
                 {[
                   { key: "nom",       label: "Prénom et Nom", type: "text",  placeholder: "Jean Tremblay"   },
-                  { key: "telephone", label: "Téléphone",     type: "tel",   placeholder: "450-558-5788"     },
+                  { key: "telephone", label: "Téléphone",     type: "tel",   placeholder: "438-808-9604"     },
                   { key: "courriel",  label: "Courriel",      type: "email", placeholder: "jean@exemple.com" },
                 ].map(({ key, label, type, placeholder }) => (
                   <div key={key}>

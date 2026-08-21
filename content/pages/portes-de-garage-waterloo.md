@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-waterloo/"
-excerpt: "Réparation et installation de portes de garage à Waterloo, Québec. Techniciens locaux, disponibles 7j/7. Appelez le 450-558-5788."
+excerpt: "Réparation et installation de portes de garage à Waterloo, Québec. Techniciens locaux, disponibles 7j/7. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À WATERLOO
 
 Vous habitez à **Waterloo** dans la région de la Haute-Yamaska et votre porte de garage vous cause des soucis? **Experts Portes de Garage** se déplace rapidement dans votre secteur pour toute réparation ou installation. Nous connaissons bien la région et nous intervenons dans les meilleurs délais.
 
-Appelez-nous au [450-558-5788](tel:4505585788) — service disponible 7 jours sur 7.
+Appelez-nous au [438-808-9604](tel:4388089604) — service disponible 7 jours sur 7.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services disponibles à Waterloo
 

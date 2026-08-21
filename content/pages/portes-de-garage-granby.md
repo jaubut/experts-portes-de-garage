@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-granby/"
-excerpt: "Service local de réparation et installation de portes de garage à Granby. Intervention rapide, techniciens certifiés, devis gratuit. Appelez le 450-558-5788."
+excerpt: "Service local de réparation et installation de portes de garage à Granby. Intervention rapide, techniciens certifiés, devis gratuit. Appelez le 438-808-9604."
 ---
 
 ## EXPERTS EN PORTES DE GARAGE À GRANBY — VOTRE SPÉCIALISTE LOCAL
 
 **Experts Portes de Garage** est basé à **Granby**, au cœur de la Haute-Yamaska. Nous connaissons parfaitement votre quartier, votre rue et les défis que posent nos hivers. Qu'il s'agisse d'un ressort brisé à 7h du matin ou d'une installation planifiée, nous sommes votre équipe de confiance — rapide, honnête et locale.
 
-Nos techniciens interviennent dans tous les secteurs de Granby : downtown, Yamaska-Est, Roxton Falls, Bromont, Saint-Alphonse-de-Granby et les villes voisines. Appelez-nous au [450-558-5788](tel:4505585788) pour un service le jour même.
+Nos techniciens interviennent dans tous les secteurs de Granby : downtown, Yamaska-Est, Roxton Falls, Bromont, Saint-Alphonse-de-Granby et les villes voisines. Appelez-nous au [438-808-9604](tel:4388089604) pour un service le jour même.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Réparations que nous effectuons à Granby
 
@@ -70,7 +70,7 @@ J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le trava
 
 Êtes-vous vraiment basés à Granby?
 
-Oui. **Experts Portes de Garage** est une entreprise locale de Granby. Vous pouvez nous joindre directement au [450-558-5788](tel:4505585788) — pas de centre d'appel, pas d'intermédiaire.
+Oui. **Experts Portes de Garage** est une entreprise locale de Granby. Vous pouvez nous joindre directement au [438-808-9604](tel:4388089604) — pas de centre d'appel, pas d'intermédiaire.
 
 Combien coûte une réparation de porte à Granby?
 
@@ -78,7 +78,7 @@ Les prix varient selon le type de réparation. Un remplacement de ressort coûte
 
 Intervenez-vous en urgence à Granby?
 
-Oui. Si votre porte est bloquée ouverte (risque de sécurité) ou fermée (voiture coincée), appelez-nous immédiatement au [450-558-5788](tel:4505585788). Nous faisons notre possible pour intervenir le jour même.
+Oui. Si votre porte est bloquée ouverte (risque de sécurité) ou fermée (voiture coincée), appelez-nous immédiatement au [438-808-9604](tel:4388089604). Nous faisons notre possible pour intervenir le jour même.
 
 Desservez-vous les environs de Granby?
 

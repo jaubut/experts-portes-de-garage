@@ -45,7 +45,7 @@ On mise sur une équipe soudée, un climat de confiance et un environnement où 
 
 Apprends un vrai métier au sein d’une équipe d’experts. Formation payée, camion de compagnie, outils fournis et carte d’essence — tout pour que tu sois prêt à performer dès le jour 1.
 
-[Appeler maintenant pour rejoindre notres équipes](tel:+14505585788)
+[Appeler maintenant pour rejoindre notres équipes](tel:+14388089604)
 
 ## Devenez un expert en portes de garage
 
@@ -64,7 +64,7 @@ Chez **Experts Portes de Garage**, on ne cherche pas juste des employés : on fo
 Des gens curieux, travaillants et fiers de bien faire les choses.  
 Et si tu veux avancer, on t’ouvre la voie — vers des postes de chef d’équipe, de formateur ou même de gestion de projets.
 
-[Appeler maintenant pour rejoindre notres équipes](tel:+14505585788)
+[Appeler maintenant pour rejoindre notres équipes](tel:+14388089604)
 
 ## Tu es fait pour faire partie de l’équipe si tu :
 
@@ -74,4 +74,4 @@ Et si tu veux avancer, on t’ouvre la voie — vers des postes de chef d’équ
 -   ☑ **Être motivé et ambitieux** – Tu veux toujours progresser et inspirer les autres autour de toi.
 -   ☑ **Aimer faire partie d’une équipe gagnante** – Tu donnes ton 100 % et tu célèbres les réussites collectives.
 
-![Technicien installant un ouvre-porte de garage moderne au plafond d’un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-14_02_30-1024x683.webp) [Appeler maintenant pour rejoindre notres équipes](tel:+14505585788)
+![Technicien installant un ouvre-porte de garage moderne au plafond d’un garage résidentiel](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-31-oct.-2025-14_02_30-1024x683.webp) [Appeler maintenant pour rejoindre notres équipes](tel:+14388089604)

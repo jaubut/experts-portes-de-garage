@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-saint-hyacinthe/"
-excerpt: "Réparation et installation de portes de garage à Saint-Hyacinthe. Techniciens locaux disponibles 7j/7, devis gratuit. Appelez le 450-558-5788."
+excerpt: "Réparation et installation de portes de garage à Saint-Hyacinthe. Techniciens locaux disponibles 7j/7, devis gratuit. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À SAINT-HYACINTHE
 
 Vous habitez à **Saint-Hyacinthe** et votre porte de garage vous cause des problèmes? Nos techniciens expérimentés se déplacent rapidement dans toute la ville — du centre-ville jusqu'aux secteurs de Saint-Thomas-d'Aquin, Douville, Castel et les rues environnantes. Nous réparons et installons tous types de portes de garage résidentielles avec **des pièces garanties** et un **service sans tracas**.
 
-Appelez **Experts Portes de Garage** dès maintenant au [450-558-5788](tel:4505585788) pour une intervention rapide à Saint-Hyacinthe.
+Appelez **Experts Portes de Garage** dès maintenant au [438-808-9604](tel:4388089604) pour une intervention rapide à Saint-Hyacinthe.
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Ce que nous réparons à Saint-Hyacinthe
 
@@ -70,7 +70,7 @@ La majorité des réparations — remplacement de ressorts, câbles, roulettes o
 
 Vous déplacez-vous le soir et la fin de semaine à Saint-Hyacinthe?
 
-Oui. Nous sommes disponibles **7 jours sur 7** pour s'adapter à votre horaire. Pour les urgences (porte bloquée ouverte ou fermée), appelez le [450-558-5788](tel:4505585788) — nous ferons notre possible pour intervenir rapidement.
+Oui. Nous sommes disponibles **7 jours sur 7** pour s'adapter à votre horaire. Pour les urgences (porte bloquée ouverte ou fermée), appelez le [438-808-9604](tel:4388089604) — nous ferons notre possible pour intervenir rapidement.
 
 Mon ouvre-porte est vieux — vaut-il mieux le réparer ou le remplacer?
 

@@ -5,16 +5,16 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-magog/"
-excerpt: "Réparation et installation de portes de garage à Magog. Techniciens locaux de l'Estrie, disponibles 7j/7. Appelez le 450-558-5788."
+excerpt: "Réparation et installation de portes de garage à Magog. Techniciens locaux de l'Estrie, disponibles 7j/7. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À MAGOG
 
 **Magog** et ses environs au bord du lac Memphrémagog méritent un service de portes de garage à la hauteur. Nos techniciens se déplacent à Magog, Omerville, Sainte-Catherine-de-Hatley, North Hatley et dans tout le secteur pour offrir un service **rapide, honnête et garanti**.
 
-Que vous ayez une résidence principale ou un chalet, **Experts Portes de Garage** répare et installe tous types de portes de garage résidentielles. Appelez-nous au [450-558-5788](tel:4505585788).
+Que vous ayez une résidence principale ou un chalet, **Experts Portes de Garage** répare et installe tous types de portes de garage résidentielles. Appelez-nous au [438-808-9604](tel:4388089604).
 
-Planifier maintenant [450-558-5788](tel:4505585788)
+Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services de portes de garage à Magog
 

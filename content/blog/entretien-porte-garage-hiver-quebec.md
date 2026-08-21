@@ -143,4 +143,4 @@ Un entretien annuel par un technicien coûte entre **80 $ et 150 $** et comprend
 
 Comparez ce montant à un remplacement de ressort (250-450 $), un moteur grillé (350-600 $), ou une porte complètement hors service qui vous empêche d'accéder à votre voiture un matin de -20 °C. L'entretien annuel est clairement rentable.
 
-**Experts Portes de Garage** offre des entretiens annuels dans toute l'Estrie et la Montérégie. Appelez le [450-558-5788](tel:4505585788) pour planifier votre inspection d'automne avant les premiers gels.
+**Experts Portes de Garage** offre des entretiens annuels dans toute l'Estrie et la Montérégie. Appelez le [438-808-9604](tel:4388089604) pour planifier votre inspection d'automne avant les premiers gels.
