@@ -8,6 +8,8 @@ import ChatBot from "@/components/ChatBot";
 import ConditionalWrapper from "@/components/ConditionalWrapper";
 import { BUSINESS_NAME, PHONE_DISPLAY, EMAIL, CITY, SERVICE_AREA } from "@/lib/config";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
+import ClickTracker from "@/components/ClickTracker";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
@@ -90,6 +92,8 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <ConditionalWrapper />
           <SpeedInsights />
+          <Analytics />
+          <ClickTracker />
         </BookingModalProvider>
       </body>
     </html>

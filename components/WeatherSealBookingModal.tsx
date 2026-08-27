@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PHONE_DISPLAY } from "@/lib/config";
+import { track } from "@vercel/analytics";
 
 interface WeatherSealBookingModalProps {
   isOpen: boolean;
@@ -266,6 +267,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
           body: JSON.stringify(form),
         });
         if (!res.ok) throw new Error();
+        track("demande_rappel", { formulaire: "coupe_froid" });
         setSubmitted(true);
       } catch {
         setSubmitError(`Une erreur est survenue. Veuillez réessayer ou nous appeler au ${PHONE_DISPLAY}.`);
