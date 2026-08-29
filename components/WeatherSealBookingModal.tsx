@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PHONE_DISPLAY } from "@/lib/config";
 import { track } from "@vercel/analytics";
+import { gtagConversion } from "@/lib/gtag";
 
 interface WeatherSealBookingModalProps {
   isOpen: boolean;
@@ -268,6 +269,7 @@ export default function WeatherSealBookingModal({ isOpen, onClose }: WeatherSeal
         });
         if (!res.ok) throw new Error();
         track("demande_rappel", { formulaire: "coupe_froid" });
+        gtagConversion("demande_rappel");
         setSubmitted(true);
       } catch {
         setSubmitError(`Une erreur est survenue. Veuillez réessayer ou nous appeler au ${PHONE_DISPLAY}.`);

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
+import { gtagConversion } from "@/lib/gtag";
 
 /** Enregistre les clics sur les liens tel: et mailto: partout sur le site. */
 export default function ClickTracker() {
@@ -12,6 +13,7 @@ export default function ClickTracker() {
       const href = a.getAttribute("href") || "";
       if (href.startsWith("tel:")) {
         track("clic_appel", { page: window.location.pathname });
+        gtagConversion("clic_appel");
       } else if (href.startsWith("mailto:")) {
         track("clic_courriel", { page: window.location.pathname });
       }
