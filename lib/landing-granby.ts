@@ -1,0 +1,88 @@
+/**
+ * Données d'affaires de la page /reparation-porte-garage-granby
+ *
+ * ── COMMENT REMPLIR ──────────────────────────────────────────────────────
+ * Tout ce qui est `null` est MASQUÉ sur la page. Rien de faux ne sera
+ * jamais affiché. Dès que tu remplis une valeur, la section apparaît.
+ *
+ * Ne mets JAMAIS un prix ou un délai que tu ne peux pas tenir : la page
+ * devient une promesse, et le client la lit comme un engagement.
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+export const LANDING = {
+  /** Heures où tu réponds VRAIMENT en personne. null = la promesse est masquée. */
+  heuresReponse: null as string | null, // ex. "7 h à 20 h, 7 jours sur 7"
+
+  /** Rayon réel de déplacement, en km. */
+  rayonKm: 30,
+
+  /** Numéro d'entreprise du Québec. */
+  neq: "2281545188",
+
+  /**
+   * Lien de prise de rendez-vous en ligne (Google Calendar / Calendly).
+   * null = le bouton « Ça peut attendre » descend vers le formulaire.
+   */
+  lienRendezVous: null as string | null,
+
+  /** Photo du hero : toi devant ton camion. null = fond dégradé sans photo. */
+  photoHero: null as string | null, // ex. "/images/lambert-camion.webp"
+
+  /** Ta photo de visage pour la section « Qui vient chez vous ». */
+  photoLambert: null as string | null, // ex. "/images/lambert.webp"
+
+  /** Déplacement + diagnostic. null = toute la section Prix est masquée. */
+  prixDeplacement: null as number | null,
+
+  /** Prix des urgences. Laisse à null ce que tu ne veux pas afficher. */
+  prixUrgence: [
+    { travail: "Remplacement d'un ressort de torsion", prix: null as number | null },
+    { travail: "Paire de ressorts", prix: null as number | null },
+    { travail: "Câbles (les deux côtés)", prix: null as number | null },
+    { travail: "Roulettes (jeu complet)", prix: null as number | null },
+    { travail: "Réparation d'ouvre-porte", prix: null as number | null },
+  ],
+
+  /** Prix des travaux planifiés. */
+  prixPlanifie: [
+    { travail: "Mise au point complète", prix: null as number | null },
+    { travail: "Remplacement des coupe-froid (contour)", prix: null as number | null },
+    { travail: "Ajustement et équilibrage", prix: null as number | null },
+    { travail: "Télécommande ou clavier", prix: null as number | null },
+  ],
+
+  /** Mise au point annuelle : prix et durée. */
+  miseAuPoint: {
+    prix: null as number | null,
+    minutes: 45,
+  },
+
+  /** Réponses FAQ. null = la question est retirée de la page. */
+  faq: {
+    soirEtFinDeSemaine: null as string | null, // ex. "Oui, jusqu'à 20 h en semaine et le samedi."
+    garantie: null as string | null,           // ex. "Pièces garanties 1 an, main-d'œuvre 90 jours."
+    paiements: null as string | null,          // ex. "Comptant, virement Interac et carte de crédit."
+  },
+
+  /**
+   * Vrais avis Google seulement. Tableau vide = section masquée.
+   * N'invente jamais d'avis : c'est illégal et ça se retourne contre toi.
+   */
+  avis: [] as { prenom: string; ville: string; texte: string }[],
+
+  /** Lien vers ta fiche Google pour « Voir tous les avis ». */
+  lienAvisGoogle: null as string | null,
+
+  /** Villes desservies, affichées en texte (bon pour le référencement). */
+  villes: [
+    "Granby", "Bromont", "Waterloo", "Cowansville", "Shefford",
+    "Roxton Pond", "Saint-Alphonse-de-Granby", "Saint-Paul-d'Abbotsford",
+    "Farnham", "Sainte-Cécile-de-Milton",
+  ],
+} as const;
+
+/** Formate un prix en dollars canadiens sans décimales inutiles. */
+export function prix(n: number): string {
+  return `${n.toLocaleString("fr-CA")} $`;
+}

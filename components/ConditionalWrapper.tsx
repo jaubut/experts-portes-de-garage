@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 const ChatBot = dynamic(() => import("./ChatBot"), { ssr: false });
 
-const HIDDEN_ON: string[] = [];
+const HIDDEN_ON: string[] = ["/reparation-porte-garage-granby"];
 const HIDDEN_PREFIXES = ["/dicter", "/admin"];
 
 export default function ConditionalWrapper() {
