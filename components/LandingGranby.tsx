@@ -45,20 +45,26 @@ export default function LandingGranby() {
 
       {/* ── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative flex min-h-[calc(100svh-40px)] items-center overflow-hidden bg-neutral-900 md:min-h-0 md:py-24">
-        {LANDING.photoHero && (
-          <Image
-            src={LANDING.photoHero}
-            alt="Technicien en réparation de porte de garage à Granby"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-40"
+        {LANDING.photoHero ? (
+          <>
+            <Image
+              src={LANDING.photoHero}
+              alt="Technicien en réparation de porte de garage à Granby"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-right"
+            />
+            {/* Voile uniforme : le texte est centre ici, il faut assombrir partout
+                (surtout le panneau de porte blanc au centre) sans effacer la scene. */}
+            <div aria-hidden className="absolute inset-0 bg-black/60" />
+          </>
+        ) : (
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#5a0000_0%,transparent_60%),radial-gradient(ellipse_at_bottom_right,#2a0000_0%,transparent_55%)]"
           />
         )}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#5a0000_0%,transparent_60%),radial-gradient(ellipse_at_bottom_right,#2a0000_0%,transparent_55%)]"
-        />
 
         <div className="relative mx-auto w-full max-w-3xl px-5 py-10">
           <h1 className="font-heading text-[2.1rem] uppercase leading-[1.05] text-white sm:text-5xl">

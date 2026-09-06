@@ -27,7 +27,7 @@ export const LANDING = {
   lienRendezVous: null as string | null,
 
   /** Photo du hero : toi devant ton camion. null = fond dégradé sans photo. */
-  photoHero: null as string | null, // ex. "/images/lambert-camion.webp"
+  photoHero: "/images/hero-urgence-nuit.webp" as string | null,
 
   /** Ta photo de visage pour la section « Qui vient chez vous ». */
   photoLambert: null as string | null, // ex. "/images/lambert.webp"
