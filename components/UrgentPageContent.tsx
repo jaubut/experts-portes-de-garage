@@ -54,7 +54,16 @@ export default function UrgentPageContent() {
     <>
       {/* ── 1. HERO ── */}
       <section className="relative bg-[#1a1a1a] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 to-brand/20" />
+        <Image
+          src="/images/hero-urgence-nuit.webp"
+          alt="Technicien reparant une porte de garage le soir, camion Experts Portes de Garage dans l'entree"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-right"
+        />
+        {/* Voile degrade : opaque a gauche pour le texte, transparent a droite pour laisser voir la scene */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-14 md:pt-20 pb-10">
           <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-14">
 
