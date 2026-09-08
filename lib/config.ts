@@ -14,4 +14,4 @@ export const CITY = "Granby";
  * Tant que cette valeur est vide, /avis affiche le numero de telephone
  * au lieu de rediriger dans le vide.
  */
-export const GOOGLE_REVIEW_URL = "";
+export const GOOGLE_REVIEW_URL = "https://g.page/r/CT-AI6_v4mdPEBM/review";
