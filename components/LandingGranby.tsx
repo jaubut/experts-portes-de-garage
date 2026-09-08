@@ -218,14 +218,14 @@ export default function LandingGranby() {
               <LignePrix
                 titre="Taux horaire"
                 montant={`${prix(LANDING.tauxHoraire)}/h`}
-                detail="Pour tout le reste. Les pièces sont en sus, et je vous dis le prix avant de les installer."
+                detail="Pour la plupart des réparations : ressorts, câbles, rouleaux, ouvre-porte. Les pièces sont en sus, et je vous dis le prix avant de les installer."
               />
             )}
             {LANDING.prixUrgence !== null && (
               <LignePrix
-                titre="Réparation d’urgence"
-                montant={`environ ${prix(LANDING.prixUrgence)}`}
-                detail="Ressort cassé, câble brisé, porte bloquée. C’est la réparation la plus fréquente, et elle se règle presque toujours en une visite."
+                titre="Sortie d’urgence"
+                montant={prix(LANDING.prixUrgence)}
+                detail="Quand vous ne pouvez pas attendre et que je laisse tout tomber pour me rendre chez vous tout de suite, en dehors de ma route de la journée. Si votre porte peut attendre à demain, vous payez le taux horaire normal."
               />
             )}
           </dl>

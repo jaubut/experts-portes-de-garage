@@ -38,7 +38,7 @@ export const LANDING = {
    */
   prixMinimum: 100 as number | null,      // petite job reglee sur place
   tauxHoraire: 120 as number | null,      // par heure, pieces en sus
-  prixUrgence: 300 as number | null,      // ressort casse, cable brise, porte bloquee
+  prixUrgence: 300 as number | null,      // sortie d'urgence : laisser tout tomber, hors route
 
   /** Mise au point annuelle : prix et durée. */
   miseAuPoint: {
