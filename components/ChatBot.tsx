@@ -67,7 +67,7 @@ export default function ChatBot() {
     <>
       {/* ── Bubble preview ── */}
       {bubble && !open && (
-        <div className="fixed bottom-20 right-5 z-50 w-[260px] bg-white rounded-2xl shadow-2xl animate-fade-in-up overflow-hidden">
+        <div className="epg-chat fixed bottom-20 right-5 z-50 w-[260px] bg-white rounded-2xl shadow-2xl animate-fade-in-up overflow-hidden">
           <button
             type="button"
             onClick={() => setBubble(false)}
@@ -112,7 +112,7 @@ export default function ChatBot() {
         type="button"
         onClick={() => { open ? closeChat() : setOpen(true); setBubble(false); }}
         aria-label={open ? "Fermer le chat" : "Ouvrir le chat"}
-        className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-brand shadow-lg shadow-brand/40 flex items-center justify-center hover:bg-brand-dark transition-all hover:scale-105 active:scale-95"
+        className="epg-chat fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-brand shadow-lg shadow-brand/40 flex items-center justify-center hover:bg-brand-dark transition-all hover:scale-105 active:scale-95"
       >
         <svg
           className={`absolute w-6 h-6 text-white transition-all duration-200 ${open ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`}
@@ -131,7 +131,7 @@ export default function ChatBot() {
       {/* ── Chat popover — never fullscreen, anchored above button ── */}
       {open && (
         <div
-          className={`fixed bottom-[76px] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-2xl flex flex-col bg-white border border-gray-200 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
+          className={`epg-chat fixed bottom-[76px] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-2xl flex flex-col bg-white border border-gray-200 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
           style={{ maxHeight: "min(520px, calc(100svh - 100px))" }}
         >
           {/* Header */}

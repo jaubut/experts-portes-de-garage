@@ -256,6 +256,47 @@ export default function UrgentPageContent() {
         </div>
       </section>
 
+      {/* ── 4b. COMBIEN CA COUTE ── */}
+      <section className="bg-[#f5f5f5] py-14">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Prix clairs</p>
+          <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase text-center mb-8 leading-tight">
+            Combien ça coûte
+          </h2>
+
+          <div className="reveal d2 bg-white border border-gray-200 rounded-2xl divide-y divide-gray-100 overflow-hidden shadow-sm">
+            <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
+              <div>
+                <p className="font-bold text-[#1a1a1a]">Frais minimum</p>
+                <p className="text-gray-500 text-sm leading-relaxed mt-1">Une petite affaire que je règle sur place en quelques minutes.</p>
+              </div>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">100 $</p>
+            </div>
+            <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
+              <div>
+                <p className="font-bold text-[#1a1a1a]">Taux horaire</p>
+                <p className="text-gray-500 text-sm leading-relaxed mt-1">Pour tout le reste. Les pièces sont en sus et je vous donne le prix avant de commencer.</p>
+              </div>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">120 $/h</p>
+            </div>
+            <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
+              <div>
+                <p className="font-bold text-[#1a1a1a]">Sortie d’urgence</p>
+                <p className="text-gray-500 text-sm leading-relaxed mt-1">
+                  Quand vous ne pouvez pas attendre et que je laisse tout tomber pour me rendre chez vous tout de suite,
+                  en dehors de ma route de la journée. Si votre porte peut attendre à demain, vous payez le taux horaire normal.
+                </p>
+              </div>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">300 $</p>
+            </div>
+          </div>
+
+          <p className="reveal d3 mt-5 rounded-2xl border-2 border-brand bg-brand/5 p-5 text-center text-lg font-bold text-[#1a1a1a] leading-snug">
+            Si je ne suis pas capable de réparer votre porte, vous ne payez rien.
+          </p>
+        </div>
+      </section>
+
       {/* ── 5. ZONES DESSERVIES ── */}
       <section className="bg-brand py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
@@ -304,6 +345,20 @@ export default function UrgentPageContent() {
           </div>
         </div>
       </section>
+
+      {/* ── BARRE D APPEL MOBILE ── */}
+      <div className="h-16 md:hidden" aria-hidden="true" />
+      <a
+        href={PHONE_HREF}
+        className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center gap-3 bg-brand py-4 font-heading text-lg uppercase tracking-wide text-white shadow-[0_-4px_20px_rgba(0,0,0,0.25)] md:hidden"
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+        Appeler {PHONE_DISPLAY}
+      </a>
+      {/* Remonte la bulle du chatbot au-dessus de la barre d appel, sur cette page seulement */}
+      <style>{`@media (max-width: 767px){ .epg-chat { margin-bottom: 4.5rem; } }`}</style>
     </>
   );
 }
