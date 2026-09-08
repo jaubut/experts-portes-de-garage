@@ -25,9 +25,9 @@ const TRAVAUX_PLANIFIES = [
 
 export default function LandingGranby() {
   const aDesPrix =
-    LANDING.prixDeplacement !== null ||
-    LANDING.prixUrgence.some((l) => l.prix !== null) ||
-    LANDING.prixPlanifie.some((l) => l.prix !== null);
+    LANDING.prixMinimum !== null ||
+    LANDING.tauxHoraire !== null ||
+    LANDING.prixUrgence !== null;
 
   const lienRdv = LANDING.lienRendezVous ?? "#rappel";
 
@@ -112,8 +112,8 @@ export default function LandingGranby() {
           />
           <Reassurance
             icone="💵"
-            titre="Prix fixe d’avance"
-            texte="Pas de surprise sur la facture."
+            titre="Pas réparée, pas payée"
+            texte="Si je ne peux pas la réparer, vous ne payez rien."
           />
           <Reassurance
             icone="🔧"
@@ -195,26 +195,44 @@ export default function LandingGranby() {
         </div>
       </section>
 
-      {/* ── Prix (masqué tant qu’aucun prix n’est rempli) ──────────────── */}
+      {/* ── Prix ───────────────────────────────────────────────────────── */}
       {aDesPrix && (
-        <section className="mx-auto max-w-5xl px-5 py-14">
+        <section className="mx-auto max-w-3xl px-5 py-14">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">Combien ça coûte</h2>
 
-          {LANDING.prixDeplacement !== null && (
-            <p className="mt-4 rounded-xl bg-muted p-4 text-lg">
-              <strong>Déplacement et diagnostic : {prix(LANDING.prixDeplacement)}</strong>
-              <span className="text-gray-600"> — crédité sur la réparation si vous allez de l’avant.</span>
-            </p>
-          )}
+          {/* La garantie est l’argument le plus fort de la page : elle enleve
+              tout le risque de l’appel. Elle passe avant les chiffres. */}
+          <p className="mt-5 rounded-2xl border-2 border-brand bg-brand/5 p-5 text-lg font-bold leading-relaxed text-gray-900 sm:text-xl">
+            Si je ne suis pas capable de réparer votre porte, vous ne payez rien.
+          </p>
 
-          <div className="mt-8 grid gap-8 md:grid-cols-2">
-            <TableauPrix titre="Bris urgents" lignes={LANDING.prixUrgence} />
-            <TableauPrix titre="Travaux planifiés" lignes={LANDING.prixPlanifie} />
-          </div>
+          <dl className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
+            {LANDING.prixMinimum !== null && (
+              <LignePrix
+                titre="Frais minimum"
+                montant={prix(LANDING.prixMinimum)}
+                detail="Pour une petite affaire réglée sur place : un ajustement, un capteur mal aligné, une télécommande à reprogrammer."
+              />
+            )}
+            {LANDING.tauxHoraire !== null && (
+              <LignePrix
+                titre="Taux horaire"
+                montant={`${prix(LANDING.tauxHoraire)}/h`}
+                detail="Pour tout le reste. Les pièces sont en sus, et je vous dis le prix avant de les installer."
+              />
+            )}
+            {LANDING.prixUrgence !== null && (
+              <LignePrix
+                titre="Réparation d’urgence"
+                montant={`environ ${prix(LANDING.prixUrgence)}`}
+                detail="Ressort cassé, câble brisé, porte bloquée. C’est la réparation la plus fréquente, et elle se règle presque toujours en une visite."
+              />
+            )}
+          </dl>
 
-          <p className="mt-6 rounded-xl border-l-4 border-brand bg-brand/5 p-4 leading-relaxed text-gray-800">
-            Le prix exact est confirmé sur place avant que je touche à quoi que ce soit. Si le prix
-            ne fait pas votre affaire, vous ne payez que le déplacement.
+          <p className="mt-6 leading-relaxed text-gray-600">
+            Le prix exact est confirmé sur place avant que je touche à quoi que ce soit.
+            Vous savez ce que ça coûte avant que je commence.
           </p>
         </section>
       )}
@@ -396,28 +414,22 @@ function Reassurance({ icone, titre, texte }: { icone: string; titre: string; te
   );
 }
 
-function TableauPrix({
+function LignePrix({
   titre,
-  lignes,
+  montant,
+  detail,
 }: {
   titre: string;
-  lignes: readonly { travail: string; prix: number | null }[];
+  montant: string;
+  detail: string;
 }) {
-  const visibles = lignes.filter((l) => l.prix !== null);
-  if (visibles.length === 0) return null;
   return (
-    <div>
-      <h3 className="font-heading text-xl uppercase text-gray-900">{titre}</h3>
-      <dl className="mt-3 divide-y divide-gray-200 border-y border-gray-200">
-        {visibles.map((l) => (
-          <div key={l.travail} className="flex items-baseline justify-between gap-4 py-3">
-            <dt className="text-gray-700">{l.travail}</dt>
-            <dd className="shrink-0 font-bold tabular-nums text-gray-900">
-              à partir de {prix(l.prix as number)}
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <div className="py-5">
+      <div className="flex items-baseline justify-between gap-4">
+        <dt className="font-bold text-gray-900">{titre}</dt>
+        <dd className="shrink-0 font-heading text-xl tabular-nums text-brand">{montant}</dd>
+      </div>
+      <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{detail}</p>
     </div>
   );
 }

@@ -32,25 +32,13 @@ export const LANDING = {
   /** Ta photo de visage pour la section « Qui vient chez vous ». */
   photoLambert: null as string | null, // ex. "/images/lambert.webp"
 
-  /** Déplacement + diagnostic. null = toute la section Prix est masquée. */
-  prixDeplacement: null as number | null,
-
-  /** Prix des urgences. Laisse à null ce que tu ne veux pas afficher. */
-  prixUrgence: [
-    { travail: "Remplacement d'un ressort de torsion", prix: null as number | null },
-    { travail: "Paire de ressorts", prix: null as number | null },
-    { travail: "Câbles (les deux côtés)", prix: null as number | null },
-    { travail: "Roulettes (jeu complet)", prix: null as number | null },
-    { travail: "Réparation d'ouvre-porte", prix: null as number | null },
-  ],
-
-  /** Prix des travaux planifiés. */
-  prixPlanifie: [
-    { travail: "Mise au point complète", prix: null as number | null },
-    { travail: "Remplacement des coupe-froid (contour)", prix: null as number | null },
-    { travail: "Ajustement et équilibrage", prix: null as number | null },
-    { travail: "Télécommande ou clavier", prix: null as number | null },
-  ],
+  /**
+   * Tarification reelle de Lambert.
+   * Mettre a null pour masquer toute la section Prix.
+   */
+  prixMinimum: 100 as number | null,      // petite job reglee sur place
+  tauxHoraire: 120 as number | null,      // par heure, pieces en sus
+  prixUrgence: 300 as number | null,      // ressort casse, cable brise, porte bloquee
 
   /** Mise au point annuelle : prix et durée. */
   miseAuPoint: {
