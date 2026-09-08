@@ -10,7 +10,7 @@ excerpt: "Réparation et installation de portes de garage à Longueuil. Technici
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À LONGUEUIL
 
-Votre porte de garage est en panne à **Longueuil**? Nos techniciens certifiés se déplacent rapidement dans tout l'agglomération — Saint-Hubert, Greenfield Park, Saint-Lambert, LeMoyne, Vieux-Longueuil et les secteurs environnants. Nous intervenons **le jour même** pour les urgences et offrons un **devis gratuit** pour chaque service.
+Votre porte de garage est en panne à **Longueuil**? Nos techniciens qualifiés se déplacent rapidement dans tout l'agglomération — Saint-Hubert, Greenfield Park, Saint-Lambert, LeMoyne, Vieux-Longueuil et les secteurs environnants. Nous intervenons **le jour même** pour les urgences et offrons un **devis gratuit** pour chaque service.
 
 Appelez **Experts Portes de Garage** au [438-808-9604](tel:4388089604) — nous sommes disponibles 7 jours sur 7.
 

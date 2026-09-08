@@ -153,7 +153,7 @@ Assurez votre tranquillité d’esprit et économisez à long terme grâce à no
 
 ## Votre partenaire local de confiance pour l’entretien de portes de garage
 
-Faites confiance à une équipe expérimentée — Expert Portes de Garage offre un service fiable et professionnel. Que ce soit pour une réparation de portes de garage ou une mise à niveau, notre équipe hautement qualifiée, équipée d’outils et de formations de pointe, s’assure que votre maison bénéficie d’un travail soigné et durable.
+Experts Portes de Garage, c’est Lambert Hétu, un technicien local de Granby. Que ce soit pour une réparation ou une mise à niveau, je me présente moi-même chez vous, avec les bons outils et les bonnes pièces, pour un travail soigné et durable.
 
 -   Service à la clientèle supérieur
 -   Techniciens hautement qualifiés

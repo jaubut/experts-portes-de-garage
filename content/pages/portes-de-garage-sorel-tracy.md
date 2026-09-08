@@ -5,7 +5,7 @@ date: "2026-04-05"
 status: "publish"
 type: "page"
 link: "https://expertsportesdegarage.ca/portes-de-garage-sorel-tracy/"
-excerpt: "Réparation et installation de portes de garage à Sorel-Tracy. Intervention rapide, techniciens certifiés, devis gratuit. Appelez le 438-808-9604."
+excerpt: "Réparation et installation de portes de garage à Sorel-Tracy. Intervention rapide, techniciens qualifiés, devis gratuit. Appelez le 438-808-9604."
 ---
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À SOREL-TRACY

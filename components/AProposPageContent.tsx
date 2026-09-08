@@ -15,7 +15,7 @@ const services = [
 
 const team = [
   {
-    label: "Techniciens qualifiés et certifiés",
+    label: "Technicien qualifié et expérimenté",
     icon: (
       <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
@@ -82,8 +82,8 @@ const values = [
 ];
 
 const reasons = [
-  "Équipe qualifiée et en constante formation",
-  "Techniciens certifiés qui prennent leur travail au sérieux",
+  "Formation continue et outils à jour",
+  "Un technicien qui prend son travail au sérieux",
   "Pas de vieilles méthodes dépassées — on utilise ce qu'il y a de mieux",
   "Service 24/7 pour les urgences",
   "Garantie sur nos travaux",
@@ -188,9 +188,9 @@ export default function AProposPageContent() {
         <div className="absolute inset-0 technicien-bg" />
         <div className="absolute inset-0 bg-[#1a1a1a]/80" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
-          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Les gens derrière le travail</p>
+          <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2 text-center">Qui vient chez vous</p>
           <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-white uppercase text-center mb-10 leading-tight">
-            Notre équipe
+            Moi, Lambert Hétu
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {team.map((t, i) => (

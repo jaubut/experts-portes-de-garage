@@ -26,7 +26,7 @@ const problems = [
 const whyUs = [
   "Intervention le jour même",
   "Disponible 24h/24, 7 jours/semaine",
-  "Équipe qualifiée et expérimentée",
+  "Technicien qualifié et expérimenté",
   "Service fiable et rapide",
 ];
 

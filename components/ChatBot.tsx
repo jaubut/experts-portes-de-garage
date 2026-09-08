@@ -12,7 +12,7 @@ export default function ChatBot() {
   const [closing, setClosing] = useState(false);
   const [bubble, setBubble] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Bonjour! 👋 Je suis Alex, l'assistant d'Experts Portes de Garage. Je peux répondre à vos questions sur nos services, prix et diagnostics. Note : mes conseils sont à titre informatif seulement — pour toute intervention, un technicien certifié doit évaluer la situation. Comment puis-je vous aider?" },
+    { role: "assistant", content: "Bonjour! 👋 Je suis Alex, l'assistant d'Experts Portes de Garage. Je peux répondre à vos questions sur nos services, prix et diagnostics. Note : mes conseils sont à titre informatif seulement — pour toute intervention, un technicien qualifié doit évaluer la situation. Comment puis-je vous aider?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

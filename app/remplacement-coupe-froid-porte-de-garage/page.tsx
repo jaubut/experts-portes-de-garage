@@ -192,7 +192,7 @@ export default function RemplacementCoupeFroidPage() {
                   {/* Checklist */}
                   <div className="flex flex-col gap-2 mb-1">
                     {[
-                      "Technicien certifié qui se déplace chez vous",
+                      "Technicien qualifié qui se déplace chez vous",
                       "Devis exact avant de commencer",
                       "Travail complété en 1 heure ou moins",
                     ].map((item) => (

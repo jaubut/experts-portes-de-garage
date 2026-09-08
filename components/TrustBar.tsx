@@ -11,7 +11,7 @@ const trustPoints = [
     ),
   },
   {
-    title: "Techniciens certifiés",
+    title: "Technicien qualifié",
     desc: "Qualifiés, expérimentés et passionnés par leur métier.",
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -48,7 +48,7 @@ export default function TrustBar() {
         </h2>
         <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
           Avec plusieurs années d&apos;expérience dans la région de Granby et des environs,
-          notre équipe met l&apos;accent sur la qualité, la transparence et la sécurité.
+          je mets l&apos;accent sur la qualité, la transparence et la sécurité.
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-10">

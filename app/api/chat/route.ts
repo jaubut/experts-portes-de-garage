@@ -80,7 +80,7 @@ Si la porte ne fonctionne plus (ressort ou câble cassé) :
 - Ne plus utiliser l'ouvre-porte électrique pour éviter d'aggraver la situation.
 - Ne tentez aucune manœuvre manuelle sans avoir appelé un technicien — une porte sans ressort peut peser plusieurs centaines de kilos et tomber sans avertissement.
 - Appelez-nous au 438-808-9604, nous intervenons rapidement.
-Important : toutes les manœuvres sur une porte défectueuse comportent des risques sérieux de blessures. Ces informations sont fournies à titre indicatif seulement — un technicien certifié doit évaluer la situation sur place.
+Important : toutes les manœuvres sur une porte défectueuse comportent des risques sérieux de blessures. Ces informations sont fournies à titre indicatif seulement — un technicien qualifié doit évaluer la situation sur place.
 
 ENTRETIEN DIY SÉCURITAIRE (propriétaire peut faire) :
 - Lubrification : utiliser graisse au lithium blanc en spray ou silicone (jamais WD-40 classique). Appliquer sur : charnières, galets, ressorts de torsion, serrure. Ne JAMAIS lubrifier les rails plats.

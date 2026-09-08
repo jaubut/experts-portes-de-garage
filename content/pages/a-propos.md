@@ -21,7 +21,7 @@ Fondée par des passionnés du travail bien fait, **Experts Portes de Garage** e
 
 Basés en Estrie, nous servons fièrement les régions de **Granby, Sherbrooke, Bromont et la Montérégie**.
 
-Chaque membre de notre équipe est formé pour offrir un service rapide, sécuritaire et professionnel, avec une approche humaine et transparente.
+Je m’engage à offrir un service rapide, sécuritaire et professionnel, avec une approche humaine et transparente.
 
 Chez **Experts Portes de Garage**, on croit qu’une bonne porte de garage, c’est plus qu’un simple mécanisme — c’est la sécurité, le confort et l’apparence de votre maison.
 
