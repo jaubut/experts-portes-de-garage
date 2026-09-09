@@ -10,7 +10,7 @@ excerpt: "Réparation et installation de portes de garage à Longueuil. Technici
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À LONGUEUIL
 
-Votre porte de garage est en panne à **Longueuil**? Nos techniciens qualifiés se déplacent rapidement dans tout l'agglomération — Saint-Hubert, Greenfield Park, Saint-Lambert, LeMoyne, Vieux-Longueuil et les secteurs environnants. Nous intervenons **le jour même** pour les urgences et offrons un **devis gratuit** pour chaque service.
+Votre porte de garage est en panne à **Longueuil**? Je me déplace rapidement dans toute l'agglomération — Saint-Hubert, Greenfield Park, Saint-Lambert, LeMoyne, Vieux-Longueuil et les secteurs environnants. Nous intervenons **le jour même** pour les urgences et offrons un **devis gratuit** pour chaque service.
 
 Appelez **Experts Portes de Garage** au [438-808-9604](tel:4388089604) — nous sommes disponibles 7 jours sur 7.
 
@@ -39,20 +39,6 @@ Longueuil est une ville dense avec de nombreuses maisons à garage attenant. Une
 - Pièces de rechange transportées dans notre camion
 - Devis gratuit et transparent avant les travaux
 - Garantie sur toutes les réparations
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Longueuil
 

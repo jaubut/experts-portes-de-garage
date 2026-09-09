@@ -10,7 +10,7 @@ excerpt: "Réparation et installation de portes de garage à Magog. Techniciens 
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À MAGOG
 
-**Magog** et ses environs au bord du lac Memphrémagog méritent un service de portes de garage à la hauteur. Nos techniciens se déplacent à Magog, Omerville, Sainte-Catherine-de-Hatley, North Hatley et dans tout le secteur pour offrir un service **rapide, honnête et garanti**.
+**Magog** et ses environs au bord du lac Memphrémagog méritent un service de portes de garage à la hauteur. Je me déplace à Magog, Omerville, Sainte-Catherine-de-Hatley, North Hatley et dans tout le secteur pour offrir un service **rapide, honnête et garanti**.
 
 Que vous ayez une résidence principale ou un chalet, **Experts Portes de Garage** répare et installe tous types de portes de garage résidentielles. Appelez-nous au [438-808-9604](tel:4388089604).
 
@@ -18,7 +18,7 @@ Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services de portes de garage à Magog
 
-Les hivers dans la région de Magog sont rigoureux et les écarts de température sont extrêmes. Ces conditions mettent vos ressorts, câbles et joints à rude épreuve. Nos techniciens connaissent ces défis et utilisent des pièces adaptées au climat estrien.
+Les hivers dans la région de Magog sont rigoureux et les écarts de température sont extrêmes. Ces conditions mettent vos ressorts, câbles et joints à rude épreuve. Je connais ces défis et j’utilise des pièces adaptées au climat estrien.
 
 **Remplacement de ressorts** — Ressort cassé à -20°C un lundi matin? Nous intervenons rapidement pour vous remettre en route.
 
@@ -37,20 +37,6 @@ La région de Magog compte de nombreuses résidences secondaires et chalets avec
 - Intervenir sur rendez-vous quand vous visitez votre propriété
 - Effectuer un entretien préventif en début et fin de saison
 - Installer un ouvre-porte WiFi pour surveiller et contrôler votre porte à distance
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Magog
 

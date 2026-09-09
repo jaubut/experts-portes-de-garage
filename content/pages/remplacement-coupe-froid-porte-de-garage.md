@@ -3,7 +3,7 @@ title: Remplacement de coupe-froid de porte de garage
 date: 2026-03-31
 status: publish
 link: /remplacement-coupe-froid-porte-de-garage
-excerpt: Votre coupe-froid de porte de garage est usé, craquelé ou décollé? Nos techniciens remplacent rapidement les joints d'étanchéité pour protéger votre garage du froid, de l'humidité et des infiltrations d'air — en Estrie et Montérégie.
+excerpt: Votre coupe-froid de porte de garage est usé, craquelé ou décollé? Je remplace rapidement les joints d'étanchéité pour protéger votre garage du froid, de l'humidité et des infiltrations d'air — en Estrie et Montérégie.
 ---
 
 Un coupe-froid en mauvais état laisse entrer le froid, la pluie, les insectes et la poussière dans votre garage. C'est aussi une source importante de pertes d'énergie qui fait grimper vos factures de chauffage. Heureusement, le remplacement du coupe-froid est un service rapide, abordable et efficace.
@@ -61,7 +61,7 @@ Planifier une visite
 R : La plupart des remplacements sont complétés en 30 à 60 minutes. Si plusieurs types de joints doivent être remplacés en même temps, compter 1 à 2 heures.
 
 **Q : Comment savoir si mon coupe-froid doit être remplacé ou simplement ajusté?**
-R : Si le joint est craquelé, durci ou décollé, le remplacement est nécessaire. Si la porte est simplement mal alignée, un ajustement peut suffire. Nos techniciens évaluent la situation sur place et vous recommandent la meilleure solution.
+R : Si le joint est craquelé, durci ou décollé, le remplacement est nécessaire. Si la porte est simplement mal alignée, un ajustement peut suffire. J’évalue la situation sur place et je vous recommande la meilleure solution.
 
 **Q : Est-ce que vous intervenez en urgence pour un coupe-froid?**
 R : Oui, nous pouvons intervenir rapidement si votre garage est exposé au froid ou à l'eau en raison d'un joint défectueux.

@@ -10,7 +10,7 @@ excerpt: "Réparation et installation de portes de garage à Saint-Jean-sur-Rich
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À SAINT-JEAN-SUR-RICHELIEU
 
-**Saint-Jean-sur-Richelieu** est une ville dynamique de la Montérégie avec de nombreuses maisons unifamiliales équipées de garages. Quand votre porte de garage tombe en panne — que ce soit un ressort brisé, un câble lâche ou un moteur défectueux — nos techniciens interviennent **rapidement et efficacement** pour vous remettre en route.
+**Saint-Jean-sur-Richelieu** est une ville dynamique de la Montérégie avec de nombreuses maisons unifamiliales équipées de garages. Quand votre porte de garage tombe en panne — que ce soit un ressort brisé, un câble lâche ou un moteur défectueux — j’interviens **rapidement et efficacement** pour vous remettre en route.
 
 Nous couvrons tous les secteurs de Saint-Jean : L'Acadie, Iberville, Saint-Luc, La Prairie (secteurs voisins) et les environs de la rivière Richelieu. Appelez **Experts Portes de Garage** au [438-808-9604](tel:4388089604).
 
@@ -39,20 +39,6 @@ Saint-Jean est une ville où le bouche-à-oreille compte. Nos clients reviennent
 - Techniciens **formés et expérimentés**
 - **Garantie** sur toutes les réparations
 - Intervention possible **le jour même**
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Saint-Jean-sur-Richelieu
 

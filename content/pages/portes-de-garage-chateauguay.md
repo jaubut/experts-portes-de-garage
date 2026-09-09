@@ -32,26 +32,12 @@ Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Pourquoi nous choisir à Châteauguay
 
-Châteauguay est une ville familiale de la Montérégie avec de nombreuses maisons unifamiliales dotées de garages attenants. Nos techniciens connaissent les configurations typiques de la région et arrivent équipés pour régler la grande majorité des pannes en une seule visite.
+Châteauguay est une ville familiale de la Montérégie avec de nombreuses maisons unifamiliales dotées de garages attenants. Je connais les configurations typiques de la région et j’arrive équipé pour régler la grande majorité des pannes en une seule visite.
 
 - Techniciens ponctuels et professionnels
 - Devis gratuit, prix fixes sans surprise
 - Disponibles 7 jours sur 7
 - Garantie sur toutes les réparations
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Châteauguay
 

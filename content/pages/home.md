@@ -9,35 +9,9 @@ link: "https://expertsportesdegarage.ca/"
 
 ## Experts Portes de Garage — Réparation rapide, service local, résultats garantis.
 
-Besoin d’une réparation de porte de garage aujourd’hui? Nos experts se déplacent rapidement partout en Estrie et Montérégie pour régler le problème dès la première visite. Service courtois, honnête et garanti, que ce soit pour une urgence, une installation ou un entretien régulier. Avec Experts Portes de Garage, vous obtenez un travail bien fait, au bon prix — sans tracas.
+Besoin d’une réparation de porte de garage aujourd’hui? Je me déplace rapidement en Estrie et en Montérégie pour régler le problème dès la première visite. Service courtois, honnête et garanti, que ce soit pour une urgence, une installation ou un entretien régulier. Avec Experts Portes de Garage, vous obtenez un travail bien fait, au bon prix — sans tracas.
 
 Planifier maintenant [Appelez maintenant](tel:4388089604) ![](https://expertsportesdegarage.ca/wp-content/uploads/2025/10/ChatGPT-Image-22-oct.-2025-22_20_39.webp)
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**  
-J’ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d’une heure, super professionnel, il m’a tout expliqué comme du monde. Ma porte marche mieux qu’avant! Je recommande à 100 %.
-
-**Très bonne expérience.**  
-Ma porte gelait tout le temps l’hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m’a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**  
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m’a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**  
-J’ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C’est rare un service client aussi solide dans ce domaine. Bravo!
-
-**Service incroyable!**  
-J’ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d’une heure, super professionnel, il m’a tout expliqué comme du monde. Ma porte marche mieux qu’avant! Je recommande à 100 %.
-
-**Très bonne expérience.**  
-Ma porte gelait tout le temps l’hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m’a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**  
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m’a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**  
-J’ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C’est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## Services et Produits
 
@@ -45,7 +19,7 @@ Découvrez la gamme de services et de produits de haute qualité offerts par Exp
 
 ### Réparation de porte de garage le jour même
 
-Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/) pour vos portes de garage. Nos experts locaux garantissent une réparation de portes de garage rapide et efficace pour résoudre vos problèmes, de jour comme de nuit.
+Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/) pour vos portes de garage. Je garantis une réparation de porte de garage rapide et efficace pour régler votre problème, de jour comme de nuit.
 
 Planifier en ligne [En savoir plus](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/)
 
@@ -81,7 +55,7 @@ Planifier en ligne [En savoir plus](https://expertsportesdegarage.ca/entretien-d
 
 ### Réparation de porte de garage le jour même
 
-Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/) pour vos portes de garage. Nos experts locaux garantissent une réparation de portes de garage rapide et efficace pour résoudre vos problèmes, de jour comme de nuit.
+Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/) pour vos portes de garage. Je garantis une réparation de porte de garage rapide et efficace pour régler votre problème, de jour comme de nuit.
 
 Planifier en ligne [En savoir plus](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/)
 
@@ -117,7 +91,7 @@ Planifier en ligne [En savoir plus](https://expertsportesdegarage.ca/entretien-d
 
 ### Réparation de porte de garage le jour même
 
-Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage//) pour vos portes de garage. Nos experts locaux garantissent une réparation de portes de garage rapide et efficace pour résoudre vos problèmes, de jour comme de nuit.
+Experts Portes de Garage offre un service de [réparation d’urgence 24/7](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage//) pour vos portes de garage. Je garantis une réparation de porte de garage rapide et efficace pour régler votre problème, de jour comme de nuit.
 
 [En savoir plus](https://expertsportesdegarage.ca/reparation-urgente-de-porte-de-garage/)
 
@@ -165,7 +139,7 @@ Experts Portes de Garage, c’est Lambert Hétu, un technicien local de Granby. 
 
 ## Vous ne savez pas par où commencer?
 
-Appelez-nous dès maintenant et laissez nos experts sympathiques vous guider afin de trouver la solution parfaite pour votre réparation de portes de garage
+Appelez dès maintenant et je vais vous guider vers la bonne solution pour votre réparation de porte de garage
 
 [Appelez maintenant](tel:4388089604)
 

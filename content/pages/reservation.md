@@ -9,7 +9,7 @@ link: "https://expertsportesdegarage.ca/?page_id=8076"
 
 # Prenez rendez-vous
 
-Choisissez votre date et votre plage horaire — notre équipe sera là pour vous.
+Choisissez votre date et votre plage horaire, je serai là.
 
 ## Remplissez le formulaire ci-dessous
 

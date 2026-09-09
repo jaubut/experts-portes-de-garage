@@ -9,7 +9,7 @@ link: "https://expertsportesdegarage.ca/reparation-ouvre-porte-de-garage/"
 
 # Entreprise de confiance pour Installation, entretien et réparation d’ouvre-portes de garage
 
-Profitez d’un **ouvre-porte de garage** fiable, silencieux et durable grâce à nos services professionnels d’**installation**, de **réparation** et d’**entretien d’ouvre-portes de garage**. Que vous souhaitiez faire installer un nouveau système ou remettre à neuf votre moteur existant, [Experts Portes de Garage](https://expertsportesdegarage.ca/) vous offre une solution rapide et efficace. Nos techniciens qualifiés s’occupent de tout, du **moteur de porte de garage** à la programmation intelligente, pour garantir un fonctionnement fluide et sécuritaire. Nous desservons fièrement Granby, Sherbrooke et Montréal avec un service de qualité supérieure, adapté à tous les types d’ouvre-portes résidentiels et commerciaux.
+Profitez d’un **ouvre-porte de garage** fiable, silencieux et durable grâce à nos services professionnels d’**installation**, de **réparation** et d’**entretien d’ouvre-portes de garage**. Que vous souhaitiez faire installer un nouveau système ou remettre à neuf votre moteur existant, [Experts Portes de Garage](https://expertsportesdegarage.ca/) vous offre une solution rapide et efficace. Je m’occupe de tout, du **moteur de porte de garage** à la programmation intelligente, pour garantir un fonctionnement fluide et sécuritaire. Nous desservons fièrement Granby, Sherbrooke et Montréal avec un service de qualité supérieure, adapté à tous les types d’ouvre-portes résidentiels et commerciaux.
 
 Planifier maintenant [438-808-9604](tel:4388089604)
 
@@ -59,7 +59,7 @@ Peu importe la conception de votre garage, nous offrons des services de réparat
 
 Posséder une porte de garage à télécommande apporte commodité, sécurité et tranquillité d’esprit. Pour t’offrir ces avantages, nous proposons une gamme de télécommandes d’ouvre-portes de garage, de systèmes à code et d’entrées sans clé de haute qualité.
 
-Nos produits sont conçus pour s’intégrer parfaitement à ton ouvre-porte et à ta porte de garage. Nos techniciens qualifiés s’occupent de toute l’installation, afin que tu puisses te détendre pendant que nous équipons ton garage de ces fonctionnalités modernes et sécuritaires.
+Nos produits sont conçus pour s’intégrer parfaitement à ton ouvre-porte et à ta porte de garage. Je m’occupe de toute l’installation, pour que vous puissiez vous détendre pendant que j’équipe votre garage de ces fonctionnalités modernes et sécuritaires.
 
 **Belt Drive** – Un ouvre-porte de garage fluide, silencieux et durable, idéal pour les maisons où le garage se trouve sous une chambre. Il offre une performance stable mais peut être un peu sensible aux fortes chaleurs.
 
@@ -79,7 +79,7 @@ Peu importe la conception de votre garage, nous offrons des services de réparat
 
 Posséder une porte de garage à télécommande apporte commodité, sécurité et tranquillité d’esprit. Pour t’offrir ces avantages, nous proposons une gamme de télécommandes d’ouvre-portes de garage, de systèmes à code et d’entrées sans clé de haute qualité.
 
-Nos produits sont conçus pour s’intégrer parfaitement à ton ouvre-porte et à ta porte de garage. Nos techniciens qualifiés s’occupent de toute l’installation, afin que tu puisses te détendre pendant que nous équipons ton garage de ces fonctionnalités modernes et sécuritaires.
+Nos produits sont conçus pour s’intégrer parfaitement à ton ouvre-porte et à ta porte de garage. Je m’occupe de toute l’installation, pour que vous puissiez vous détendre pendant que j’équipe votre garage de ces fonctionnalités modernes et sécuritaires.
 
 **Belt Drive** – Un ouvre-porte de garage fluide, silencieux et durable, idéal pour les maisons où le garage se trouve sous une chambre. Il offre une performance stable mais peut être un peu sensible aux fortes chaleurs.
 

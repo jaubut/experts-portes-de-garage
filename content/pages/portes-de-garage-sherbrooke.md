@@ -10,7 +10,7 @@ excerpt: "Service expert de réparation et installation de portes de garage à S
 
 ## EXPERTS EN PORTES DE GARAGE À SHERBROOKE — SERVICE RAPIDE ET FIABLE
 
-Vous avez un problème avec votre porte de garage à **Sherbrooke**? Nos techniciens qualifiés interviennent rapidement pour tout type de réparation ou installation. Ressort brisé, câble lâche, ouvre-porte défectueux ou porte qui déraille — nous réglons le problème dès la première visite avec des **pièces de qualité supérieure** et une **garantie sur les travaux**.
+Vous avez un problème avec votre porte de garage à **Sherbrooke**? J’interviens rapidement pour tout type de réparation ou d’installation. Ressort brisé, câble lâche, ouvre-porte défectueux ou porte qui déraille — nous réglons le problème dès la première visite avec des **pièces de qualité supérieure** et une **garantie sur les travaux**.
 
 Chez **Experts Portes de Garage**, nous desservons tous les quartiers de Sherbrooke : Rock Forest, Fleurimont, Lennoxville, Mont-Bellevue, Brompton et les secteurs environnants. Appelez-nous dès maintenant au [438-808-9604](tel:4388089604) pour une intervention le jour même.
 
@@ -18,7 +18,7 @@ Planifier maintenant [438-808-9604](tel:4388089604)
 
 ## Services de portes de garage disponibles à Sherbrooke
 
-Que votre porte soit coincée, bruyante ou complètement hors service, notre équipe a la solution :
+Que votre porte soit coincée, bruyante ou complètement hors service, j'ai la solution :
 
 **Réparation de ressorts** — Remplacement rapide de ressorts de torsion ou d'extension brisés, la panne la plus fréquente sur les portes de garage.
 
@@ -34,7 +34,7 @@ Que votre porte soit coincée, bruyante ou complètement hors service, notre éq
 
 ## Pourquoi les résidents de Sherbrooke nous font confiance
 
-Sherbrooke est la capitale de l'Estrie. Avec des hivers rigoureux, les portes de garage subissent d'importants stress thermiques. Nos techniciens connaissent parfaitement les défis du climat de la région — ils arrivent équipés pour travailler même par grand froid, et utilisent des pièces adaptées aux conditions québécoises.
+Sherbrooke est la capitale de l'Estrie. Avec des hivers rigoureux, les portes de garage subissent d'importants stress thermiques. Je connais les défis du climat de la région. J’arrive équipé pour travailler même par grand froid, avec des pièces adaptées aux conditions québécoises.
 
 Notre engagement à Sherbrooke :
 
@@ -43,20 +43,6 @@ Notre engagement à Sherbrooke :
 - **Techniciens locaux** qui connaissent votre secteur
 - **Garantie sur les pièces et la main-d'œuvre**
 - **Disponible 7 jours sur 7**, incluant les fins de semaine
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Sherbrooke
 

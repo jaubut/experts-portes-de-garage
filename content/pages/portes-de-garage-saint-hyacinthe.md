@@ -10,7 +10,7 @@ excerpt: "Réparation et installation de portes de garage à Saint-Hyacinthe. Te
 
 ## RÉPARATION ET INSTALLATION DE PORTES DE GARAGE À SAINT-HYACINTHE
 
-Vous habitez à **Saint-Hyacinthe** et votre porte de garage vous cause des problèmes? Nos techniciens expérimentés se déplacent rapidement dans toute la ville — du centre-ville jusqu'aux secteurs de Saint-Thomas-d'Aquin, Douville, Castel et les rues environnantes. Nous réparons et installons tous types de portes de garage résidentielles avec **des pièces garanties** et un **service sans tracas**.
+Vous habitez à **Saint-Hyacinthe** et votre porte de garage vous cause des problèmes? Je me déplace rapidement dans toute la ville — du centre-ville jusqu'aux secteurs de Saint-Thomas-d'Aquin, Douville, Castel et les rues environnantes. Nous réparons et installons tous types de portes de garage résidentielles avec **des pièces garanties** et un **service sans tracas**.
 
 Appelez **Experts Portes de Garage** dès maintenant au [438-808-9604](tel:4388089604) pour une intervention rapide à Saint-Hyacinthe.
 
@@ -47,20 +47,6 @@ Chaque installation inclut une garantie sur les pièces et la main-d'œuvre.
 - Devis gratuit, prix transparents, aucuns frais cachés
 - Pièces de remplacement en stock dans notre véhicule
 - Réparation le jour même dans la majorité des cas
-
-## Avis de nos clients – Expert Portes de Garage
-
-**Service incroyable!**
-J'ai appelé Experts Portes de Garage pour un ressort brisé. Le tech est arrivé en moins d'une heure, super professionnel, il m'a tout expliqué comme du monde. Ma porte marche mieux qu'avant! Je recommande à 100 %.
-
-**Très bonne expérience.**
-Ma porte gelait tout le temps l'hiver. Lambert est venu, il a ajusté mes rails, changé mon coupe-froid puis m'a donné des conseils pour éviter que ça revienne. Prix honnête, service rapide, rien à dire. Ça fait du bien de faire affaire avec une vraie compagnie locale.
-
-**Professionnel, rapide, efficace!**
-Mon ouvre-porte faisait un drôle de bruit depuis des semaines. Ils sont venus le jour même. Le gars a trouvé le problème en 2 minutes, réparé ça sur place, et m'a fait un petit entretien complet en bonus. Super satisfait.
-
-**Je les recommande sans hésiter.**
-J'ai fait remplacer mes câbles et mes roulettes sur une vieille porte. Le travail est propre, le tech est courtois, et ils ne poussent pas de ventes inutiles. C'est rare un service client aussi solide dans ce domaine. Bravo!
 
 ## FAQ sur les portes de garage à Saint-Hyacinthe
 
