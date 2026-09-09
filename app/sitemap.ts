@@ -13,6 +13,8 @@ const CITY_SLUGS = [
   "portes-de-garage-saint-jean-sur-richelieu",
   "portes-de-garage-bromont",
   "portes-de-garage-waterloo",
+  "portes-de-garage-cowansville",
+  "portes-de-garage-farnham",
   "portes-de-garage-chateauguay",
   "portes-de-garage-beloeil",
   "portes-de-garage-sorel-tracy",
