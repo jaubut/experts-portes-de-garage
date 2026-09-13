@@ -270,14 +270,14 @@ export default function UrgentPageContent() {
                 <p className="font-bold text-[#1a1a1a]">Frais minimum</p>
                 <p className="text-gray-500 text-sm leading-relaxed mt-1">Une petite affaire que je règle sur place en quelques minutes.</p>
               </div>
-              <p className="font-heading text-2xl text-brand whitespace-nowrap">100 $</p>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">125 $</p>
             </div>
             <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
               <div>
                 <p className="font-bold text-[#1a1a1a]">Taux horaire</p>
                 <p className="text-gray-500 text-sm leading-relaxed mt-1">Pour tout le reste. Les pièces sont en sus et je vous donne le prix avant de commencer.</p>
               </div>
-              <p className="font-heading text-2xl text-brand whitespace-nowrap">120 $/h</p>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">145 $/h</p>
             </div>
             <div className="flex items-start justify-between gap-4 px-5 py-5 sm:px-6">
               <div>
@@ -287,7 +287,7 @@ export default function UrgentPageContent() {
                   en dehors de ma route de la journée. Si votre porte peut attendre à demain, vous payez le taux horaire normal.
                 </p>
               </div>
-              <p className="font-heading text-2xl text-brand whitespace-nowrap">300 $</p>
+              <p className="font-heading text-2xl text-brand whitespace-nowrap">350 $</p>
             </div>
           </div>
 

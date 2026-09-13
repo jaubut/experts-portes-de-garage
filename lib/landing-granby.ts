@@ -36,9 +36,9 @@ export const LANDING = {
    * Tarification reelle de Lambert.
    * Mettre a null pour masquer toute la section Prix.
    */
-  prixMinimum: 100 as number | null,      // petite job reglee sur place
-  tauxHoraire: 120 as number | null,      // par heure, pieces en sus
-  prixUrgence: 300 as number | null,      // sortie d'urgence : laisser tout tomber, hors route
+  prixMinimum: 125 as number | null,      // petite job reglee sur place
+  tauxHoraire: 145 as number | null,      // par heure, pieces en sus
+  prixUrgence: 350 as number | null,      // sortie d'urgence : laisser tout tomber, hors route
 
   /** Mise au point annuelle : prix et durée. */
   miseAuPoint: {
