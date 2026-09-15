@@ -349,9 +349,12 @@ export default function UrgentPageContent() {
       {/* ── BARRE D APPEL MOBILE ── */}
       <div className="h-28 md:hidden" aria-hidden="true" />
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 md:hidden">
-        {/* Degrade doux pour detacher le bouton du contenu qui defile dessous */}
-        <div className="h-12 bg-gradient-to-t from-black/30 to-transparent" />
-        <div className="bg-gradient-to-t from-black/30 to-transparent px-4 pb-[calc(env(safe-area-inset-bottom)+0.85rem)]">
+        {/* Aucun degrade derriere le bouton. Le `from-black/30` d avant
+            etait pense pour le hero sombre : sur les sections blanches il
+            devenait un rectangle gris sale sur toute la largeur, avec un
+            bord franc. L ombre portee du bouton suffit a le detacher, et
+            elle fonctionne sur n importe quel fond. */}
+        <div className="px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.85rem)]">
           <a
             href={PHONE_HREF}
             className="pointer-events-auto flex items-center gap-3 rounded-full bg-brand py-3 pl-3 pr-6 shadow-2xl shadow-black/40 ring-1 ring-white/20 transition-transform duration-150 active:scale-[0.97]"
