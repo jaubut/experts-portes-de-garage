@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { BookingModalProvider } from "@/context/BookingModalContext";
 import ChatBot from "@/components/ChatBot";
 import ConditionalWrapper from "@/components/ConditionalWrapper";
-import { BUSINESS_NAME, PHONE_DISPLAY, EMAIL, CITY, SERVICE_AREA } from "@/lib/config";
+import { businessSchema, jsonLdString } from "@/lib/schema";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import ClickTracker from "@/components/ClickTracker";
@@ -50,30 +50,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": BUSINESS_NAME,
-  "telephone": PHONE_DISPLAY,
-  "email": EMAIL,
-  "url": "https://www.expertsportesdegarage.ca",
-  "logo": "https://www.expertsportesdegarage.ca/images/logo_experts.png",
-  "image": "https://www.expertsportesdegarage.ca/images/logo_experts.png",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": CITY,
-    "addressRegion": "QC",
-    "addressCountry": "CA",
-  },
-  "areaServed": SERVICE_AREA,
-  "openingHours": "Mo-Su 00:00-23:59",
-  "priceRange": "$$",
-  "description": "Service local de réparation et installation de portes de garage en Estrie et Montérégie. Urgences 24/7.",
-  "sameAs": [
-    "https://www.google.com/search?q=Experts+Portes+de+Garage+Granby",
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -84,7 +60,7 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(businessSchema) }}
         />
       </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>

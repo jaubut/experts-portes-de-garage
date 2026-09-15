@@ -10,6 +10,7 @@ import ReviewsSection from "@/components/ReviewsSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import InspectionBanner from "@/components/InspectionBanner";
 import { PHONE_DISPLAY, PHONE_HREF, BUSINESS_NAME, EMAIL } from "@/lib/config";
+import { pageSchema, jsonLdString } from "@/lib/schema";
 
 const BASE_URL = "https://www.expertsportesdegarage.ca";
 const HERO_BG = "/images/maison_garage_v1.png";
@@ -109,22 +110,22 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
       }
     : null;
 
-  // Schema LocalBusiness avec breadcrumb
-  const pageSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": BUSINESS_NAME,
-    "telephone": PHONE_DISPLAY,
-    "email": EMAIL,
-    "url": `${BASE_URL}/${slug}`,
-    "address": {
-      "@type": "PostalAddress",
-      "addressRegion": "QC",
-      "addressCountry": "CA",
-    },
-    "openingHours": "Mo-Su 00:00-23:59",
-    "priceRange": "$$",
-  };
+  // La page renvoie a l'entreprise par son identifiant au lieu d'en
+  // redeclarer une. Avant, chaque page de ville declarait un
+  // LocalBusiness distinct : 15 commerces au meme nom pour une machine.
+  // Le nom de ville se lit apres le « a » du titre : « Reparation de
+  // Portes de Garage a Cowansville ». Pas de \b avant le « a » accentue :
+  // en JavaScript \w est ASCII, donc la frontiere de mot ne s'applique pas
+  // a un caractere accentue et le motif echouait en silence.
+  const ville = / à /.test(page.title)
+    ? page.title.split(/ à /).pop()?.trim()
+    : undefined;
+  const schemaPage = pageSchema({
+    url: `${BASE_URL}/${slug}`,
+    nom: page.title,
+    description: page.excerpt,
+    ville,
+  });
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -155,16 +156,16 @@ export default async function SlugPage(props: PageProps<"/[slug]">) {
       {/* ── JSON-LD SCHEMAS ── */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(schemaPage) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbSchema) }}
       />
       {faqSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(faqSchema) }}
         />
       )}
 
