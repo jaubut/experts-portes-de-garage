@@ -65,9 +65,15 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* ── Bubble preview ── */}
+      {/* ── Bubble preview ──
+          bottom-[6.5rem] laisse 28 px au-dessus du bouton rond, qui fait
+          56 px de haut a bottom-5. Avec l'ancien bottom-20 il ne restait
+          que 4 px : les deux ombres se rejoignaient et la bulle blanche
+          avait l'air d'un rectangle colle au bouton. La marge absorbe
+          aussi le translateY(10px) que l'animation laisse parfois en
+          place quand elle ne demarre jamais (onglet en arriere-plan). */}
       {bubble && !open && (
-        <div className="epg-chat fixed bottom-20 right-5 z-50 w-[260px] bg-white rounded-2xl shadow-2xl animate-fade-in-up overflow-hidden">
+        <div className="epg-chat fixed bottom-[6.5rem] right-5 z-50 w-[260px] bg-white rounded-2xl shadow-xl shadow-black/10 ring-1 ring-black/5 animate-fade-in-up overflow-hidden">
           <button
             type="button"
             onClick={() => setBubble(false)}
@@ -131,7 +137,7 @@ export default function ChatBot() {
       {/* ── Chat popover — never fullscreen, anchored above button ── */}
       {open && (
         <div
-          className={`epg-chat fixed bottom-[76px] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-2xl flex flex-col bg-white border border-gray-200 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
+          className={`epg-chat fixed bottom-[6.5rem] right-4 left-4 sm:left-auto sm:right-5 sm:w-[380px] z-50 rounded-2xl shadow-xl shadow-black/10 flex flex-col bg-white border border-gray-200 overflow-hidden ${closing ? "animate-fade-out" : "animate-fade-in-up"}`}
           style={{ maxHeight: "min(520px, calc(100svh - 100px))" }}
         >
           {/* Header */}
