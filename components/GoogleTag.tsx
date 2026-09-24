@@ -1,5 +1,6 @@
 import Script from "next/script";
-import { GA4_ID, GOOGLE_ADS_ID } from "@/lib/gtag";
+import { GA4_ID, GOOGLE_ADS_ID, WEBSITE_CALL } from "@/lib/gtag";
+import { PHONE_DISPLAY } from "@/lib/config";
 
 /** Balise Google (gtag.js) pour Google Ads + GA4 : conversions, remarketing et trafic. */
 export default function GoogleTag() {
@@ -13,7 +14,8 @@ export default function GoogleTag() {
         {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GOOGLE_ADS_ID}');${GA4_ID ? `
+gtag('config', '${GOOGLE_ADS_ID}');
+gtag('config', '${WEBSITE_CALL}', { phone_conversion_number: '${PHONE_DISPLAY}' });${GA4_ID ? `
 gtag('config', '${GA4_ID}');` : ""}`}
       </Script>
     </>

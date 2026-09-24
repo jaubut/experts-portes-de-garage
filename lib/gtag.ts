@@ -20,6 +20,13 @@ export const CONVERSIONS = {
   demande_rappel: "AW-17995346238/oyXVCKWli-ocEL7i7IRD",
 } as const;
 
+/**
+ * « Appels depuis le site (60 s+) » : Google remplace le numéro affiché par un numéro
+ * de transfert pour les visiteurs venus d'une annonce, et compte l'appel s'il dure 60 s+.
+ * Le numéro doit être écrit exactement comme PHONE_DISPLAY sur les pages.
+ */
+export const WEBSITE_CALL = "AW-17995346238/b7ePCMrApYQdEL7i7IRD";
+
 type GtagFn = (...args: unknown[]) => void;
 
 declare global {
