@@ -68,7 +68,7 @@ const CONTENU: ContenuLanding = {
     items: [
       { titre: "Vérifier la porte d’abord", texte: "Si la porte est lourde ou croche, un moteur neuf va lâcher lui aussi. Je vérifie les ressorts avant de toucher au moteur." },
       { titre: "Souvent réparable", texte: "Engrenage, capteurs, ajustement de la course ou de la force, télécommande : ça se règle sans changer l’appareil." },
-      { titre: "Quand remplacer vaut la peine", texte: "Moteur brûlé sur un vieil appareil, pièces introuvables : je vous le dis franchement si réparer n’est pas rentable." },
+      { titre: "Quand remplacer vaut la peine", texte: "Moteur brûlé sur un vieil appareil, pièces introuvables : je vous le dis franchement. Si on remplace, j’installe du LiftMaster." },
     ],
     miseAuPoint: false,
   },
@@ -78,6 +78,12 @@ const CONTENU: ContenuLanding = {
       r:
         "Commencez par changer la pile. Si ça ne règle rien, c’est souvent une reprogrammation ou le " +
         "récepteur : une petite affaire réglée sur place.",
+    },
+    {
+      q: "Réparez-vous ma marque d’ouvre-porte?",
+      r:
+        "Je répare la plupart des marques. Appelez-moi avec la marque et le problème, je vous le " +
+        "dis tout de suite. Et si votre ouvre-porte est à remplacer, j’installe du LiftMaster.",
     },
     {
       q: "Pourquoi ma porte remonte quand elle touche le sol?",
