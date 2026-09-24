@@ -30,7 +30,7 @@ export const LANDING = {
   photoHero: "/images/hero-urgence-nuit.webp" as string | null,
 
   /** Ta photo de visage pour la section « Qui vient chez vous ». */
-  photoLambert: null as string | null, // ex. "/images/lambert.webp"
+  photoLambert: "/images/lambert.webp" as string | null,
 
   /**
    * Tarification reelle de Lambert.
