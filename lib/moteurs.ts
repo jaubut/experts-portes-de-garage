@@ -7,11 +7,15 @@
  * caractéristiques des fiches LiftMaster et Garaga Canada, le prix de
  * Lambert lui-même. N'ajoute rien qu'on ne peut pas prouver.
  *
- * ── AJOUTER UNE VIDÉO ──
- * Dépose le fichier dans public/videos/ (MP4, 15-30 s, filmé au cellulaire
- * sur une vraie job) et mets `video: "/videos/nom.mp4"`. Tant que c'est
- * `null`, le bloc vidéo est masqué dans la fiche.
+ * ── LES VIDÉOS ──
+ * Pour l'instant, des courts YouTube (verticaux) filmés par d'autres
+ * installateurs, en anglais : LiftMaster n'a pas publié de démo courte de
+ * ces modèles. À remplacer par les clips de Lambert dès qu'il en filme :
+ * dépose le MP4 dans public/videos/ et mets `{ mp4: "/videos/nom.mp4" }`.
+ * Liste vide = bloc vidéo masqué dans la fiche.
  */
+
+export type Video = { youtube: string } | { mp4: string };
 
 export type Moteur = {
   modele: string;
@@ -22,7 +26,7 @@ export type Moteur = {
   resume: string;
   pourQui: string[];
   points: string[];
-  video: string | null;
+  videos: Video[];
 };
 
 export const MOTEURS: Moteur[] = [
@@ -46,7 +50,7 @@ export const MOTEURS: Moteur[] = [
       "Codes de télécommande qui changent à chaque utilisation (Security+ 3.0)",
       "Garantie de 5 ans sur le moteur",
     ],
-    video: null,
+    videos: [{ youtube: "a4ygvUCJnbo" }, { youtube: "UB0lN12IOU8" }],
   },
   {
     modele: "LJ8900W",
@@ -67,6 +71,6 @@ export const MOTEURS: Moteur[] = [
       "Construit pour l’usage commercial léger : robuste pour une maison",
       "Codes de télécommande qui changent à chaque utilisation",
     ],
-    video: null,
+    videos: [{ youtube: "GGuGiEHZqvs" }],
   },
 ];

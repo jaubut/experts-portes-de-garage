@@ -84,21 +84,10 @@ export default function MotorSection() {
               </svg>
             </button>
 
-            {ouvert.video ? (
-              <video
-                src={ouvert.video}
-                controls
-                playsInline
-                preload="metadata"
-                poster={ouvert.image}
-                className="aspect-video w-full bg-black"
-              />
-            ) : (
-              <div className="flex h-56 items-center justify-center bg-white px-8 pt-6">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ouvert.image} alt={ouvert.nom} className="max-h-48 max-w-full object-contain" />
-              </div>
-            )}
+            <div className="flex h-56 items-center justify-center bg-white px-8 pt-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ouvert.image} alt={ouvert.nom} className="max-h-48 max-w-full object-contain" />
+            </div>
 
             <div className="px-6 pb-6 pt-5">
               <p className="text-sm font-semibold text-gray-500">{ouvert.type}</p>
@@ -125,6 +114,38 @@ export default function MotorSection() {
                   </div>
                 ))}
               </div>
+
+              {ouvert.videos.length > 0 && (
+                <>
+                  <h4 className="mt-6 text-sm font-bold uppercase tracking-wide text-gray-900">
+                    Le voir en marche
+                  </h4>
+                  <div className="mt-2 flex snap-x gap-3 overflow-x-auto pb-1">
+                    {ouvert.videos.map((v) => (
+                      <div
+                        key={"youtube" in v ? v.youtube : v.mp4}
+                        className="aspect-[9/16] w-[200px] shrink-0 snap-start overflow-hidden rounded-xl bg-black"
+                      >
+                        {"youtube" in v ? (
+                          <iframe
+                            src={`https://www.youtube-nocookie.com/embed/${v.youtube}?rel=0&modestbranding=1&playsinline=1`}
+                            title={`${ouvert.nom} en marche`}
+                            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                            allowFullScreen
+                            loading="lazy"
+                            className="h-full w-full"
+                          />
+                        ) : (
+                          <video src={v.mp4} controls playsInline preload="metadata" className="h-full w-full" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    Vidéos d’installateurs aux États-Unis, en anglais.
+                  </p>
+                </>
+              )}
 
               <p className="mt-6 text-sm leading-relaxed text-gray-600">
                 Le prix comprend le moteur et l’installation. Je vous confirme tout sur place avant
