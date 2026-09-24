@@ -97,6 +97,8 @@ ${sectionPrix()}## Pages utiles
 
 - Accueil : ${SITE_URL}
 - Réparation à Granby : ${SITE_URL}/reparation-porte-garage-granby
+- Ressort de porte de garage cassé : ${SITE_URL}/reparation-ressort-porte-de-garage
+- Ouvre-porte en panne (Granby) : ${SITE_URL}/reparation-ouvre-porte-garage-granby
 - Réparation urgente : ${SITE_URL}/reparation-urgente-de-porte-de-garage
 - Réparation d'ouvre-porte : ${SITE_URL}/reparation-ouvre-porte-de-garage
 - Remplacement de coupe-froid : ${SITE_URL}/remplacement-coupe-froid-porte-de-garage

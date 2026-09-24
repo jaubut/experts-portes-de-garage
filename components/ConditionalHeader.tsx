@@ -3,7 +3,13 @@
 import { usePathname } from "next/navigation";
 import Header from "./Header";
 
-const HIDDEN_ON = ["/remplacement-coupe-froid-porte-de-garage", "/reparation-porte-garage-granby", "/avis"];
+const HIDDEN_ON = [
+  "/remplacement-coupe-froid-porte-de-garage",
+  "/reparation-porte-garage-granby",
+  "/reparation-ressort-porte-de-garage",
+  "/reparation-ouvre-porte-garage-granby",
+  "/avis",
+];
 const HIDDEN_PREFIXES = ["/dicter", "/admin"];
 
 export default function ConditionalHeader() {

@@ -202,7 +202,10 @@ export function pageSchema(options: {
   nom: string;
   description?: string;
   ville?: string;
+  /** Nom du service précis. Par défaut : « Réparation de porte de garage ». */
+  service?: string;
 }) {
+  const service = options.service ?? "Réparation de porte de garage";
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -217,8 +220,8 @@ export function pageSchema(options: {
       ? {
           mainEntity: {
             "@type": "Service",
-            name: `Réparation de porte de garage à ${options.ville}`,
-            serviceType: "Réparation de porte de garage",
+            name: `${service} à ${options.ville}`,
+            serviceType: service,
             provider: { "@id": BUSINESS_ID },
             areaServed: { "@type": "City", name: options.ville },
           },
