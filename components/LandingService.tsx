@@ -17,6 +17,8 @@ import { LANDING, prix } from "@/lib/landing-granby";
 
 export type Carte = { titre: string; texte: string };
 
+export type IconeReassurance = "horloge" | "garantie" | "outil" | "diagnostic";
+
 export type ContenuLanding = {
   /** Texte de la barre rouge collee en haut. */
   barre: string;
@@ -24,7 +26,7 @@ export type ContenuLanding = {
   intro: string;
   altHero: string;
   /** Exactement trois arguments sous le hero. */
-  reassurance: { icone: string; titre: string; texte: string }[];
+  reassurance: { icone: IconeReassurance; titre: string; texte: string }[];
   problemesTitre: string;
   /** Cartes cliquables qui appellent directement. */
   problemes: Carte[];
@@ -53,16 +55,16 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
     <div className="pb-20 md:pb-0">
       {/* ── Barre du haut ──────────────────────────────────────────────── */}
       <div className="sticky top-0 z-40 bg-brand text-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2 text-sm">
-          <span className="font-medium">{c.barre}</span>
-          <a href={PHONE_HREF} className="font-bold tabular-nums hover:underline">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-2 text-sm">
+          <span className="truncate font-medium">{c.barre}</span>
+          <a href={PHONE_HREF} className="shrink-0 whitespace-nowrap font-bold tabular-nums hover:underline">
             {PHONE_DISPLAY}
           </a>
         </div>
       </div>
 
       {/* ── HERO ───────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[calc(100svh-40px)] items-center overflow-hidden bg-neutral-900 md:min-h-0 md:py-24">
+      <section className="relative flex min-h-[calc(100svh-40px)] items-end overflow-hidden bg-neutral-950 md:min-h-[620px] md:items-center">
         {LANDING.photoHero ? (
           <>
             <Image
@@ -71,11 +73,15 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
               fill
               priority
               sizes="100vw"
-              className="object-cover object-right"
+              className="object-cover object-[70%_center]"
             />
-            {/* Voile uniforme : le texte est centre ici, il faut assombrir partout
-                (surtout le panneau de porte blanc au centre) sans effacer la scene. */}
-            <div aria-hidden className="absolute inset-0 bg-black/60" />
+            {/* Dégradé progressif plutôt qu'un voile uniforme : sombre là où
+                est le texte (en bas sur cellulaire, à gauche sur ordinateur),
+                la scène reste visible ailleurs. */}
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-neutral-950/25 md:bg-gradient-to-r md:from-neutral-950/95 md:via-neutral-950/70 md:to-neutral-950/10"
+            />
           </>
         ) : (
           <div
@@ -84,44 +90,57 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
           />
         )}
 
-        <div className="relative mx-auto w-full max-w-3xl px-5 py-10">
-          <h1 className="font-heading text-[2.1rem] uppercase leading-[1.05] text-white sm:text-5xl">
-            {c.h1}
-          </h1>
+        <div className="relative mx-auto w-full max-w-5xl px-5 pb-12 pt-24 md:py-24">
+          <div className="max-w-2xl">
+            <h1 className="font-heading text-[2rem] uppercase leading-[1.02] tracking-[0.01em] text-white sm:text-[2.75rem] md:text-[3.1rem]">
+              {c.h1}
+            </h1>
 
-          <p className="mt-4 text-base leading-relaxed text-white/85 sm:text-lg">
-            {c.intro}
-          </p>
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+              {c.intro}
+            </p>
 
-          {/* Aiguillage : l’urgence garde le poids visuel */}
-          <div className="mt-7 space-y-3">
-            <a
-              href={PHONE_HREF}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-brand px-6 py-5 font-heading text-xl uppercase tracking-wide text-white shadow-lg shadow-black/30 transition-transform active:scale-[0.98] sm:text-2xl"
-            >
-              <PhoneIcon className="h-6 w-6" />
-              C’est urgent : {PHONE_DISPLAY}
-            </a>
+            {/* Aiguillage : l’urgence garde le poids visuel */}
+            <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7">
+              <a
+                href={PHONE_HREF}
+                className="group inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-xl bg-brand py-3.5 pl-3.5 pr-6 text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-colors hover:bg-brand-dark active:scale-[0.99] sm:w-auto"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15">
+                  <PhoneIcon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="whitespace-nowrap font-heading text-lg uppercase tracking-wide sm:text-xl">
+                  C’est urgent : <span className="tabular-nums">{PHONE_DISPLAY}</span>
+                </span>
+              </a>
 
-            <a
-              href={lienRdv}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/40 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              <CalendarIcon className="h-5 w-5" />
-              Ça peut attendre : prendre rendez-vous
-            </a>
+              <a
+                href={lienRdv}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-[15px] font-medium text-white/80 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white sm:justify-start"
+              >
+                <CalendarIcon className="h-4 w-4" />
+                Ça peut attendre : prendre rendez-vous
+              </a>
+            </div>
+
+            <p className="mt-9 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-white/60">
+              {LANDING.heuresReponse && (
+                <>
+                  <span>Réponse en direct de {LANDING.heuresReponse}</span>
+                  <span aria-hidden className="text-white/30">·</span>
+                </>
+              )}
+              <span>Prix dit avant les travaux</span>
+              <span aria-hidden className="text-white/30">·</span>
+              <span>Granby, Bromont, Cowansville, Waterloo et {LANDING.rayonKm} km autour</span>
+            </p>
           </div>
-
-          <p className="mt-5 text-sm text-white/70">
-            {LANDING.heuresReponse && <>Réponse en direct de {LANDING.heuresReponse} · </>}
-            Prix dit avant les travaux · Granby et {LANDING.rayonKm} km autour
-          </p>
         </div>
       </section>
 
       {/* ── Réassurance ────────────────────────────────────────────────── */}
-      <section className="border-b bg-muted">
-        <div className="mx-auto grid max-w-5xl gap-6 px-5 py-8 sm:grid-cols-3">
+      <section className="relative z-10 bg-white shadow-[0_1px_0_rgba(0,0,0,0.04),0_12px_24px_-18px_rgba(0,0,0,0.25)]">
+        <div className="mx-auto grid max-w-5xl gap-8 px-5 py-10 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-gray-200 sm:py-12">
           {c.reassurance.map((r) => (
             <Reassurance key={r.titre} icone={r.icone} titre={r.titre} texte={r.texte} />
           ))}
@@ -129,7 +148,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
       </section>
 
       {/* ── VOIE A : bris urgents ──────────────────────────────────────── */}
-      <section className="mx-auto max-w-5xl px-5 py-14">
+      <section className="mx-auto max-w-5xl px-5 py-16 sm:py-20">
         <h2 className="font-heading text-3xl uppercase sm:text-4xl">{c.problemesTitre}</h2>
         <p className="mt-2 text-gray-600">Touchez votre problème pour m’appeler tout de suite.</p>
 
@@ -138,7 +157,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
             <a
               key={b.titre}
               href={PHONE_HREF}
-              className="group rounded-2xl border border-gray-200 bg-white p-5 transition-colors hover:border-brand hover:bg-brand/[0.03]"
+              className="group rounded-2xl border border-gray-200 bg-white p-5 transition-[border-color,box-shadow] hover:border-gray-300 hover:shadow-[0_8px_24px_-16px_rgba(0,0,0,0.35)]"
             >
               <h3 className="font-bold text-gray-900 group-hover:text-brand">{b.titre}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{b.texte}</p>
@@ -159,7 +178,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
       {/* ── VOIE B : travaux planifiés ─────────────────────────────────── */}
       {c.voieB && (
       <section className="bg-muted">
-        <div className="mx-auto max-w-5xl px-5 py-14">
+        <div className="mx-auto max-w-5xl px-5 py-16 sm:py-20">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">
             {c.voieB.titre}
           </h2>
@@ -208,7 +227,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
 
       {/* ── Prix ───────────────────────────────────────────────────────── */}
       {aDesPrix && (
-        <section className="mx-auto max-w-3xl px-5 py-14">
+        <section className="mx-auto max-w-3xl px-5 py-16 sm:py-20">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">Combien ça coûte</h2>
 
           {/* La garantie est l’argument le plus fort de la page : elle enleve
@@ -250,7 +269,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
 
       {/* ── Comment ça marche ──────────────────────────────────────────── */}
       <section className="bg-muted">
-        <div className="mx-auto max-w-5xl px-5 py-14">
+        <div className="mx-auto max-w-5xl px-5 py-16 sm:py-20">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">Comment ça marche</h2>
           <ol className="mt-7 grid gap-6 sm:grid-cols-3">
             <Etape n={1} titre="Vous appelez">
@@ -269,7 +288,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
       </section>
 
       {/* ── Qui vient chez vous ────────────────────────────────────────── */}
-      <section className="mx-auto max-w-5xl px-5 py-14">
+      <section className="mx-auto max-w-5xl px-5 py-16 sm:py-20">
         <div className="grid items-center gap-8 md:grid-cols-[220px_1fr]">
           {LANDING.photoLambert ? (
             <Image
@@ -319,7 +338,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
 
       {/* ── Avis (masqué tant qu’il n’y a pas de vrais avis) ───────────── */}
       {LANDING.avis.length > 0 && (
-        <section className="mx-auto max-w-5xl px-5 py-14">
+        <section className="mx-auto max-w-5xl px-5 py-16 sm:py-20">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">Ce que le monde en dit</h2>
           <div className="mt-7 grid gap-4 md:grid-cols-3">
             {LANDING.avis.slice(0, 3).map((a, i) => (
@@ -345,7 +364,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
       )}
 
       {/* ── FAQ (accordéon natif, aucun JavaScript) ────────────────────── */}
-      <section className="mx-auto max-w-3xl px-5 py-14">
+      <section className="mx-auto max-w-3xl px-5 py-16 sm:py-20">
         <h2 className="font-heading text-3xl uppercase sm:text-4xl">Questions fréquentes</h2>
         <div className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
           {LANDING.faq.soirEtFinDeSemaine && (
@@ -375,7 +394,7 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
 
       {/* ── Formulaire (plan B) ────────────────────────────────────────── */}
       <section id="rappel" className="scroll-mt-14 bg-muted">
-        <div className="mx-auto max-w-xl px-5 py-14">
+        <div className="mx-auto max-w-xl px-5 py-16 sm:py-20">
           <h2 className="font-heading text-3xl uppercase sm:text-4xl">Écrivez-moi</h2>
           <p className="mt-2 mb-6 text-gray-600">
             Je vous rappelle. Trois champs, ça prend 20 secondes.
@@ -407,13 +426,25 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
 
 /* ─── Petits composants ─────────────────────────────────────────────────── */
 
-function Reassurance({ icone, titre, texte }: { icone: string; titre: string; texte: string }) {
+/** Icônes au trait, même épaisseur, pour les trois arguments sous le hero. */
+const ICONES: Record<IconeReassurance, string> = {
+  horloge: "M12 7v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+  garantie: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+  outil: "M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085",
+  diagnostic: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z",
+};
+
+function Reassurance({ icone, titre, texte }: { icone: IconeReassurance; titre: string; texte: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <span className="text-2xl leading-none">{icone}</span>
-      <div>
-        <p className="font-bold text-gray-900">{titre}</p>
-        <p className="text-sm text-gray-600">{texte}</p>
+    <div className="flex items-start gap-4 sm:px-8 sm:first:pl-0 sm:last:pr-0">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand/[0.07] text-brand">
+        <svg className="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+          <path strokeLinecap="round" strokeLinejoin="round" d={ICONES[icone]} />
+        </svg>
+      </span>
+      <div className="pt-0.5">
+        <p className="text-[17px] font-bold leading-snug text-gray-900">{titre}</p>
+        <p className="mt-1 text-sm leading-relaxed text-gray-500">{texte}</p>
       </div>
     </div>
   );

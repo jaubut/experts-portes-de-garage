@@ -45,9 +45,9 @@ const CONTENU: ContenuLanding = {
     "Prix donné avant de commencer.",
   altHero: "Réparation de ressort de porte de garage à Granby",
   reassurance: [
-    { icone: "⏱", titre: "Le jour même", texte: "Dans la plupart des cas." },
-    { icone: "🔧", titre: "Ressorts dans le camion", texte: "Ressorts, câbles et roulettes." },
-    { icone: "💵", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
+    { icone: "horloge", titre: "Le jour même", texte: "Dans la plupart des cas." },
+    { icone: "outil", titre: "Ressorts dans le camion", texte: "Ressorts, câbles et roulettes." },
+    { icone: "garantie", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
   ],
   problemesTitre: "Ressorts et câbles : ce que je répare",
   problemes: [

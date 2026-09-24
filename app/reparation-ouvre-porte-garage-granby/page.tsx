@@ -38,16 +38,16 @@ const jsonLd = pageSchema({
 
 const CONTENU: ContenuLanding = {
   barre: "Réparation d’ouvre-porte de garage · Granby",
-  h1: "Ouvre-porte de garage en panne? Réparé à Granby",
+  h1: "Ouvre-porte de garage en panne? Réparé à Granby et environs",
   intro:
     "L’ouvre-porte ne répond plus, le moteur force, la porte remonte toute seule? Je trouve la " +
     "cause sur place et je vous dis si ça se répare ou si ça se remplace, avec le prix, avant " +
     "de commencer.",
   altHero: "Réparation d’ouvre-porte de garage à Granby",
   reassurance: [
-    { icone: "⏱", titre: "Le jour même", texte: "Dans la plupart des cas." },
-    { icone: "🔍", titre: "Diagnostic honnête", texte: "Réparer ou remplacer : je vous dis ce qui est rentable." },
-    { icone: "💵", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
+    { icone: "horloge", titre: "Le jour même", texte: "Dans la plupart des cas." },
+    { icone: "diagnostic", titre: "Diagnostic honnête", texte: "Réparer ou remplacer : je vous dis ce qui est rentable." },
+    { icone: "garantie", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
   ],
   problemesTitre: "Les pannes d’ouvre-porte que je règle",
   problemes: [

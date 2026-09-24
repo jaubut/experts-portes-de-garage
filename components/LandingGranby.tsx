@@ -3,15 +3,15 @@ import LandingService, { type ContenuLanding } from "@/components/LandingService
 /** Contenu de /reparation-porte-garage-granby : la page generale. */
 const CONTENU: ContenuLanding = {
   barre: "Réparation de porte de garage · Granby",
-  h1: "Réparation de porte de garage à Granby",
+  h1: "Réparation de porte de garage à Granby et environs",
   intro:
     "Bris urgent réparé le jour même, ou rendez-vous à votre convenance pour une porte " +
     "qui force, qui est bruyante ou qui ferme mal. Prix donné avant de commencer.",
   altHero: "Technicien en réparation de porte de garage à Granby",
   reassurance: [
-    { icone: "⏱", titre: "Le jour même", texte: "Dans la plupart des cas." },
-    { icone: "💵", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
-    { icone: "🔧", titre: "Pièces dans le camion", texte: "Ressorts, câbles, roulettes." },
+    { icone: "horloge", titre: "Le jour même", texte: "Dans la plupart des cas." },
+    { icone: "garantie", titre: "Pas réparée, pas payée", texte: "Si je ne peux pas la réparer, vous ne payez rien." },
+    { icone: "outil", titre: "Pièces dans le camion", texte: "Ressorts, câbles, roulettes." },
   ],
   problemesTitre: "Les problèmes que je règle",
   problemes: [
