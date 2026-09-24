@@ -1,6 +1,6 @@
 /**
  * Balise Google (Google Ads) et envoi des conversions.
- * Compte Google Ads « Experts Portes de garage » (806-724-3086).
+ * Compte Google Ads « Experts Portes de garage » (574-035-8164) — propriétaire de AW-17995346238.
  */
 export const GOOGLE_ADS_ID = "AW-17995346238";
 
