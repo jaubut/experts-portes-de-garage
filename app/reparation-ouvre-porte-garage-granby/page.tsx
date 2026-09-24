@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LandingService, { type ContenuLanding } from "@/components/LandingService";
+import MotorSection from "@/components/MotorSection";
 import { PHONE_DISPLAY } from "@/lib/config";
 import { pageSchema, jsonLdString } from "@/lib/schema";
 
@@ -72,6 +73,7 @@ const CONTENU: ContenuLanding = {
     ],
     miseAuPoint: false,
   },
+  sectionEnPlus: <MotorSection />,
   faq: [
     {
       q: "Ma télécommande ne marche plus. C’est grave?",

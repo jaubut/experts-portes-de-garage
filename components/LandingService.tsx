@@ -37,6 +37,8 @@ export type ContenuLanding = {
    * et les paiements, les autres apres.
    */
   faq: { q: string; r: string }[];
+  /** Section en plus, placée juste après le deuxième bloc (ex. les moteurs). */
+  sectionEnPlus?: React.ReactNode;
 };
 
 export default function LandingService({ contenu: c }: { contenu: ContenuLanding }) {
@@ -201,6 +203,8 @@ export default function LandingService({ contenu: c }: { contenu: ContenuLanding
         </div>
       </section>
       )}
+
+      {c.sectionEnPlus}
 
       {/* ── Prix ───────────────────────────────────────────────────────── */}
       {aDesPrix && (
