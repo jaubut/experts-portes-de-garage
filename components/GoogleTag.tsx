@@ -1,7 +1,7 @@
 import Script from "next/script";
-import { GOOGLE_ADS_ID } from "@/lib/gtag";
+import { GA4_ID, GOOGLE_ADS_ID } from "@/lib/gtag";
 
-/** Balise Google (gtag.js) pour Google Ads : mesure des conversions et remarketing. */
+/** Balise Google (gtag.js) pour Google Ads + GA4 : conversions, remarketing et trafic. */
 export default function GoogleTag() {
   return (
     <>
@@ -13,7 +13,8 @@ export default function GoogleTag() {
         {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GOOGLE_ADS_ID}');`}
+gtag('config', '${GOOGLE_ADS_ID}');${GA4_ID ? `
+gtag('config', '${GA4_ID}');` : ""}`}
       </Script>
     </>
   );

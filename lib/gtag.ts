@@ -4,6 +4,15 @@
  */
 export const GOOGLE_ADS_ID = "AW-17995346238";
 
+/** Propriété Google Analytics 4 (flux Web). Vide = GA4 désactivé, Google Ads seul. */
+export const GA4_ID = "G-10NPEDM005";
+
+/** Événement GA4 envoyé avec chaque conversion (à marquer « événement clé » dans GA4). */
+const GA4_EVENTS = {
+  clic_appel: "clic_appel",
+  demande_rappel: "generate_lead",
+} as const;
+
 export const CONVERSIONS = {
   /** Clic sur un lien tel: n'importe où sur le site (« Annonce Appel Direct »). */
   clic_appel: "AW-17995346238/6uevCKP2iuocEL7i7IRD",
@@ -20,8 +29,9 @@ declare global {
   }
 }
 
-/** Envoie une conversion à Google Ads. Silencieux si la balise n'est pas chargée. */
+/** Envoie une conversion à Google Ads (et à GA4 si configuré). Silencieux si la balise n'est pas chargée. */
 export function gtagConversion(name: keyof typeof CONVERSIONS) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
   window.gtag("event", "conversion", { send_to: CONVERSIONS[name], value: 1.0, currency: "CAD" });
+  if (GA4_ID) window.gtag("event", GA4_EVENTS[name], { send_to: GA4_ID, value: 1.0, currency: "CAD" });
 }
