@@ -9,6 +9,7 @@ const HIDDEN_ON = [
   "/reparation-ressort-porte-de-garage",
   "/reparation-ouvre-porte-garage-granby",
   "/avis",
+  "/depannage-porte-de-garage",
 ];
 const HIDDEN_PREFIXES = ["/dicter", "/admin"];
 

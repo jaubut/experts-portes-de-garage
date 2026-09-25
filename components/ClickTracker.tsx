@@ -12,8 +12,10 @@ export default function ClickTracker() {
       if (!a) return;
       const href = a.getAttribute("href") || "";
       if (href.startsWith("tel:")) {
-        track("clic_appel", { page: window.location.pathname });
-        gtagConversion("clic_appel");
+        // Emplacement du bouton : data-cta sur le lien ou un parent (hero, barre_mobile, entete…).
+        const cta = a.closest("[data-cta]")?.getAttribute("data-cta") ?? "autre";
+        track("clic_appel", { page: window.location.pathname, cta });
+        gtagConversion("clic_appel", { cta });
       } else if (href.startsWith("mailto:")) {
         track("clic_courriel", { page: window.location.pathname });
       }

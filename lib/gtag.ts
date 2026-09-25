@@ -36,9 +36,12 @@ declare global {
   }
 }
 
-/** Envoie une conversion à Google Ads (et à GA4 si configuré). Silencieux si la balise n'est pas chargée. */
-export function gtagConversion(name: keyof typeof CONVERSIONS) {
+/**
+ * Envoie une conversion à Google Ads (et à GA4 si configuré). Silencieux si la balise n'est pas chargée.
+ * `details` (ex. { cta: "hero" }) part seulement dans GA4, pour savoir quel bouton a converti.
+ */
+export function gtagConversion(name: keyof typeof CONVERSIONS, details: Record<string, string> = {}) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
   window.gtag("event", "conversion", { send_to: CONVERSIONS[name], value: 1.0, currency: "CAD" });
-  if (GA4_ID) window.gtag("event", GA4_EVENTS[name], { send_to: GA4_ID, value: 1.0, currency: "CAD" });
+  if (GA4_ID) window.gtag("event", GA4_EVENTS[name], { send_to: GA4_ID, value: 1.0, currency: "CAD", ...details });
 }
