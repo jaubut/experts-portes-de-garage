@@ -9,7 +9,9 @@ import { getSupabase } from "@/lib/supabase";
  */
 export async function POST(req: Request) {
   try {
-    const { nom, telephone, probleme } = await req.json();
+    const { nom, telephone, probleme, source } = await req.json();
+    // Page d'origine, liste fermée (jamais de texte libre du client dans le courriel).
+    const page = PAGES[source as keyof typeof PAGES] ?? PAGES.granby;
 
     if (!nom?.trim() || !telephone?.trim()) {
       return NextResponse.json({ error: "Nom et téléphone requis" }, { status: 400 });
@@ -54,7 +56,7 @@ export async function POST(req: Request) {
             escapeHtml(propre.probleme) || "(rien d'écrit)"
           }</p>
           <p style="margin:20px 0 0;color:#666;font-size:13px">
-            Reçu par la page Granby.
+            Reçu par la page ${page}.
           </p>
         </div>
       `,
@@ -71,6 +73,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
+
+const PAGES = {
+  granby: "Granby",
+  depannage: "Dépannage (test A/B, version B)",
+} as const;
 
 function escapeHtml(s: string): string {
   return s

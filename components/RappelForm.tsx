@@ -5,7 +5,8 @@ import { track } from "@vercel/analytics";
 import { gtagConversion } from "@/lib/gtag";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/config";
 
-export default function RappelForm() {
+/** `source` = page d'origine, reprise dans le courriel reçu et dans les stats (défaut : granby). */
+export default function RappelForm({ source = "granby" }: { source?: "granby" | "depannage" }) {
   const [nom, setNom] = useState("");
   const [telephone, setTelephone] = useState("");
   const [probleme, setProbleme] = useState("");
@@ -25,11 +26,11 @@ export default function RappelForm() {
       const res = await fetch("/api/rappel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom, telephone, probleme }),
+        body: JSON.stringify({ nom, telephone, probleme, source }),
       });
       if (!res.ok) throw new Error();
-      track("demande_rappel", { formulaire: "granby" });
-      gtagConversion("demande_rappel");
+      track("demande_rappel", { formulaire: source });
+      gtagConversion("demande_rappel", { cta: `formulaire_${source}` });
       setEnvoye(true);
     } catch {
       setErreur(`L'envoi n'a pas fonctionné. Appelez-moi au ${PHONE_DISPLAY}.`);

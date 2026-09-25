@@ -92,6 +92,7 @@ export default function UrgentPageContent() {
               </p>
               <a
                 href={PHONE_HREF}
+                data-cta="hero"
                 className="reveal d4 inline-flex items-center gap-3 bg-brand text-white font-heading text-lg md:text-xl px-8 py-4 rounded-xl hover:bg-brand-dark transition-colors shadow-lg shadow-brand/30 uppercase tracking-wide"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -175,7 +176,7 @@ export default function UrgentPageContent() {
                   </PlanifierButton>
 
                   {/* Phone */}
-                  <a href={PHONE_HREF} className="flex items-center justify-center gap-2 mt-3.5 text-white/30 hover:text-white/60 transition-colors text-xs font-medium">
+                  <a href={PHONE_HREF} data-cta="carte" className="flex items-center justify-center gap-2 mt-3.5 text-white/30 hover:text-white/60 transition-colors text-xs font-medium">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.18 21 3 13.82 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z" /></svg>
                     ou appeler {PHONE_DISPLAY}
                   </a>
@@ -318,7 +319,7 @@ export default function UrgentPageContent() {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <p className="reveal text-brand font-bold text-sm uppercase tracking-widest mb-2">Contactez-nous</p>
           <h2 className="reveal d1 font-heading text-2xl md:text-3xl text-[#1a1a1a] uppercase mb-8 leading-tight">On est là pour vous</h2>
-          <a href={PHONE_HREF} className="reveal d2 block font-heading text-4xl md:text-5xl text-brand uppercase mb-2 hover:text-brand-dark transition-colors">
+          <a href={PHONE_HREF} data-cta="contact" className="reveal d2 block font-heading text-4xl md:text-5xl text-brand uppercase mb-2 hover:text-brand-dark transition-colors">
             {PHONE_DISPLAY}
           </a>
           <p className="reveal d3 text-gray-400 text-sm mb-8">Disponible 24h/24 · 7 jours/7</p>
@@ -357,6 +358,7 @@ export default function UrgentPageContent() {
         <div className="px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.85rem)]">
           <a
             href={PHONE_HREF}
+            data-cta="barre_mobile"
             className="pointer-events-auto flex items-center gap-3 rounded-full bg-brand py-3 pl-3 pr-6 shadow-2xl shadow-black/40 ring-1 ring-white/20 transition-transform duration-150 active:scale-[0.97]"
           >
             <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-white/20">
